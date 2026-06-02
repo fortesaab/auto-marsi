@@ -39,8 +39,8 @@ class ListingController extends Controller
             ->when($request->filled('body_type'), fn ($query) =>
                 $query->where('body_type', $request->string('body_type'))
             )
-            ->when($request->filled('q'), function ($query) use ($request) {
-                $search = $request->string('q');
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->string('search');
 
                 $query->where(function ($query) use ($search) {
                     $query->where('title', 'like', "%{$search}%")
