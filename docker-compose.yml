@@ -3,7 +3,7 @@ services:
     image: nginx:alpine
     container_name: automarsi_nginx
     ports:
-      - "80:80"
+      - "${NGINX_PORT:-80}:80"
     volumes:
       - ./automarsi-api:/var/www/api
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
