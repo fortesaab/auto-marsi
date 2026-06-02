@@ -1,10 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Admin\AdminListingController;
 
-Route::get('me', function (Request $request) {
-    return response()->json([
-        'data' => $request->user(),
-    ]);
-});
+Route::apiResource('listings', AdminListingController::class);
