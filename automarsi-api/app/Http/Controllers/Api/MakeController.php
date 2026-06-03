@@ -6,25 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CarModelResource;
 use App\Http\Resources\MakeResource;
 use App\Models\Make;
-use Illuminate\Http\Request;
+use App\Queries\MakeCatalogQuery;
 
 class MakeController extends Controller
 {
-    public function index()
+    public function index(MakeCatalogQuery $query)
     {
-        $makes = Make::query()
-            ->orderBy('name')
-            ->get();
-
-        return MakeResource::collection($makes);
+        return MakeResource::collection($query->allMakes());
     }
 
-    public function models(Make $make)
+    public function models(Make $make, MakeCatalogQuery $query)
     {
-        $models = $make->carModels()
-            ->orderBy('name')
-            ->get();
-
-        return CarModelResource::collection($models);
+        return CarModelResource::collection($query->modelsForMake($make));
     }
 }
