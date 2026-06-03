@@ -11,7 +11,12 @@ class ListingImage extends Model
 
     protected $fillable = [
         'listing_id',
+        'disk',
+        'path',
         'image_url',
+        'original_name',
+        'mime_type',
+        'size',
         'alt_text',
         'sort_order',
         'is_primary',
