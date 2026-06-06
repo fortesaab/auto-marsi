@@ -1,61 +1,68 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-  useAuth,
-} from '@clerk/clerk-react'
-import { useState } from 'react'
-import './App.css'
+import { SignInButton, SignedIn, SignedOut } from '@clerk/clerk-react'
+import { useEffect, useState } from 'react'
+import AdminLayout from './layouts/AdminLayout'
+import AppointmentsPage from './pages/admin/AppointmentsPage'
+import InquiriesPage from './pages/admin/InquiriesPage'
+import ListingsPage from './pages/admin/ListingsPage'
 
-const apiUrl = import.meta.env.VITE_API_URL
+function getAdminPage(path: string) {
+  if (path === '/admin/inquiries') {
+    return <InquiriesPage />
+  }
+
+  if (path === '/admin/appointments') {
+    return <AppointmentsPage />
+  }
+
+  return <ListingsPage />
+}
 
 function App() {
-  const { getToken, isSignedIn } = useAuth()
-  const [result, setResult] = useState('')
+  const [currentPath, setCurrentPath] = useState(window.location.pathname)
 
-  async function testAdminRoute() {
-    if (!isSignedIn) {
-      setResult('Please sign in first.')
+  useEffect(() => {
+    function handlePopState() {
+      setCurrentPath(window.location.pathname)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [])
+
+  function navigateTo(path: string) {
+    if (path === currentPath) {
       return
     }
 
-    const token = await getToken()
-
-    const response = await fetch(`${apiUrl}/admin/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-
-    const data = await response.json()
-    setResult(JSON.stringify(data, null, 2))
+    window.history.pushState(null, '', path)
+    setCurrentPath(path)
   }
 
   return (
-    <main>
-      <header>
-        <h1>AutoMarsi Auth Test</h1>
+    <>
+      <SignedOut>
+        <main className="auth-screen">
+          <section className="auth-panel">
+            <h1>AutoMarsi Admin</h1>
+            <p>Sign in to manage listings, inquiries, and appointments.</p>
+            <SignInButton mode="modal">
+              <button type="button" className="primary-button">
+                Sign in
+              </button>
+            </SignInButton>
+          </section>
+        </main>
+      </SignedOut>
 
-        <SignedOut>
-          <SignInButton mode="modal" />
-          <SignUpButton mode="modal" />
-        </SignedOut>
-
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header>
-
-      <section>
-        <button type="button" onClick={testAdminRoute}>
-          Test Admin API
-        </button>
-
-        <pre>{result}</pre>
-      </section>
-    </main>
+      <SignedIn>
+        <AdminLayout currentPath={currentPath} onNavigate={navigateTo}>
+          {getAdminPage(currentPath)}
+        </AdminLayout>
+      </SignedIn>
+    </>
   )
 }
 
