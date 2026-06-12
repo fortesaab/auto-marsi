@@ -1,13 +1,36 @@
 import AdminUserButton from './AdminUserButton'
 
-function AdminTopbar() {
+const pageTitles: Record<string, { eyebrow: string; title: string }> = {
+  '/admin/listings': {
+    eyebrow: 'Inventory',
+    title: 'Listings',
+  },
+  '/admin/inquiries': {
+    eyebrow: 'Customers',
+    title: 'Inquiries',
+  },
+  '/admin/appointments': {
+    eyebrow: 'Schedule',
+    title: 'Appointments',
+  },
+}
+
+type AdminTopbarProps = {
+  currentPath: string
+}
+
+function AdminTopbar({ currentPath }: AdminTopbarProps) {
+  const page = currentPath.startsWith('/admin/listings/')
+    ? pageTitles['/admin/listings']
+    : pageTitles[currentPath] ?? pageTitles['/admin/listings']
+
   return (
-    <header className="flex min-h-18 items-center justify-between border-b bg-background px-7 max-md:px-4">
+    <header className="flex min-h-16 items-center justify-between border-b bg-background/95 px-5 backdrop-blur lg:px-6 max-md:px-4">
       <div>
         <p className="text-xs font-semibold uppercase text-muted-foreground">
-          Admin
+          {page.eyebrow}
         </p>
-        <h1 className="text-xl font-semibold">Dashboard</h1>
+        <h1 className="text-lg font-semibold">{page.title}</h1>
       </div>
 
       <AdminUserButton />

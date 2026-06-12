@@ -10,7 +10,11 @@ import ListingCreatePanel from '@/features/admin-listings/components/ListingCrea
 import ListingsTable from '@/features/admin-listings/components/ListingsTable'
 import type { AdminListing } from '@/features/admin-listings/types'
 
-function ListingsPage() {
+type ListingsPageProps = {
+  onNavigate: (path: string) => void
+}
+
+function ListingsPage({ onNavigate }: ListingsPageProps) {
   const { getToken, isLoaded, isSignedIn } = useAuth()
   const [listings, setListings] = useState<AdminListing[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -73,13 +77,16 @@ function ListingsPage() {
   const hasListings = listings.length > 0
 
   return (
-    <section className="grid gap-5">
+    <section className="grid gap-4">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase text-muted-foreground">
             Inventory
           </p>
           <h2 className="text-2xl font-semibold">Listings</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Manage vehicle inventory, photos, status, and listing details.
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -93,24 +100,20 @@ function ListingsPage() {
             Refresh
           </Button>
 
-          <Button type="button" onClick={openCreatePanel}>
+          <Button type="button" onClick={() => onNavigate('/admin/listings/new')}>
             <Plus />
             Add listing
           </Button>
         </div>
       </div>
 
-      {isCreatePanelOpen && authToken ? (
-        <ListingCreatePanel
-          token={authToken}
-          onCancel={() => setIsCreatePanelOpen(false)}
-          onCreated={handleListingCreated}
-        />
-      ) : (
-        <DataTableShell title="Car listings">
-          {isLoading ? (
-            <LoadingState label="Loading listings" />
-          ) : null}
+      <DataTableShell
+        title="Car listings"
+        description="A compact overview of the vehicles currently managed by the dealership."
+      >
+        {isLoading ? (
+          <LoadingState label="Loading listings" />
+        ) : null}
 
           {!isLoading && errorMessage ? (
             <EmptyState
@@ -126,11 +129,10 @@ function ListingsPage() {
             />
           ) : null}
 
-          {!isLoading && !errorMessage && hasListings ? (
-            <ListingsTable listings={listings} />
-          ) : null}
-        </DataTableShell>
-      )}
+        {!isLoading && !errorMessage && hasListings ? (
+          <ListingsTable listings={listings} onNavigate={onNavigate} />
+        ) : null}
+      </DataTableShell>
     </section>
   )
 }

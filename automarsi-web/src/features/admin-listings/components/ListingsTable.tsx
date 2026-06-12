@@ -12,6 +12,7 @@ import ListingStatusBadge from './ListingStatusBadge'
 
 type ListingsTableProps = {
   listings: AdminListing[]
+  onNavigate: (path: string) => void
 }
 
 function formatPrice(listing: AdminListing): string {
@@ -36,57 +37,79 @@ function formatKilometers(kilometers: number | null): string {
   return `${new Intl.NumberFormat('en-US').format(kilometers)} km`
 }
 
-function ListingsTable({ listings }: ListingsTableProps) {
+function ListingsTable({ listings, onNavigate }: ListingsTableProps) {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Listing</TableHead>
-          <TableHead>Vehicle</TableHead>
-          <TableHead>Year</TableHead>
-          <TableHead>Price</TableHead>
-          <TableHead>Kilometers</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead className="w-12 text-right">Actions</TableHead>
-        </TableRow>
-      </TableHeader>
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-muted/40 hover:bg-muted/40">
+            <TableHead className="min-w-64">Listing</TableHead>
+            <TableHead>Vehicle</TableHead>
+            <TableHead>Year</TableHead>
+            <TableHead className="text-right">Price</TableHead>
+            <TableHead>Kilometers</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="w-12 text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
 
-      <TableBody>
-        {listings.map((listing) => (
-          <TableRow key={listing.id}>
-            <TableCell>
-              <div className="grid gap-1">
-                <span className="font-medium">{listing.title}</span>
-                <span className="text-xs text-muted-foreground">
-                  {listing.location ?? 'No location'}
-                </span>
-              </div>
-            </TableCell>
+        <TableBody>
+          {listings.map((listing) => (
+            <TableRow key={listing.id} className="h-14">
+              <TableCell>
+                <div className="flex items-center gap-3">
+                  <div className="size-10 shrink-0 overflow-hidden rounded-md border bg-muted">
+                    {listing.primary_image ? (
+                      <img
+                        src={listing.primary_image.image_url}
+                        alt={listing.primary_image.alt_text ?? listing.title}
+                        className="size-full object-cover"
+                      />
+                    ) : null}
+                  </div>
 
-            <TableCell>
-              <div className="grid gap-1">
-                <span>{listing.make?.name ?? '-'}</span>
-                <span className="text-xs text-muted-foreground">
-                  {listing.car_model?.name ?? '-'}
-                </span>
-              </div>
-            </TableCell>
+                  <div className="grid gap-0.5">
+                    <span className="font-medium leading-none">
+                      {listing.title}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {listing.location ?? 'No location'}
+                    </span>
+                  </div>
+                </div>
+              </TableCell>
 
-            <TableCell>{listing.year}</TableCell>
-            <TableCell>{formatPrice(listing)}</TableCell>
-            <TableCell>{formatKilometers(listing.kilometers)}</TableCell>
+              <TableCell>
+                <div className="grid gap-0.5">
+                  <span className="leading-none">{listing.make?.name ?? '-'}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {listing.car_model?.name ?? '-'}
+                  </span>
+                </div>
+              </TableCell>
 
-            <TableCell>
-              <ListingStatusBadge status={listing.status} />
-            </TableCell>
+              <TableCell className="text-muted-foreground">
+                {listing.year}
+              </TableCell>
+              <TableCell className="text-right font-medium">
+                {formatPrice(listing)}
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {formatKilometers(listing.kilometers)}
+              </TableCell>
+
+              <TableCell>
+                <ListingStatusBadge status={listing.status} />
+              </TableCell>
 
             <TableCell className="text-right">
-              <ListingActionsMenu listing={listing} />
+              <ListingActionsMenu listing={listing} onNavigate={onNavigate} />
             </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   )
 }
 

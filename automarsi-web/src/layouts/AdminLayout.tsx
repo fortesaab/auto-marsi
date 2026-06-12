@@ -10,13 +10,13 @@ type AdminLayoutProps = {
 
 function AdminLayout({ children, currentPath, onNavigate }: AdminLayoutProps) {
   return (
-    <div className="grid min-h-screen grid-cols-[260px_1fr] bg-muted/30 max-md:grid-cols-1">
+    <div className="grid min-h-screen grid-cols-[236px_1fr] bg-muted/30 max-md:grid-cols-1">
       <AdminSidebar currentPath={currentPath} onNavigate={onNavigate} />
 
       <div className="flex min-w-0 flex-col">
-        <AdminTopbar />
+        <AdminTopbar currentPath={currentPath} />
 
-        <main className="p-7 max-md:p-4">
+        <main className="p-5 lg:p-6 max-md:p-4">
           {children}
         </main>
       </div>
