@@ -20,7 +20,9 @@ type AdminTopbarProps = {
 }
 
 function AdminTopbar({ currentPath }: AdminTopbarProps) {
-  const page = pageTitles[currentPath] ?? pageTitles['/admin/listings']
+  const page = currentPath.startsWith('/admin/listings/')
+    ? pageTitles['/admin/listings']
+    : pageTitles[currentPath] ?? pageTitles['/admin/listings']
 
   return (
     <header className="flex min-h-16 items-center justify-between border-b bg-background/95 px-5 backdrop-blur lg:px-6 max-md:px-4">

@@ -5,9 +5,13 @@ import { Button } from '@/components/ui/button'
 import AdminLayout from './layouts/AdminLayout'
 import AppointmentsPage from './pages/admin/AppointmentsPage'
 import InquiriesPage from './pages/admin/InquiriesPage'
+import ListingEditPage from './pages/admin/ListingEditPage'
+import ListingImagesPage from './pages/admin/ListingImagesPage'
+import ListingViewPage from './pages/admin/ListingViewPage'
 import ListingsPage from './pages/admin/ListingsPage'
+import ListingsCreatePage from './pages/admin/ListingsCreatePage'
 
-function getAdminPage(path: string) {
+function getAdminPage(path: string, onNavigate: (path: string) => void) {
   if (path === '/admin/inquiries') {
     return <InquiriesPage />
   }
@@ -16,7 +20,27 @@ function getAdminPage(path: string) {
     return <AppointmentsPage />
   }
 
-  return <ListingsPage />
+  if (path === '/admin/listings/new') {
+    return <ListingsCreatePage onNavigate={onNavigate} />
+  }
+
+  const listingRouteMatch = path.match(/^\/admin\/listings\/(\d+)(?:\/(edit|images))?$/)
+
+  if (listingRouteMatch) {
+    const [, listingId, action] = listingRouteMatch
+
+    if (action === 'edit') {
+      return <ListingEditPage listingId={listingId} onNavigate={onNavigate} />
+    }
+
+    if (action === 'images') {
+      return <ListingImagesPage listingId={listingId} onNavigate={onNavigate} />
+    }
+
+    return <ListingViewPage listingId={listingId} onNavigate={onNavigate} />
+  }
+
+  return <ListingsPage onNavigate={onNavigate} />
 }
 
 function App() {
@@ -73,7 +97,7 @@ function App() {
 
       <SignedIn>
         <AdminLayout currentPath={currentPath} onNavigate={navigateTo}>
-          {getAdminPage(currentPath)}
+          {getAdminPage(currentPath, navigateTo)}
         </AdminLayout>
       </SignedIn>
     </>

@@ -12,6 +12,7 @@ import ListingStatusBadge from './ListingStatusBadge'
 
 type ListingsTableProps = {
   listings: AdminListing[]
+  onNavigate: (path: string) => void
 }
 
 function formatPrice(listing: AdminListing): string {
@@ -36,7 +37,7 @@ function formatKilometers(kilometers: number | null): string {
   return `${new Intl.NumberFormat('en-US').format(kilometers)} km`
 }
 
-function ListingsTable({ listings }: ListingsTableProps) {
+function ListingsTable({ listings, onNavigate }: ListingsTableProps) {
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -101,9 +102,9 @@ function ListingsTable({ listings }: ListingsTableProps) {
                 <ListingStatusBadge status={listing.status} />
               </TableCell>
 
-              <TableCell className="text-right">
-                <ListingActionsMenu listing={listing} />
-              </TableCell>
+            <TableCell className="text-right">
+              <ListingActionsMenu listing={listing} onNavigate={onNavigate} />
+            </TableCell>
             </TableRow>
           ))}
         </TableBody>

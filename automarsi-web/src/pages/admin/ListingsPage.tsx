@@ -9,7 +9,11 @@ import { getAdminListings } from '@/features/admin-listings/api/getAdminListings
 import ListingsTable from '@/features/admin-listings/components/ListingsTable'
 import type { AdminListing } from '@/features/admin-listings/types'
 
-function ListingsPage() {
+type ListingsPageProps = {
+  onNavigate: (path: string) => void
+}
+
+function ListingsPage({ onNavigate }: ListingsPageProps) {
   const { getToken, isLoaded, isSignedIn } = useAuth()
   const [listings, setListings] = useState<AdminListing[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -72,7 +76,7 @@ function ListingsPage() {
             Refresh
           </Button>
 
-          <Button type="button">
+          <Button type="button" onClick={() => onNavigate('/admin/listings/new')}>
             <Plus />
             Add listing
           </Button>
@@ -102,7 +106,7 @@ function ListingsPage() {
         ) : null}
 
         {!isLoading && !errorMessage && hasListings ? (
-          <ListingsTable listings={listings} />
+          <ListingsTable listings={listings} onNavigate={onNavigate} />
         ) : null}
       </DataTableShell>
     </section>

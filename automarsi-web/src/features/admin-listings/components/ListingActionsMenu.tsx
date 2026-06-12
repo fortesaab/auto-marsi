@@ -10,19 +10,20 @@ import type { AdminListing } from '../types'
 
 type ListingActionsMenuProps = {
   listing: AdminListing
+  onNavigate: (path: string) => void
 }
 
-function ListingActionsMenu({ listing }: ListingActionsMenuProps) {
+function ListingActionsMenu({ listing, onNavigate }: ListingActionsMenuProps) {
   function handleView() {
-    console.log('View listing', listing.id)
+    onNavigate(`/admin/listings/${listing.id}`)
   }
 
   function handleEdit() {
-    console.log('Edit listing', listing.id)
+    onNavigate(`/admin/listings/${listing.id}/edit`)
   }
 
   function handleImages() {
-    console.log('Manage listing images', listing.id)
+    onNavigate(`/admin/listings/${listing.id}/images`)
   }
 
   return (

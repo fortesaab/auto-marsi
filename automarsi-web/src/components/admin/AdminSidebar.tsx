@@ -44,7 +44,10 @@ function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
 
       <nav className="grid gap-1">
         {navItems.map((item) => {
-          const isActive = currentPath === item.href
+          const isActive =
+            currentPath === item.href ||
+            (item.href === '/admin/listings' &&
+              currentPath.startsWith('/admin/listings/'))
 
           return (
             <Button
