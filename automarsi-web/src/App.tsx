@@ -10,6 +10,9 @@ import ListingImagesPage from './pages/admin/ListingImagesPage'
 import ListingViewPage from './pages/admin/ListingViewPage'
 import ListingsPage from './pages/admin/ListingsPage'
 import ListingsCreatePage from './pages/admin/ListingsCreatePage'
+import CatalogFeaturesPage from './pages/admin/CatalogFeaturesPage'
+import CatalogMakesPage from './pages/admin/CatalogMakesPage'
+import CatalogModelsPage from './pages/admin/CatalogModelsPage'
 
 function getAdminPage(path: string, onNavigate: (path: string) => void) {
   if (path === '/admin/inquiries') {
@@ -38,6 +41,18 @@ function getAdminPage(path: string, onNavigate: (path: string) => void) {
     }
 
     return <ListingViewPage listingId={listingId} onNavigate={onNavigate} />
+  }
+
+  if (path === '/admin/catalog/makes') {
+    return <CatalogMakesPage />
+  }
+
+  if (path === '/admin/catalog/models') {
+    return <CatalogModelsPage />
+  }
+
+  if (path === '/admin/catalog/features') {
+    return <CatalogFeaturesPage />
   }
 
   return <ListingsPage onNavigate={onNavigate} />

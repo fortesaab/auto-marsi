@@ -13,6 +13,18 @@ const pageTitles: Record<string, { eyebrow: string; title: string }> = {
     eyebrow: 'Schedule',
     title: 'Appointments',
   },
+  '/admin/catalog/makes': {
+    eyebrow: 'Catalog',
+    title: 'Makes',
+  },
+  '/admin/catalog/models': {
+    eyebrow: 'Catalog',
+    title: 'Models',
+  },
+  '/admin/catalog/features': {
+    eyebrow: 'Catalog',
+    title: 'Features',
+  },
 }
 
 type AdminTopbarProps = {
