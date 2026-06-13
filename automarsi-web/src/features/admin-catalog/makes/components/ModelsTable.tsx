@@ -1,3 +1,5 @@
+import { Pencil, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -10,9 +12,17 @@ import type { AdminModel } from '../types'
 
 type ModelsTableProps = {
   models: AdminModel[]
+  isDeletingModelId: number | null
+  onEditModel: (model: AdminModel) => void
+  onDeleteModel: (model: AdminModel) => void
 }
 
-function ModelsTable({ models }: ModelsTableProps) {
+function ModelsTable({
+  models,
+  isDeletingModelId,
+  onEditModel,
+  onDeleteModel,
+}: ModelsTableProps) {
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -20,6 +30,7 @@ function ModelsTable({ models }: ModelsTableProps) {
           <TableRow className="bg-muted/40 hover:bg-muted/40">
             <TableHead>Model</TableHead>
             <TableHead>Slug</TableHead>
+            <TableHead className="w-32 text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -29,6 +40,30 @@ function ModelsTable({ models }: ModelsTableProps) {
               <TableCell className="font-medium">{model.name}</TableCell>
               <TableCell className="text-muted-foreground">
                 {model.slug}
+              </TableCell>
+              <TableCell>
+                <div className="flex justify-end gap-1">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`Edit ${model.name}`}
+                    onClick={() => onEditModel(model)}
+                  >
+                    <Pencil />
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`Delete ${model.name}`}
+                    disabled={isDeletingModelId === model.id}
+                    onClick={() => onDeleteModel(model)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}

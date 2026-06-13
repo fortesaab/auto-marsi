@@ -19,6 +19,10 @@ import CreateModelForm from '@/features/admin-catalog/makes/components/CreateMod
 import ImportModelsPanel from '@/features/admin-catalog/makes/components/ImportModelsPanel'
 import MakesList from '@/features/admin-catalog/makes/components/MakesList'
 import ModelsTable from '@/features/admin-catalog/makes/components/ModelsTable'
+import { deleteAdminModel } from '@/features/admin-catalog/makes/api/deleteAdminModel'
+import { updateAdminModel } from '@/features/admin-catalog/makes/api/updateAdminModel'
+import EditModelForm from '@/features/admin-catalog/makes/components/EditModelForm'
+import type { AdminModel } from '@/features/admin-catalog/makes/types'
 
 function CatalogMakesPage() {
   const { getToken, isLoaded, isSignedIn } = useAuth()
@@ -28,6 +32,8 @@ function CatalogMakesPage() {
   const [isCreateMakeOpen, setIsCreateMakeOpen] = useState(false)
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false)
   const [isImportModelsOpen, setIsImportModelsOpen] = useState(false)
+  const [editingModel, setEditingModel] = useState<AdminModel | null>(null)
+  const [deletingModelId, setDeletingModelId] = useState<number | null>(null)
 
   async function getAuthToken() {
     const token = await getToken()
@@ -139,6 +145,53 @@ function CatalogMakesPage() {
           queryKey: ['admin', 'catalog', 'makes'],
         }),
       ])
+    },
+  })
+
+  const updateModelMutation = useMutation({
+    mutationFn: async (payload: { modelId: number; name: string }) => {
+      const token = await getAuthToken()
+
+      return updateAdminModel({
+        token,
+        modelId: payload.modelId,
+        payload: {
+          name: payload.name,
+        },
+      })
+    },
+    onSuccess: async () => {
+      setEditingModel(null)
+
+      await queryClient.invalidateQueries({
+        queryKey: ['admin', 'catalog', 'models', selectedMakeId],
+      })
+    },
+  })
+
+  const deleteModelMutation = useMutation({
+    mutationFn: async (model: AdminModel) => {
+      const token = await getAuthToken()
+
+      setDeletingModelId(model.id)
+
+      return deleteAdminModel({
+        token,
+        modelId: model.id,
+      })
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['admin', 'catalog', 'models', selectedMakeId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['admin', 'catalog', 'makes'],
+        }),
+      ])
+    },
+    onSettled: () => {
+      setDeletingModelId(null)
     },
   })
 
@@ -269,6 +322,7 @@ function CatalogMakesPage() {
                   setSelectedMakeId(makeId)
                   setIsCreateModelOpen(false)
                   setIsImportModelsOpen(false)
+                  setEditingModel(null)
                 }}
               />
             ) : null}
@@ -313,6 +367,24 @@ function CatalogMakesPage() {
           }
         >
           <div className="grid gap-4 p-4">
+            {editingModel ? (
+              <EditModelForm
+                model={editingModel}
+                isSubmitting={updateModelMutation.isPending}
+                errorMessage={
+                  updateModelMutation.error instanceof Error
+                    ? updateModelMutation.error.message
+                    : null
+                }
+                onCancel={() => setEditingModel(null)}
+                onSubmit={async (payload) => {
+                  await updateModelMutation.mutateAsync({
+                    modelId: editingModel.id,
+                    name: payload.name,
+                  })
+                }}
+              />
+            ) : null}
             {isImportModelsOpen && selectedMake ? (
               <ImportModelsPanel
                 makeName={selectedMake.name}
@@ -363,6 +435,7 @@ function CatalogMakesPage() {
             {selectedMake &&
             !modelsQuery.isLoading &&
             !modelsErrorMessage &&
+            !hasModels ? (
               <EmptyState
                 title="No models found"
                 description={`Add the first model under ${selectedMake.name}.`}
@@ -373,7 +446,26 @@ function CatalogMakesPage() {
             !modelsQuery.isLoading &&
             !modelsErrorMessage &&
             hasModels ? (
-              <ModelsTable models={models} />
+              <ModelsTable
+                models={models}
+                isDeletingModelId={deletingModelId}
+                onEditModel={(model) => {
+                  setEditingModel(model)
+                  setIsCreateModelOpen(false)
+                  setIsImportModelsOpen(false)
+                }}
+                onDeleteModel={(model) => {
+                  const shouldDelete = window.confirm(
+                    `Delete ${model.name}? This cannot be undone.`
+                  )
+
+                  if (!shouldDelete) {
+                    return
+                  }
+
+                  void deleteModelMutation.mutateAsync(model)
+                }}
+              />
             ) : null}
           </div>
         </DataTableShell>
