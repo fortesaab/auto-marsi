@@ -3,13 +3,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { createAdminMake } from '../api/createAdminMake'
 import { createAdminModel } from '../api/createAdminModel'
+import { deleteAdminMake } from '../api/deleteAdminMake'
 import { deleteAdminModel } from '../api/deleteAdminModel'
 import { getAdminMakes } from '../api/getAdminMakes'
 import { getAdminModels } from '../api/getAdminModels'
 import { getCatalogModelSuggestions } from '../api/getCatalogModelSuggestions'
 import { importCatalogModels } from '../api/importCatalogModels'
+import { updateAdminMake } from '../api/updateAdminMake'
 import { updateAdminModel } from '../api/updateAdminModel'
-import type { AdminModel } from '../types'
+import type { AdminMake, AdminModel } from '../types'
 
 export function useMakeModelCatalog() {
   const { getToken, isLoaded, isSignedIn } = useAuth()
@@ -19,7 +21,9 @@ export function useMakeModelCatalog() {
   const [isCreateMakeOpen, setIsCreateMakeOpen] = useState(false)
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false)
   const [isImportModelsOpen, setIsImportModelsOpen] = useState(false)
+  const [editingMake, setEditingMake] = useState<AdminMake | null>(null)
   const [editingModel, setEditingModel] = useState<AdminModel | null>(null)
+  const [deletingMakeId, setDeletingMakeId] = useState<number | null>(null)
   const [deletingModelId, setDeletingModelId] = useState<number | null>(null)
 
   async function getAuthToken() {
@@ -135,6 +139,59 @@ export function useMakeModelCatalog() {
     },
   })
 
+  const updateMakeMutation = useMutation({
+    mutationFn: async (payload: {
+      makeId: number
+      name: string
+      logo_url: string | null
+    }) => {
+      const token = await getAuthToken()
+
+      return updateAdminMake({
+        token,
+        makeId: payload.makeId,
+        payload: {
+          name: payload.name,
+          logo_url: payload.logo_url,
+        },
+      })
+    },
+    onSuccess: async () => {
+      setEditingMake(null)
+
+      await queryClient.invalidateQueries({
+        queryKey: ['admin', 'catalog', 'makes'],
+      })
+    },
+  })
+
+  const deleteMakeMutation = useMutation({
+    mutationFn: async (make: AdminMake) => {
+      const token = await getAuthToken()
+
+      setDeletingMakeId(make.id)
+
+      return deleteAdminMake({
+        token,
+        makeId: make.id,
+      })
+    },
+    onSuccess: async (_, deletedMake) => {
+      setEditingMake(null)
+
+      if (selectedMakeId === deletedMake.id) {
+        setSelectedMakeId(null)
+      }
+
+      await queryClient.invalidateQueries({
+        queryKey: ['admin', 'catalog', 'makes'],
+      })
+    },
+    onSettled: () => {
+      setDeletingMakeId(null)
+    },
+  })
+
   const updateModelMutation = useMutation({
     mutationFn: async (payload: { modelId: number; name: string }) => {
       const token = await getAuthToken()
@@ -243,7 +300,9 @@ export function useMakeModelCatalog() {
     isCreateMakeOpen,
     isCreateModelOpen,
     isImportModelsOpen,
+    editingMake,
     editingModel,
+    deletingMakeId,
     deletingModelId,
 
     makesQuery,
@@ -251,6 +310,8 @@ export function useMakeModelCatalog() {
     modelSuggestionsQuery,
     createMakeMutation,
     createModelMutation,
+    updateMakeMutation,
+    deleteMakeMutation,
     updateModelMutation,
     deleteModelMutation,
     importModelsMutation,
@@ -262,10 +323,12 @@ export function useMakeModelCatalog() {
     setIsCreateMakeOpen,
     setIsCreateModelOpen,
     setIsImportModelsOpen,
+    setEditingMake,
     setEditingModel,
 
     selectMake(makeId: number) {
       setSelectedMakeId(makeId)
+      setEditingMake(null)
       setIsCreateModelOpen(false)
       setIsImportModelsOpen(false)
       setEditingModel(null)
