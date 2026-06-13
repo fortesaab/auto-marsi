@@ -1,5 +1,7 @@
 import FormField from '@/components/admin/FormField'
 import { Button } from '@/components/ui/button'
+import VehicleFeatureIcon from '@/features/admin-catalog/features/components/VehicleFeatureIcon'
+import type { AdminVehicleFeature } from '@/features/admin-catalog/features/types'
 import type { ListingCarModelOption, ListingMakeOption } from '../types'
 import {
   conditionOptions,
@@ -13,24 +15,28 @@ type ListingCreateFormProps = {
   formState: ListingFormState
   makes: ListingMakeOption[]
   carModels: ListingCarModelOption[]
+  vehicleFeatures: AdminVehicleFeature[]
   isLoadingOptions: boolean
   isSubmitting: boolean
   errorMessage: string | null
   onCancel: () => void
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
   onFieldChange: (field: keyof ListingFormState, value: string) => void
+  onFeatureToggle: (featureId: number) => void
 }
 
 function ListingCreateForm({
   formState,
   makes,
   carModels,
+  vehicleFeatures,
   isLoadingOptions,
   isSubmitting,
   errorMessage,
   onCancel,
   onSubmit,
   onFieldChange,
+  onFeatureToggle,
 }: ListingCreateFormProps) {
   return (
     <form
@@ -220,6 +226,39 @@ function ListingCreateForm({
           value={formState.description}
           onChange={(event) => onFieldChange('description', event.target.value)}
         />
+      </FormField>
+
+      <FormField label="Features">
+        <div className="grid gap-2 rounded-md border bg-background p-3 sm:grid-cols-2 lg:grid-cols-3">
+          {vehicleFeatures.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              No vehicle features found. Add features in Catalog first.
+            </p>
+          ) : null}
+
+          {vehicleFeatures.map((feature) => {
+            const isSelected = formState.featureIds.includes(String(feature.id))
+
+            return (
+              <button
+                key={feature.id}
+                type="button"
+                onClick={() => onFeatureToggle(feature.id)}
+                className={
+                  isSelected
+                    ? 'flex items-center gap-2 rounded-md border border-primary bg-primary/10 px-3 py-2 text-left text-sm font-medium'
+                    : 'flex items-center gap-2 rounded-md border bg-card px-3 py-2 text-left text-sm hover:bg-muted'
+                }
+              >
+                <span className="grid size-7 place-items-center rounded-md border bg-background">
+                  <VehicleFeatureIcon icon={feature.icon} className="size-4" />
+                </span>
+
+                <span>{feature.name}</span>
+              </button>
+            )
+          })}
+        </div>
       </FormField>
 
       <div className="flex justify-end gap-2">

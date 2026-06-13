@@ -25,6 +25,8 @@ function ListingCreatePanel({
       onCancel={onCancel}
       onSubmit={createForm.submit}
       onFieldChange={createForm.updateField}
+      vehicleFeatures={createForm.vehicleFeatures}
+      onFeatureToggle={createForm.toggleFeature}
     />
   )
 }

@@ -27,6 +27,7 @@ export type CreateAdminListingPayload = {
   status: string
   location?: string | null
   description?: string | null
+  feature_ids: number[]
 }
 
 export type CreateAdminListingResponse = {

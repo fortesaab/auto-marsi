@@ -16,6 +16,7 @@ export type ListingFormState = {
   status: string
   location: string
   description: string
+  featureIds: string[]
 }
 
 export const initialListingFormState: ListingFormState = {
@@ -34,6 +35,7 @@ export const initialListingFormState: ListingFormState = {
   status: 'draft',
   location: '',
   description: '',
+  featureIds: [],
 }
 
 function nullableText(value: string): string | null {
@@ -69,5 +71,6 @@ export function buildCreateListingPayload(
     status: formState.status,
     location: nullableText(formState.location),
     description: nullableText(formState.description),
+    feature_ids: formState.featureIds.map(Number),
   }
 }
