@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { createAdminListing } from '../api/createAdminListing'
 import { getListingCarModels } from '../api/getListingCarModels'
 import { getListingMakes } from '../api/getListingMakes'
+import { getAdminVehicleFeatures } from '@/features/admin-catalog/features/api/getAdminVehicleFeatures'
 import {
   buildCreateListingPayload,
   initialListingFormState,
@@ -35,6 +36,11 @@ export function useListingCreateForm({
     queryFn: () => getListingCarModels(selectedMakeId),
   })
 
+  const vehicleFeaturesQuery = useQuery({
+    queryKey: ['listing-form', 'vehicle-features'],
+    queryFn: () => getAdminVehicleFeatures({ token }),
+  })
+
   const createListingMutation = useMutation({
     mutationFn: () => {
       return createAdminListing({
@@ -47,6 +53,21 @@ export function useListingCreateForm({
       onCreated()
     },
   })
+
+  function toggleFeature(featureId: number) {
+    const featureIdValue = String(featureId)
+
+    setFormState((currentState) => {
+      const hasFeature = currentState.featureIds.includes(featureIdValue)
+
+      return {
+        ...currentState,
+        featureIds: hasFeature
+          ? currentState.featureIds.filter((id) => id !== featureIdValue)
+          : [...currentState.featureIds, featureIdValue],
+      }
+    })
+  }
 
   function updateField(field: keyof ListingFormState, value: string) {
     setFormState((currentState) => ({
@@ -67,15 +88,19 @@ export function useListingCreateForm({
       ? makesQuery.error.message
       : carModelsQuery.error instanceof Error
         ? carModelsQuery.error.message
-        : createListingMutation.error instanceof Error
-          ? createListingMutation.error.message
-          : null
+        : vehicleFeaturesQuery.error instanceof Error
+          ? vehicleFeaturesQuery.error.message
+          : createListingMutation.error instanceof Error
+            ? createListingMutation.error.message
+            : null
 
   return {
     formState,
     makes: makesQuery.data ?? [],
     carModels: carModelsQuery.data ?? [],
-    isLoadingOptions: makesQuery.isLoading,
+    vehicleFeatures: vehicleFeaturesQuery.data ?? [],
+    toggleFeature,
+    isLoadingOptions: makesQuery.isLoading || vehicleFeaturesQuery.isLoading,
     isSubmitting: createListingMutation.isPending,
     errorMessage,
     updateField,
