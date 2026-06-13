@@ -1,54 +1,17 @@
-import { useAuth } from '@clerk/clerk-react'
 import { Plus, RefreshCw } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import DataTableShell from '../../components/admin/DataTableShell'
 import EmptyState from '../../components/admin/EmptyState'
 import LoadingState from '../../components/admin/LoadingState'
 import { Button } from '@/components/ui/button'
-import { getAdminListings } from '@/features/admin-listings/api/getAdminListings'
 import ListingsTable from '@/features/admin-listings/components/ListingsTable'
-import type { AdminListing } from '@/features/admin-listings/types'
+import { useAdminListings } from '@/features/admin-listings/hooks/useAdminListings'
 
 type ListingsPageProps = {
   onNavigate: (path: string) => void
 }
 
 function ListingsPage({ onNavigate }: ListingsPageProps) {
-  const { getToken, isLoaded, isSignedIn } = useAuth()
-  const [listings, setListings] = useState<AdminListing[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  async function loadListings() {
-    if (!isLoaded || !isSignedIn) {
-      return
-    }
-
-    setIsLoading(true)
-    setErrorMessage(null)
-
-    try {
-      const token = await getToken()
-
-      if (!token) {
-        throw new Error('Missing authentication token.')
-      }
-
-      const response = await getAdminListings({ token })
-
-      setListings(response.data)
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : 'Failed to load listings.'
-      )
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    void loadListings()
-  }, [isLoaded, isSignedIn])
+  const { listings, listingsQuery, errorMessage } = useAdminListings()
 
   const hasListings = listings.length > 0
 
@@ -69,8 +32,8 @@ function ListingsPage({ onNavigate }: ListingsPageProps) {
           <Button
             type="button"
             variant="outline"
-            onClick={loadListings}
-            disabled={isLoading}
+            onClick={() => void listingsQuery.refetch()}
+            disabled={listingsQuery.isFetching}
           >
             <RefreshCw />
             Refresh
@@ -87,25 +50,25 @@ function ListingsPage({ onNavigate }: ListingsPageProps) {
         title="Car listings"
         description="A compact overview of the vehicles currently managed by the dealership."
       >
-        {isLoading ? (
+        {listingsQuery.isLoading ? (
           <LoadingState label="Loading listings" />
         ) : null}
 
-        {!isLoading && errorMessage ? (
+        {!listingsQuery.isLoading && errorMessage ? (
           <EmptyState
             title="Could not load listings"
             description={errorMessage}
           />
         ) : null}
 
-        {!isLoading && !errorMessage && !hasListings ? (
+        {!listingsQuery.isLoading && !errorMessage && !hasListings ? (
           <EmptyState
             title="No listings found"
             description="Create the first listing from the admin panel or adjust your filters."
           />
         ) : null}
 
-        {!isLoading && !errorMessage && hasListings ? (
+        {!listingsQuery.isLoading && !errorMessage && hasListings ? (
           <ListingsTable listings={listings} onNavigate={onNavigate} />
         ) : null}
       </DataTableShell>
