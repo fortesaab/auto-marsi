@@ -4,7 +4,6 @@ import {
   ChevronRight,
   Gauge,
   MessagesSquare,
-  Tags,
   Wrench,
   BadgeCheck,
 } from 'lucide-react'
@@ -22,8 +21,7 @@ const navSections = [
   {
     label: 'Catalog',
     items: [
-      { label: 'Makes', href: '/admin/catalog/makes', icon: BadgeCheck },
-      { label: 'Models', href: '/admin/catalog/models', icon: Tags },
+      { label: 'Makes & Models', href: '/admin/catalog/makes', icon: BadgeCheck },
       { label: 'Features', href: '/admin/catalog/features', icon: Wrench },
     ],
   },

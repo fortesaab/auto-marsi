@@ -1,5 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import EmptyState from '@/components/admin/EmptyState'
+import LoadingState from '@/components/admin/LoadingState'
 import PageHeader from '@/components/admin/PageHeader'
 import { Button } from '@/components/ui/button'
 import ListingCreatePanel from '@/features/admin-listings/components/ListingCreatePanel'
@@ -10,7 +12,38 @@ type ListingsCreatePageProps = {
 }
 
 function ListingsCreatePage({ onNavigate }: ListingsCreatePageProps) {
-  const { token, errorMessage } = useAdminToken()
+  const { isAuthReady, getAdminToken } = useAdminToken()
+  const [token, setToken] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!isAuthReady) {
+      return
+    }
+
+    let isMounted = true
+
+    getAdminToken()
+      .then((freshToken) => {
+        if (isMounted) {
+          setToken(freshToken)
+          setErrorMessage(null)
+        }
+      })
+      .catch((error: unknown) => {
+        if (isMounted) {
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : 'Could not prepare listing form.'
+          )
+        }
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [getAdminToken, isAuthReady])
 
   return (
     <section className="grid gap-4">
@@ -30,6 +63,8 @@ function ListingsCreatePage({ onNavigate }: ListingsCreatePageProps) {
         }
       />
 
+      {!isAuthReady ? <LoadingState label="Preparing listing form" /> : null}
+
       {errorMessage ? (
         <EmptyState
           title="Could not prepare listing form"
@@ -37,7 +72,7 @@ function ListingsCreatePage({ onNavigate }: ListingsCreatePageProps) {
         />
       ) : null}
 
-      {!errorMessage && token ? (
+      {isAuthReady && !errorMessage && token ? (
         <ListingCreatePanel
           token={token}
           onCancel={() => onNavigate('/admin/listings')}
