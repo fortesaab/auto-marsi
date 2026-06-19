@@ -1,7 +1,10 @@
 import FormField from '@/components/admin/FormField'
 import { Button } from '@/components/ui/button'
-import VehicleFeatureIcon from '@/features/admin-catalog/features/components/VehicleFeatureIcon'
-import type { AdminVehicleFeature } from '@/features/admin-catalog/features/types'
+import type {
+  AdminVehicleFeature,
+  CreateAdminVehicleFeaturePayload,
+} from '@/features/admin-catalog/features/types'
+import ListingEquipmentPicker from './ListingEquipmentPicker'
 import type { ListingCarModelOption, ListingMakeOption } from '../types'
 import {
   conditionOptions,
@@ -19,7 +22,19 @@ type ListingFormProps = {
   formState: ListingFormState
   makes: ListingMakeOption[]
   carModels: ListingCarModelOption[]
-  vehicleFeatures: AdminVehicleFeature[]
+  equipment: {
+    features: AdminVehicleFeature[]
+    suggestions: AdminVehicleFeature[]
+    isLoading: boolean
+    isCreating: boolean
+    catalogErrorMessage: string | null
+    presetErrorMessage: string | null
+    onToggle: (featureId: number) => void
+    onCreate: (
+      payload: CreateAdminVehicleFeaturePayload
+    ) => Promise<AdminVehicleFeature>
+    onRetry: () => void
+  }
   isLoadingOptions: boolean
   isSubmitting: boolean
   errorMessage: string | null
@@ -29,8 +44,10 @@ type ListingFormProps = {
   submittingLabel: string
   onCancel: () => void
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
-  onFieldChange: (field: keyof ListingFormState, value: string) => void
-  onFeatureToggle: (featureId: number) => void
+  onFieldChange: (
+    field: keyof ListingFormState,
+    value: string
+  ) => void | Promise<void>
 }
 
 function ListingForm({
@@ -41,15 +58,19 @@ function ListingForm({
   formState,
   makes,
   carModels,
-  vehicleFeatures,
+  equipment,
   isLoadingOptions,
   isSubmitting,
   errorMessage,
   onCancel,
   onSubmit,
   onFieldChange,
-  onFeatureToggle,
 }: ListingFormProps) {
+  const selectedCarModel =
+    carModels.find(
+      (carModel) => String(carModel.id) === formState.carModelId
+    ) ?? null
+
   return (
     <form
       onSubmit={onSubmit}
@@ -71,7 +92,9 @@ function ListingForm({
           <select
             className="h-10 rounded-md border bg-background px-3 text-sm"
             value={formState.makeId}
-            onChange={(event) => onFieldChange('makeId', event.target.value)}
+            onChange={(event) => {
+              void onFieldChange('makeId', event.target.value)
+            }}
             required
             disabled={isLoadingOptions}
           >
@@ -88,7 +111,9 @@ function ListingForm({
           <select
             className="h-10 rounded-md border bg-background px-3 text-sm"
             value={formState.carModelId}
-            onChange={(event) => onFieldChange('carModelId', event.target.value)}
+            onChange={(event) => {
+              void onFieldChange('carModelId', event.target.value)
+            }}
             required
             disabled={!formState.makeId}
           >
@@ -250,37 +275,20 @@ function ListingForm({
         />
       </FormField>
 
-      <FormField label="Features">
-        <div className="grid gap-2 rounded-md border bg-background p-3 sm:grid-cols-2 lg:grid-cols-3">
-          {vehicleFeatures.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No vehicle features found. Add features in Catalog first.
-            </p>
-          ) : null}
-
-          {vehicleFeatures.map((feature) => {
-            const isSelected = formState.featureIds.includes(String(feature.id))
-
-            return (
-              <button
-                key={feature.id}
-                type="button"
-                onClick={() => onFeatureToggle(feature.id)}
-                className={
-                  isSelected
-                    ? 'flex items-center gap-2 rounded-md border border-primary bg-primary/10 px-3 py-2 text-left text-sm font-medium'
-                    : 'flex items-center gap-2 rounded-md border bg-card px-3 py-2 text-left text-sm hover:bg-muted'
-                }
-              >
-                <span className="grid size-7 place-items-center rounded-md border bg-background">
-                  <VehicleFeatureIcon icon={feature.icon} className="size-4" />
-                </span>
-
-                <span>{feature.name}</span>
-              </button>
-            )
-          })}
-        </div>
+      <FormField label="Equipment">
+        <ListingEquipmentPicker
+          modelName={selectedCarModel?.name ?? null}
+          features={equipment.features}
+          suggestions={equipment.suggestions}
+          selectedFeatureIds={formState.featureIds}
+          isLoading={equipment.isLoading}
+          isCreating={equipment.isCreating}
+          catalogErrorMessage={equipment.catalogErrorMessage}
+          presetErrorMessage={equipment.presetErrorMessage}
+          onToggle={equipment.onToggle}
+          onCreate={equipment.onCreate}
+          onRetry={equipment.onRetry}
+        />
       </FormField>
 
       <div className="flex justify-end gap-2">

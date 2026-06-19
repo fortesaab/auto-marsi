@@ -1,16 +1,12 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { getAdminVehicleFeatures } from '@/features/admin-catalog/features/api/getAdminVehicleFeatures'
 import { useAdminToken } from '@/hooks/useAdminToken'
 import { createAdminListing } from '../api/createAdminListing'
-import { getListingCarModels } from '../api/getListingCarModels'
-import { getListingMakes } from '../api/getListingMakes'
 import {
   buildListingPayload,
   initialListingFormState,
-  type ListingFormState,
 } from '../form/listingFormState'
+import { useListingFormFields } from './useListingFormFields'
 
 type UseListingCreateFormParams = {
   onCreated: () => void
@@ -19,33 +15,10 @@ type UseListingCreateFormParams = {
 export function useListingCreateForm({
   onCreated,
 }: UseListingCreateFormParams) {
-  const { isAuthReady, getAdminToken } = useAdminToken()
-  const [formState, setFormState] = useState<ListingFormState>(
+  const { getAdminToken } = useAdminToken()
+  const fields = useListingFormFields(
     initialListingFormState
   )
-
-  const selectedMakeId = Number(formState.makeId)
-
-  const makesQuery = useQuery({
-    queryKey: ['listing-form', 'makes'],
-    queryFn: getListingMakes,
-  })
-
-  const carModelsQuery = useQuery({
-    queryKey: ['listing-form', 'car-models', selectedMakeId],
-    enabled: Boolean(selectedMakeId),
-    queryFn: () => getListingCarModels(selectedMakeId),
-  })
-
-  const vehicleFeaturesQuery = useQuery({
-    queryKey: ['admin', 'catalog', 'vehicle-features'],
-    enabled: isAuthReady,
-    queryFn: async () => {
-      const token = await getAdminToken()
-
-      return getAdminVehicleFeatures({ token })
-    },
-  })
 
   const createListingMutation = useMutation({
     mutationFn: async () => {
@@ -53,11 +26,11 @@ export function useListingCreateForm({
 
       return createAdminListing({
         token,
-        payload: buildListingPayload(formState),
+        payload: buildListingPayload(fields.formState),
       })
     },
     onSuccess: () => {
-      setFormState(initialListingFormState)
+      fields.resetForm(initialListingFormState)
       toast.success('Listing created successfully.')
       onCreated()
     },
@@ -68,57 +41,21 @@ export function useListingCreateForm({
     },
   })
 
-  function toggleFeature(featureId: number) {
-    const featureIdValue = String(featureId)
-
-    setFormState((currentState) => {
-      const hasFeature = currentState.featureIds.includes(featureIdValue)
-
-      return {
-        ...currentState,
-        featureIds: hasFeature
-          ? currentState.featureIds.filter((id) => id !== featureIdValue)
-          : [...currentState.featureIds, featureIdValue],
-      }
-    })
-  }
-
-  function updateField(field: keyof ListingFormState, value: string) {
-    setFormState((currentState) => ({
-      ...currentState,
-      [field]: value,
-      ...(field === 'makeId' ? { carModelId: '' } : {}),
-    }))
-  }
-
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     await createListingMutation.mutateAsync()
   }
 
-  const errorMessage =
-    makesQuery.error instanceof Error
-      ? makesQuery.error.message
-      : carModelsQuery.error instanceof Error
-        ? carModelsQuery.error.message
-        : vehicleFeaturesQuery.error instanceof Error
-          ? vehicleFeaturesQuery.error.message
-          : createListingMutation.error instanceof Error
-            ? createListingMutation.error.message
-            : null
+  const errorMessage = fields.optionsErrorMessage ??
+    (createListingMutation.error instanceof Error
+      ? createListingMutation.error.message
+      : null)
 
   return {
-    formState,
-    makes: makesQuery.data ?? [],
-    carModels: carModelsQuery.data ?? [],
-    vehicleFeatures: vehicleFeaturesQuery.data ?? [],
-    toggleFeature,
-    isLoadingOptions:
-      !isAuthReady || makesQuery.isLoading || vehicleFeaturesQuery.isLoading,
+    ...fields,
     isSubmitting: createListingMutation.isPending,
     errorMessage,
-    updateField,
     submit,
   }
 }
