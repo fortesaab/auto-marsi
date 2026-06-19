@@ -1,17 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { getAdminVehicleFeatures } from '@/features/admin-catalog/features/api/getAdminVehicleFeatures'
 import { useAdminToken } from '@/hooks/useAdminToken'
-import { getListingCarModels } from '../api/getListingCarModels'
-import { getListingMakes } from '../api/getListingMakes'
 import { updateAdminListing } from '../api/updateAdminListing'
 import {
   buildListingPayload,
   listingToFormState,
-  type ListingFormState,
 } from '../form/listingFormState'
 import type { AdminListing } from '../types'
+import { useListingFormFields } from './useListingFormFields'
 
 type UseListingEditFormParams = {
   listing: AdminListing
@@ -24,32 +20,9 @@ export function useListingEditForm({
 }: UseListingEditFormParams) {
   const queryClient = useQueryClient()
   const { getAdminToken } = useAdminToken()
-
-  const [formState, setFormState] = useState<ListingFormState>(() =>
+  const fields = useListingFormFields(() =>
     listingToFormState(listing)
   )
-
-  const selectedMakeId = Number(formState.makeId)
-
-  const makesQuery = useQuery({
-    queryKey: ['listing-form', 'makes'],
-    queryFn: getListingMakes,
-  })
-
-  const carModelsQuery = useQuery({
-    queryKey: ['listing-form', 'car-models', selectedMakeId],
-    enabled: Boolean(selectedMakeId),
-    queryFn: () => getListingCarModels(selectedMakeId),
-  })
-
-  const vehicleFeaturesQuery = useQuery({
-    queryKey: ['admin', 'catalog', 'vehicle-features'],
-    queryFn: async () => {
-      const token = await getAdminToken()
-
-      return getAdminVehicleFeatures({ token })
-    },
-  })
 
   const updateListingMutation = useMutation({
     mutationFn: async () => {
@@ -58,7 +31,7 @@ export function useListingEditForm({
       return updateAdminListing({
         token,
         listingId: String(listing.id),
-        payload: buildListingPayload(formState),
+        payload: buildListingPayload(fields.formState),
       })
     },
     onSuccess: async () => {
@@ -83,55 +56,21 @@ export function useListingEditForm({
     },
   })
 
-  function updateField(field: keyof ListingFormState, value: string) {
-    setFormState((currentState) => ({
-      ...currentState,
-      [field]: value,
-      ...(field === 'makeId' ? { carModelId: '' } : {}),
-    }))
-  }
-
-  function toggleFeature(featureId: number) {
-    const value = String(featureId)
-
-    setFormState((currentState) => ({
-      ...currentState,
-      featureIds: currentState.featureIds.includes(value)
-        ? currentState.featureIds.filter((id) => id !== value)
-        : [...currentState.featureIds, value],
-    }))
-  }
-
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     await updateListingMutation.mutateAsync()
   }
 
-  const errorMessage =
-    makesQuery.error instanceof Error
-      ? makesQuery.error.message
-      : carModelsQuery.error instanceof Error
-        ? carModelsQuery.error.message
-        : vehicleFeaturesQuery.error instanceof Error
-          ? vehicleFeaturesQuery.error.message
-          : updateListingMutation.error instanceof Error
-            ? updateListingMutation.error.message
-            : null
+  const errorMessage = fields.optionsErrorMessage ??
+    (updateListingMutation.error instanceof Error
+      ? updateListingMutation.error.message
+      : null)
 
   return {
-    formState,
-    makes: makesQuery.data ?? [],
-    carModels: carModelsQuery.data ?? [],
-    vehicleFeatures: vehicleFeaturesQuery.data ?? [],
-    isLoadingOptions:
-      makesQuery.isLoading ||
-      carModelsQuery.isLoading ||
-      vehicleFeaturesQuery.isLoading,
+    ...fields,
     isSubmitting: updateListingMutation.isPending,
     errorMessage,
-    updateField,
-    toggleFeature,
     submit,
   }
 }
