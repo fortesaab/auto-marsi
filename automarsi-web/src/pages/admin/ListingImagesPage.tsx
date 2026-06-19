@@ -1,4 +1,4 @@
-import { ArrowLeft, ImageOff } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ImageOff } from 'lucide-react'
 import DataTableShell from '@/components/admin/DataTableShell'
 import EmptyState from '@/components/admin/EmptyState'
 import LoadingState from '@/components/admin/LoadingState'
@@ -6,6 +6,7 @@ import PageHeader from '@/components/admin/PageHeader'
 import { Button } from '@/components/ui/button'
 import ListingImageCard from '@/features/admin-listings/components/ListingImageCard'
 import ListingImageUploader from '@/features/admin-listings/components/ListingImageUploader'
+import ListingWorkflowSteps from '@/features/admin-listings/components/ListingWorkflowSteps'
 import { useAdminListingImages } from '@/features/admin-listings/hooks/useAdminListingImages'
 
 type ListingImagesPageProps = {
@@ -31,18 +32,32 @@ function ListingImagesPage({ listingId, onNavigate }: ListingImagesPageProps) {
         title={`Images for listing #${listingId}`}
         description="Manage gallery order, alt text, primary image, and uploads."
         action={
-          <div className="flex justify-end">
+          <div className="flex flex-wrap justify-end gap-2">
             <Button
               type="button"
               variant="outline"
-              onClick={() => onNavigate(`/admin/listings/${listingId}`)}
+              onClick={() =>
+                onNavigate(`/admin/listings/${listingId}/edit`)
+              }
             >
               <ArrowLeft />
-              Back to listing
+              Back to details
+            </Button>
+
+            <Button
+              type="button"
+              onClick={() => onNavigate(`/admin/listings/${listingId}`)}
+            >
+              Review listing
+              <ArrowRight />
             </Button>
           </div>
         }
       />
+
+      <div className="rounded-lg border bg-card p-4">
+        <ListingWorkflowSteps currentStep="images" />
+      </div>
 
       <DataTableShell
         title="Listing images"

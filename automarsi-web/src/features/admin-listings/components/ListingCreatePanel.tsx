@@ -1,9 +1,10 @@
+import type { AdminListing } from '../types'
 import { useListingCreateForm } from '../hooks/useListingCreateForm'
 import ListingForm from './ListingForm'
 
 type ListingCreatePanelProps = {
   onCancel: () => void
-  onCreated: () => void
+  onCreated: (listing: AdminListing) => void
 }
 
 function ListingCreatePanel({
@@ -15,9 +16,10 @@ function ListingCreatePanel({
   return (
     <ListingForm
       heading="Add listing"
-      description="Create a vehicle listing for the dealership inventory."
-      submitLabel="Create listing"
-      submittingLabel="Creating..."
+      description="Add the vehicle details, then continue with its images."
+      submitLabel="Save and add images"
+      submittingLabel="Saving..."
+      showStatus={false}
       formState={createForm.formState}
       makes={createForm.makes}
       carModels={createForm.carModels}

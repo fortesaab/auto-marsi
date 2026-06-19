@@ -6,10 +6,11 @@ import {
   buildListingPayload,
   initialListingFormState,
 } from '../form/listingFormState'
+import type { AdminListing } from '../types'
 import { useListingFormFields } from './useListingFormFields'
 
 type UseListingCreateFormParams = {
-  onCreated: () => void
+  onCreated: (listing: AdminListing) => void
 }
 
 export function useListingCreateForm({
@@ -29,10 +30,10 @@ export function useListingCreateForm({
         payload: buildListingPayload(fields.formState),
       })
     },
-    onSuccess: () => {
+    onSuccess: (createdListing) => {
       fields.resetForm(initialListingFormState)
-      toast.success('Listing created successfully.')
-      onCreated()
+      toast.success('Listing saved. Add its photos next.')
+      onCreated(createdListing)
     },
     onError: (error) => {
       toast.error(

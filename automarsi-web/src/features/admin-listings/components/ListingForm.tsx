@@ -42,6 +42,7 @@ type ListingFormProps = {
   description: string
   submitLabel: string
   submittingLabel: string
+  showStatus?: boolean
   onCancel: () => void
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
   onFieldChange: (
@@ -55,6 +56,7 @@ function ListingForm({
   description,
   submitLabel,
   submittingLabel,
+  showStatus = true,
   formState,
   makes,
   carModels,
@@ -243,19 +245,23 @@ function ListingForm({
           </select>
         </FormField>
 
-        <FormField label="Status">
-          <select
-            className="h-10 rounded-md border bg-background px-3 text-sm"
-            value={formState.status}
-            onChange={(event) => onFieldChange('status', event.target.value)}
-          >
-            {listingStatusOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </FormField>
+        {showStatus ? (
+          <FormField label="Status">
+            <select
+              className="h-10 rounded-md border bg-background px-3 text-sm"
+              value={formState.status}
+              onChange={(event) =>
+                onFieldChange('status', event.target.value)
+              }
+            >
+              {listingStatusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </FormField>
+        ) : null}
 
         <FormField label="Location">
           <input

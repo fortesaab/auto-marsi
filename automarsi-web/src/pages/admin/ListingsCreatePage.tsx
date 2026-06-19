@@ -2,18 +2,21 @@ import { ArrowLeft } from 'lucide-react'
 import PageHeader from '@/components/admin/PageHeader'
 import { Button } from '@/components/ui/button'
 import ListingCreatePanel from '@/features/admin-listings/components/ListingCreatePanel'
+import ListingWorkflowSteps from '@/features/admin-listings/components/ListingWorkflowSteps'
 
 type ListingsCreatePageProps = {
   onNavigate: (path: string) => void
 }
 
-function ListingsCreatePage({ onNavigate }: ListingsCreatePageProps) {
+function ListingsCreatePage({
+  onNavigate,
+}: ListingsCreatePageProps) {
   return (
     <section className="grid gap-4">
       <PageHeader
         eyebrow="Inventory"
         title="Add listing"
-        description="Create a new vehicle listing for the dealership inventory."
+        description="Enter the vehicle details, then add photos and review it."
         action={
           <Button
             type="button"
@@ -26,9 +29,15 @@ function ListingsCreatePage({ onNavigate }: ListingsCreatePageProps) {
         }
       />
 
+      <div className="rounded-lg border bg-card p-4">
+        <ListingWorkflowSteps currentStep="details" />
+      </div>
+
       <ListingCreatePanel
         onCancel={() => onNavigate('/admin/listings')}
-        onCreated={() => onNavigate('/admin/listings')}
+        onCreated={(listing) =>
+          onNavigate(`/admin/listings/${listing.id}/images`)
+        }
       />
     </section>
   )
