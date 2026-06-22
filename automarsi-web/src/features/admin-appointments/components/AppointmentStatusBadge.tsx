@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge'
+import AdminStatusPill from '@/components/admin/AdminStatusPill'
 import type { AppointmentStatus } from '../types'
 
 type AppointmentStatusBadgeProps = {
@@ -6,19 +6,7 @@ type AppointmentStatusBadgeProps = {
 }
 
 function AppointmentStatusBadge({ status }: AppointmentStatusBadgeProps) {
-  if (status === 'confirmed') {
-    return <Badge>Confirmed</Badge>
-  }
-
-  if (status === 'completed') {
-    return <Badge variant="secondary">Completed</Badge>
-  }
-
-  if (status === 'cancelled') {
-    return <Badge variant="destructive">Cancelled</Badge>
-  }
-
-  return <Badge variant="outline">Pending</Badge>
+  return <AdminStatusPill status={status} />
 }
 
 export default AppointmentStatusBadge

@@ -2,6 +2,7 @@ import { Plus, RefreshCw } from 'lucide-react'
 import DataTableShell from '../../components/admin/DataTableShell'
 import EmptyState from '../../components/admin/EmptyState'
 import LoadingState from '../../components/admin/LoadingState'
+import PageHeader from '../../components/admin/PageHeader'
 import { Button } from '@/components/ui/button'
 import ListingsTable from '@/features/admin-listings/components/ListingsTable'
 import { useAdminListings } from '@/features/admin-listings/hooks/useAdminListings'
@@ -17,18 +18,12 @@ function ListingsPage({ onNavigate }: ListingsPageProps) {
 
   return (
     <section className="grid gap-4">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase text-muted-foreground">
-            Inventory
-          </p>
-          <h2 className="text-2xl font-semibold">Listings</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Manage vehicle inventory, photos, status, and listing details.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
+      <PageHeader
+        eyebrow="Inventory"
+        title="Listings"
+        description="Manage vehicles, photos, status, and listing details."
+        action={
+          <>
           <Button
             type="button"
             variant="outline"
@@ -43,12 +38,13 @@ function ListingsPage({ onNavigate }: ListingsPageProps) {
             <Plus />
             Add listing
           </Button>
-        </div>
-      </div>
+          </>
+        }
+      />
 
       <DataTableShell
         title="Car listings"
-        description="A compact overview of the vehicles currently managed by the dealership."
+        description={`${listings.length} vehicles on this page`}
       >
         {listingsQuery.isLoading ? (
           <LoadingState label="Loading listings" />

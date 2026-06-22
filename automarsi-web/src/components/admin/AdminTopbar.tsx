@@ -1,6 +1,10 @@
 import AdminUserButton from './AdminUserButton'
 
 const pageTitles: Record<string, { eyebrow: string; title: string }> = {
+  '/admin': {
+    eyebrow: 'AutoMarsi',
+    title: 'Overview',
+  },
   '/admin/listings': {
     eyebrow: 'Inventory',
     title: 'Listings',
@@ -34,18 +38,28 @@ type AdminTopbarProps = {
 function AdminTopbar({ currentPath }: AdminTopbarProps) {
   const page = currentPath.startsWith('/admin/listings/')
     ? pageTitles['/admin/listings']
-    : pageTitles[currentPath] ?? pageTitles['/admin/listings']
+    : pageTitles[currentPath] ?? pageTitles['/admin']
+  const today = new Intl.DateTimeFormat('en-GB', {
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date())
 
   return (
-    <header className="flex min-h-16 items-center justify-between border-b bg-background/95 px-5 backdrop-blur lg:px-6 max-md:px-4">
-      <div>
-        <p className="text-xs font-semibold uppercase text-muted-foreground">
-          {page.eyebrow}
-        </p>
-        <h1 className="text-lg font-semibold">{page.title}</h1>
+    <header className="sticky top-0 z-30 flex min-h-12 items-center justify-between border-b bg-card/95 px-5 backdrop-blur lg:px-7 max-md:px-4">
+      <div className="flex items-center gap-2 text-xs">
+        <span className="text-muted-foreground">{page.eyebrow}</span>
+        <span className="text-muted-foreground/50">/</span>
+        <span className="font-semibold text-foreground">{page.title}</span>
       </div>
 
-      <AdminUserButton />
+      <div className="flex items-center gap-3">
+        <span className="hidden rounded-md border bg-muted/40 px-2.5 py-1.5 text-[11px] tabular-nums text-muted-foreground sm:block">
+          {today}
+        </span>
+        <AdminUserButton />
+      </div>
     </header>
   )
 }
