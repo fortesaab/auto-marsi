@@ -1,6 +1,11 @@
 import { SignInButton, SignedIn, SignedOut } from '@clerk/clerk-react'
 import { LogIn, ShieldCheck } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+} from 'react'
 import { Button } from '@/components/ui/button'
 import AdminLayout from './layouts/AdminLayout'
 import AppointmentsPage from './pages/admin/AppointmentsPage'
@@ -12,15 +17,34 @@ import ListingsPage from './pages/admin/ListingsPage'
 import ListingsCreatePage from './pages/admin/ListingsCreatePage'
 import CatalogFeaturesPage from './pages/admin/CatalogFeaturesPage'
 import CatalogMakesPage from './pages/admin/CatalogMakesPage'
+const OverviewPage = lazy(() => import('./pages/admin/OverviewPage'))
 
 
 function getAdminPage(path: string, onNavigate: (path: string) => void) {
+  if (path === '/admin') {
+    return (
+      <Suspense
+        fallback={
+          <div className="text-sm text-muted-foreground">
+            Loading dashboard...
+          </div>
+        }
+      >
+        <OverviewPage onNavigate={onNavigate} />
+      </Suspense>
+    )
+  }
+
   if (path === '/admin/inquiries') {
     return <InquiriesPage />
   }
 
   if (path === '/admin/appointments') {
     return <AppointmentsPage />
+  }
+
+  if (path === '/admin/listings') {
+    return <ListingsPage onNavigate={onNavigate} />
   }
 
   if (path === '/admin/listings/new') {
@@ -51,7 +75,17 @@ function getAdminPage(path: string, onNavigate: (path: string) => void) {
     return <CatalogFeaturesPage />
   }
 
-  return <ListingsPage onNavigate={onNavigate} />
+  return (
+    <Suspense
+      fallback={
+        <div className="text-sm text-muted-foreground">
+          Loading dashboard...
+        </div>
+      }
+    >
+      <OverviewPage onNavigate={onNavigate} />
+    </Suspense>
+  )
 }
 
 function App() {

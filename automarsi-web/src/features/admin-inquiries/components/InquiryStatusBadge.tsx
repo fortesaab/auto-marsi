@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge'
+import AdminStatusPill from '@/components/admin/AdminStatusPill'
 import type { InquiryStatus } from '../types'
 
 type InquiryStatusBadgeProps = {
@@ -6,15 +6,7 @@ type InquiryStatusBadgeProps = {
 }
 
 function InquiryStatusBadge({ status }: InquiryStatusBadgeProps) {
-  if (status === 'new') {
-    return <Badge>New</Badge>
-  }
-
-  if (status === 'read') {
-    return <Badge variant="secondary">Read</Badge>
-  }
-
-  return <Badge variant="outline">Closed</Badge>
+  return <AdminStatusPill status={status} />
 }
 
 export default InquiryStatusBadge
