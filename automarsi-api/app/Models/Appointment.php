@@ -11,6 +11,7 @@ class Appointment extends Model
 
     protected $fillable = [
         'listing_id',
+        'inquiry_id',
         'name',
         'phone',
         'email',
@@ -29,5 +30,9 @@ class Appointment extends Model
     public function listing()
     {
         return $this->belongsTo(Listing::class);
+    }
+    public function inquiry()
+    {
+        return $this->belongsTo(Inquiry::class);
     }
 }

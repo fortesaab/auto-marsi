@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Actions\Inquiries;
+
+use App\Models\Appointment;
+use App\Models\Inquiry;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+
+class ConvertInquiryToAppointment
+{
+    public function handle(Inquiry $inquiry, array $data): Appointment
+    {
+        return DB::transaction(function () use ($inquiry, $data) {
+            if ($inquiry->appointments()->exists()) {
+                throw ValidationException::withMessages([
+                    'inquiry_id' => ['This inquiry already has an appointment.'],
+                ]);
+            }
+
+            $appointment = Appointment::create([
+                'listing_id' => $inquiry->listing_id,
+                'inquiry_id' => $inquiry->id,
+                'name' => $inquiry->name,
+                'phone' => $inquiry->phone,
+                'email' => $inquiry->email,
+                'preferred_at' => $data['preferred_at'],
+                'message' => $data['message'] ?? $inquiry->message,
+                'status' => $data['status'] ?? 'pending',
+            ]);
+
+            $inquiry->update([
+                'status' => 'closed',
+            ]);
+
+            return $appointment->load(['listing.make', 'listing.carModel', 'inquiry']);
+        });
+    }
+}

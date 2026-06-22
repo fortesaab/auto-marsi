@@ -148,6 +148,77 @@ class AdminAppointmentControllerTest extends TestCase
             ->assertJsonPath('data.listing.id', $listing->id);
     }
 
+    public function test_admin_can_create_manual_appointment(): void
+    {
+        $listing = $this->createListing('audi-a6');
+
+        $response = $this->postJson('/api/admin/appointments', [
+            'listing_id' => $listing->id,
+            'name' => 'Ardian Krasniqi',
+            'phone' => '+38344111222',
+            'email' => 'ardian@example.com',
+            'preferred_at' => now()->addDay()->toDateTimeString(),
+            'message' => 'Customer wants to visit the showroom.',
+            'status' => 'confirmed',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('data.listing_id', $listing->id)
+            ->assertJsonPath('data.name', 'Ardian Krasniqi')
+            ->assertJsonPath('data.status', 'confirmed');
+
+        $this->assertDatabaseHas('appointments', [
+            'listing_id' => $listing->id,
+            'name' => 'Ardian Krasniqi',
+            'phone' => '+38344111222',
+            'status' => 'confirmed',
+        ]);
+    }
+
+    public function test_manual_appointment_defaults_status_to_pending(): void
+    {
+        $response = $this->postJson('/api/admin/appointments', [
+            'name' => 'Pending Customer',
+            'phone' => '+38344111222',
+            'preferred_at' => now()->addDay()->toDateTimeString(),
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('data.name', 'Pending Customer')
+            ->assertJsonPath('data.status', 'pending');
+
+        $this->assertDatabaseHas('appointments', [
+            'name' => 'Pending Customer',
+            'status' => 'pending',
+        ]);
+    }
+
+    public function test_admin_cannot_create_appointment_with_invalid_status(): void
+    {
+        $response = $this->postJson('/api/admin/appointments', [
+            'name' => 'Invalid Status Customer',
+            'phone' => '+38344111222',
+            'preferred_at' => now()->addDay()->toDateTimeString(),
+            'status' => 'invalid',
+        ]);
+
+        $response->assertUnprocessable();
+    }
+
+    public function test_admin_cannot_create_appointment_in_the_past(): void
+    {
+        $response = $this->postJson('/api/admin/appointments', [
+            'name' => 'Past Appointment Customer',
+            'phone' => '+38344111222',
+            'preferred_at' => now()->subDay()->toDateTimeString(),
+            'status' => 'pending',
+        ]);
+
+        $response->assertUnprocessable();
+    }
+
     public function test_admin_can_update_appointment_status(): void
     {
         $appointment = Appointment::create([

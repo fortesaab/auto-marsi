@@ -23,4 +23,8 @@ class Inquiry extends Model
     {
         return $this->belongsTo(Listing::class);
     }
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\AdminMakeController;
 use App\Http\Controllers\Api\Admin\AdminVehicleCatalogImportController;
 use App\Http\Controllers\Api\Admin\AdminVehicleFeatureController;
 use App\Http\Controllers\Api\Admin\CarModelFeatureSuggestionsController;
+use App\Http\Controllers\Api\Admin\AdminInquiryAppointmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('makes', AdminMakeController::class);
@@ -29,8 +30,10 @@ Route::apiResource('vehicle-features', AdminVehicleFeatureController::class);
 Route::get('inquiries', [AdminInquiryController::class, 'index']);
 Route::get('inquiries/{inquiry}', [AdminInquiryController::class, 'show']);
 Route::patch('inquiries/{inquiry}', [AdminInquiryController::class, 'update']);
+Route::post('inquiries/{inquiry}/appointment', [AdminInquiryAppointmentController::class, 'store']);
 
 Route::get('appointments', [AdminAppointmentController::class, 'index']);
+Route::post('appointments', [AdminAppointmentController::class, 'store']);
 Route::get('appointments/{appointment}', [AdminAppointmentController::class, 'show']);
 Route::patch('appointments/{appointment}', [AdminAppointmentController::class, 'update']);
 

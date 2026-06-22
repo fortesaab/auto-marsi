@@ -10,6 +10,8 @@ use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Queries\AdminAppointmentQuery;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Actions\Appointments\CreateAppointment;
+use App\Http\Requests\Admin\Appointments\StoreAppointmentRequest;
 
 class AdminAppointmentController extends Controller
 {
@@ -36,6 +38,15 @@ class AdminAppointmentController extends Controller
     ): AppointmentResource {
         return new AppointmentResource(
             $updateAppointment->handle($appointment, $request->validated())
+        );
+    }
+
+    public function store(
+        StoreAppointmentRequest $request,
+        CreateAppointment $createAppointment
+    ): AppointmentResource {
+        return new AppointmentResource(
+            $createAppointment->handle($request->validated())
         );
     }
 }
