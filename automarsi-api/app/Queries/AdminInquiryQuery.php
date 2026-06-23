@@ -19,21 +19,17 @@ class AdminInquiryQuery
                 $query->where('listing_id', $listingId)
             )
             ->when($filters['search'] ?? null, function ($query, string $searchTerm) {
-                $escapedSearchTerm = $this->escapeLikeSearch($searchTerm);
+                $search = '%' . strtolower($searchTerm) . '%';
 
-                $query->where(function ($query) use ($escapedSearchTerm) {
-                    $query->whereRaw("name like ? escape '\\'", ["%{$escapedSearchTerm}%"])
-                        ->orWhereRaw("email like ? escape '\\'", ["%{$escapedSearchTerm}%"])
-                        ->orWhereRaw("phone like ? escape '\\'", ["%{$escapedSearchTerm}%"])
-                        ->orWhereRaw("message like ? escape '\\'", ["%{$escapedSearchTerm}%"]);
+                $query->where(function ($query) use ($search) {
+                    $query->whereRaw('lower(name) like ?', [$search])
+                        ->orWhereRaw('lower(email) like ?', [$search])
+                        ->orWhereRaw('lower(phone) like ?', [$search])
+                        ->orWhereRaw('lower(message) like ?', [$search]);
                 });
             })
             ->latest()
             ->paginate($filters['per_page'] ?? 15);
     }
 
-    private function escapeLikeSearch(string $searchTerm): string
-    {
-        return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $searchTerm);
-    }
 }

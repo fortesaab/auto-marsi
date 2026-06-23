@@ -49,12 +49,12 @@ class PublicListingQuery
                 $query->where('body_type', $bodyType)
             )
             ->when(isset($filters['search']) && $filters['search'] !== null, function ($query) use ($filters) {
-                $search = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $filters['search']);
+                $search = '%' . strtolower($filters['search']) . '%';
 
                 $query->where(function ($query) use ($search) {
-                    $query->whereRaw("title like ? escape '\\'", ["%{$search}%"])
-                        ->orWhereRaw("description like ? escape '\\'", ["%{$search}%"])
-                        ->orWhereRaw("location like ? escape '\\'", ["%{$search}%"]);
+                    $query->whereRaw('lower(title) like ?', [$search])
+                        ->orWhereRaw('lower(description) like ?', [$search])
+                        ->orWhereRaw('lower(location) like ?', [$search]);
                 });
             })
             ->latest('published_at')

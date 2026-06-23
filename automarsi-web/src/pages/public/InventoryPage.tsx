@@ -40,13 +40,13 @@ function InventoryPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
         <PublicListingFilters
           filters={filters}
           onFiltersChange={setFilters}
         />
 
-        <div className="grid gap-5">
+        <div className="grid min-w-0 gap-5">
           {listingsQuery.isLoading ? (
             <div className="rounded-lg border bg-card p-8 text-sm text-muted-foreground">
               Loading vehicles...

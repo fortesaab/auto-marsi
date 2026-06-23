@@ -12,12 +12,12 @@ class AdminListingQuery
         return Listing::query()
             ->with(['make', 'carModel', 'primaryImage'])
             ->when($filters['search'] ?? null, function ($query, string $searchTerm) {
-                $escapedSearchTerm = $this->escapeLikeSearch($searchTerm);
+                $search = '%' . strtolower($searchTerm) . '%';
 
-                $query->where(function ($query) use ($escapedSearchTerm) {
-                    $query->whereRaw("title like ? escape '\\'", ["%{$escapedSearchTerm}%"])
-                        ->orWhereRaw("vin like ? escape '\\'", ["%{$escapedSearchTerm}%"])
-                        ->orWhereRaw("location like ? escape '\\'", ["%{$escapedSearchTerm}%"]);
+                $query->where(function ($query) use ($search) {
+                    $query->whereRaw('lower(title) like ?', [$search])
+                        ->orWhereRaw('lower(vin) like ?', [$search])
+                        ->orWhereRaw('lower(location) like ?', [$search]);
                 });
             })
             ->when($filters['status'] ?? null, fn ($query, $status) => $query->where('status', $status))
@@ -29,8 +29,4 @@ class AdminListingQuery
             ->paginate($filters['per_page'] ?? 15);
     }
 
-    private function escapeLikeSearch(string $searchTerm): string
-    {
-        return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $searchTerm);
-    }
 }
