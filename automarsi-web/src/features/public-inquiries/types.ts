@@ -1,10 +1,12 @@
+export type PublicInquirySource = 'listing_details' | 'contact_page'
+
 export type CreatePublicInquiryPayload = {
-  listing_id: number
+  listing_id: number | null
   name: string
   phone: string
   email: string | null
   message: string | null
-  source: 'listing_details'
+  source: PublicInquirySource
 }
 
 export type CreatePublicInquiryResponse = {
