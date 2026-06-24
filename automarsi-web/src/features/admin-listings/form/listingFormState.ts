@@ -20,6 +20,8 @@ export type ListingFormState = {
   location: string
   description: string
   featureIds: string[]
+  engineSize: string
+  horsepower: string
 }
 
 export const initialListingFormState: ListingFormState = {
@@ -39,6 +41,8 @@ export const initialListingFormState: ListingFormState = {
   location: '',
   description: '',
   featureIds: [],
+  engineSize: '',
+  horsepower: '',
 }
 
 export function listingToFormState(
@@ -65,6 +69,11 @@ export function listingToFormState(
     status: listing.status,
     location: listing.location ?? '',
     description: listing.description ?? '',
+    engineSize: listing.engine_size ?? '',
+    horsepower:
+      listing.horsepower === null
+        ? ''
+        : String(listing.horsepower),
     featureIds: listing.features.map((feature) =>
       String(feature.id)
     ),
@@ -101,6 +110,8 @@ export function buildListingPayload(
     location: nullableText(formState.location),
     description: nullableText(formState.description),
     feature_ids: formState.featureIds.map(Number),
+    engine_size: nullableNumber(formState.engineSize),
+    horsepower: nullableNumber(formState.horsepower),
   }
 }
 

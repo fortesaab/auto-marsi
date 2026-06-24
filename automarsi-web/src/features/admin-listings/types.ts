@@ -28,6 +28,8 @@ export type CreateAdminListingPayload = {
   location?: string | null
   description?: string | null
   feature_ids: number[]
+  engine_size?: number | null
+  horsepower?: number | null
 }
 
 export type CreateAdminListingResponse = {

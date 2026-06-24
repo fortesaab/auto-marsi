@@ -25,7 +25,7 @@ function ListingSpecificationFields({
       description="Record the essential technical details."
       icon={Settings2}
     >
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <FormField label="Fuel type">
           <select
             className="h-9 rounded-md border bg-background px-3 text-sm"
@@ -79,6 +79,29 @@ function ListingSpecificationFields({
               void onFieldChange('color', event.target.value)
             }}
             placeholder="Black"
+          />
+        </FormField>
+        <FormField label="Engine size">
+          <input
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            value={formState.engineSize}
+            onChange={(event) => {
+              void onFieldChange('engineSize', event.target.value)
+            }}
+            placeholder="2.0"
+            inputMode="decimal"
+          />
+        </FormField>
+
+        <FormField label="Horsepower">
+          <input
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            value={formState.horsepower}
+            onChange={(event) => {
+              void onFieldChange('horsepower', event.target.value)
+            }}
+            placeholder="245"
+            inputMode="numeric"
           />
         </FormField>
       </div>
