@@ -1,34 +1,55 @@
-import { BadgeCheck, Calculator, Clock } from 'lucide-react'
-import FeatureCard from '@/components/public/FeatureCard'
+import { ArrowRight } from 'lucide-react'
+
 import SectionHeader from '@/components/public/SectionHeader'
+import { Button } from '@/components/ui/button'
+import FinancingCalculator from '@/features/public-financing/components/FinancingCalculator'
+import FinancingCta from '@/features/public-financing/components/FinancingCta'
+import FinancingSteps from '@/features/public-financing/components/FinancingSteps'
 
-function FinancingPage() {
+type FinancingPageProps = {
+  onNavigate: (path: string) => void
+}
+
+function FinancingPage({ onNavigate }: FinancingPageProps) {
   return (
-    <section className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:px-8">
-      <SectionHeader
-        eyebrow="Financing"
-        title="Flexible financing guidance."
-        description="This branch only prepares the page. A calculator can be added later as frontend-only logic."
-      />
+    <div className="grid gap-6">
+      <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_360px] lg:items-start lg:px-8">
+        <div className="grid max-w-3xl gap-5">
+          <SectionHeader
+            eyebrow="Financing"
+            title="Plan the next step before you visit."
+            description="Use this page as simple guidance before speaking with the AutoMarsi team. The estimate helps you prepare better questions, not receive guaranteed approval."
+          />
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <FeatureCard
-          icon={<Calculator className="size-5" />}
-          title="Payment estimate"
-          description="A future calculator can estimate monthly payments without backend changes."
-        />
-        <FeatureCard
-          icon={<BadgeCheck className="size-5" />}
-          title="Clear terms"
-          description="Explain financing options in a compact and understandable way."
-        />
-        <FeatureCard
-          icon={<Clock className="size-5" />}
-          title="Fast follow-up"
-          description="Interested customers can be routed into the inquiry workflow."
-        />
-      </div>
-    </section>
+          <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+            Financing depends on real terms, customer details, vehicle price,
+            and the final offer reviewed by the customer. Nothing on this page
+            is saved or sent to a bank.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <Button type="button" onClick={() => onNavigate('/inventory')}>
+              Browse vehicles
+              <ArrowRight className="size-4" />
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onNavigate('/contact')}
+            >
+              Ask about financing
+            </Button>
+          </div>
+        </div>
+
+        <FinancingCalculator />
+      </section>
+
+      <FinancingSteps />
+
+      <FinancingCta onNavigate={onNavigate} />
+    </div>
   )
 }
 
