@@ -10,7 +10,7 @@ class PublicListingQuery
     public function paginate(array $filters): LengthAwarePaginator
     {
         return Listing::query()
-            ->with(['make', 'carModel', 'primaryImage', 'images'])
+            ->with(['make', 'carModel', 'primaryImage'])
             ->where('status', 'active')
             ->when(
                 $filters['make_id'] ?? null,

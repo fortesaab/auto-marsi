@@ -41,6 +41,7 @@ export function useMakeModelCatalog() {
   const makesQuery = useQuery({
     queryKey: ['admin', 'catalog', 'makes'],
     enabled: isLoaded && isSignedIn,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const token = await getAuthToken()
 
@@ -58,6 +59,7 @@ export function useMakeModelCatalog() {
   const modelsQuery = useQuery({
     queryKey: ['admin', 'catalog', 'models', activeMakeId],
     enabled: isLoaded && isSignedIn && activeMakeId !== null,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       if (activeMakeId === null) {
         return []

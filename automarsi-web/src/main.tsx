@@ -12,7 +12,16 @@ if (!publishableKey) {
   throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY')
 }
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      gcTime: 5 * 60_000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

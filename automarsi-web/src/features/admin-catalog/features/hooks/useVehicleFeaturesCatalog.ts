@@ -23,6 +23,7 @@ export function useVehicleFeaturesCatalog() {
   const featuresQuery = useQuery({
     queryKey: ['admin', 'catalog', 'vehicle-features'],
     enabled: isAuthReady,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const token = await getAdminToken()
 

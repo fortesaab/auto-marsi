@@ -65,6 +65,7 @@ export function useAdminListings({
       },
     ],
     enabled: isLoaded && isSignedIn,
+    staleTime: 20_000,
     queryFn: async () => {
       const token = await getAuthToken()
 

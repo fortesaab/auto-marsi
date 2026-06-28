@@ -37,6 +37,7 @@ export function useAdminAppointments({
   const appointmentsQuery = useQuery({
     queryKey,
     enabled: isAuthReady,
+    staleTime: 15_000,
     queryFn: async () => {
       const token = await getAdminToken()
 

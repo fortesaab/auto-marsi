@@ -10,12 +10,14 @@ export function usePublicMakeOptions({ makeId }: UsePublicMakeOptionsParams) {
   const makesQuery = useQuery({
     queryKey: ['public', 'makes'],
     queryFn: getPublicMakes,
+    staleTime: 5 * 60_000,
   })
 
   const modelsQuery = useQuery({
     queryKey: ['public', 'makes', makeId, 'models'],
     queryFn: () => getPublicMakeModels(makeId),
     enabled: makeId !== '',
+    staleTime: 5 * 60_000,
   })
 
   return {

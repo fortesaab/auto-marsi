@@ -41,6 +41,8 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
             <img
               src={listing.primary_image.image_url}
               alt={listing.primary_image.alt_text ?? listing.title}
+              loading="lazy"
+              decoding="async"
               className="size-full object-cover transition duration-300 group-hover:scale-[1.02]"
             />
           ) : (

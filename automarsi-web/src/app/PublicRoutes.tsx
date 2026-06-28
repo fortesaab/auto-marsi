@@ -1,11 +1,15 @@
+import { lazy, Suspense } from 'react'
 import PublicLayout from '@/layouts/PublicLayout'
-import AboutPage from '@/pages/public/AboutPage'
-import ContactPage from '@/pages/public/ContactPage'
-import FinancingPage from '@/pages/public/FinancingPage'
-import HomePage from '@/pages/public/HomePage'
-import InventoryPage from '@/pages/public/InventoryPage'
-import ListingDetailsPage from '@/pages/public/ListingDetailsPage'
-import ServicesPage from '@/pages/public/ServicesPage'
+
+const AboutPage = lazy(() => import('@/pages/public/AboutPage'))
+const ContactPage = lazy(() => import('@/pages/public/ContactPage'))
+const FinancingPage = lazy(() => import('@/pages/public/FinancingPage'))
+const HomePage = lazy(() => import('@/pages/public/HomePage'))
+const InventoryPage = lazy(() => import('@/pages/public/InventoryPage'))
+const ListingDetailsPage = lazy(
+  () => import('@/pages/public/ListingDetailsPage')
+)
+const ServicesPage = lazy(() => import('@/pages/public/ServicesPage'))
 
 type PublicRoutesProps = {
   currentPath: string
@@ -50,7 +54,15 @@ function getPublicPage(path: string, onNavigate: (path: string) => void) {
 function PublicRoutes({ currentPath, onNavigate }: PublicRoutesProps) {
   return (
     <PublicLayout currentPath={currentPath} onNavigate={onNavigate}>
-      {getPublicPage(currentPath, onNavigate)}
+      <Suspense
+        fallback={
+          <main className="mx-auto min-h-[60vh] max-w-7xl px-4 py-10 text-sm text-muted-foreground sm:px-6 lg:px-8">
+            Loading page...
+          </main>
+        }
+      >
+        {getPublicPage(currentPath, onNavigate)}
+      </Suspense>
     </PublicLayout>
   )
 }

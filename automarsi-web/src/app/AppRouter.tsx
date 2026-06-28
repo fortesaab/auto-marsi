@@ -1,8 +1,10 @@
 import { SignInButton, SignedIn, SignedOut } from '@clerk/clerk-react'
 import { LogIn, ShieldCheck } from 'lucide-react'
-import AdminRoutes from './AdminRoutes'
-import PublicRoutes from './PublicRoutes'
+import { lazy, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
+
+const AdminRoutes = lazy(() => import('./AdminRoutes'))
+const PublicRoutes = lazy(() => import('./PublicRoutes'))
 
 type AppRouterProps = {
   currentPath: string
@@ -11,7 +13,17 @@ type AppRouterProps = {
 
 function AppRouter({ currentPath, onNavigate }: AppRouterProps) {
   if (!currentPath.startsWith('/admin')) {
-    return <PublicRoutes currentPath={currentPath} onNavigate={onNavigate} />
+    return (
+      <Suspense
+        fallback={
+          <main className="grid min-h-screen place-items-center text-sm text-muted-foreground">
+            Loading...
+          </main>
+        }
+      >
+        <PublicRoutes currentPath={currentPath} onNavigate={onNavigate} />
+      </Suspense>
+    )
   }
 
   return (
@@ -43,7 +55,15 @@ function AppRouter({ currentPath, onNavigate }: AppRouterProps) {
       </SignedOut>
 
       <SignedIn>
-        <AdminRoutes currentPath={currentPath} onNavigate={onNavigate} />
+        <Suspense
+          fallback={
+            <main className="grid min-h-screen place-items-center bg-background text-sm text-muted-foreground">
+              Loading admin...
+            </main>
+          }
+        >
+          <AdminRoutes currentPath={currentPath} onNavigate={onNavigate} />
+        </Suspense>
       </SignedIn>
     </>
   )

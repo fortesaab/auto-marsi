@@ -56,6 +56,7 @@ export function useListingEquipment({
   const featuresQuery = useQuery({
     queryKey: featuresQueryKey,
     enabled: isAuthReady,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const token = await getAdminToken()
 
@@ -66,6 +67,7 @@ export function useListingEquipment({
   const suggestionsQuery = useQuery({
     queryKey: suggestionsQueryKey(carModelId),
     enabled: isAuthReady && carModelId > 0,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const token = await getAdminToken()
 
@@ -124,6 +126,7 @@ export function useListingEquipment({
       const token = await getAdminToken()
       const suggestions = await queryClient.fetchQuery({
         queryKey: suggestionsQueryKey(modelId),
+        staleTime: 5 * 60_000,
         queryFn: () =>
           getCarModelFeatureSuggestions({
             token,

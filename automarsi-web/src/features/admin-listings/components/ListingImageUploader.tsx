@@ -164,6 +164,8 @@ function ListingImageUploader({
                 <img
                   src={image.previewUrl}
                   alt={image.file.name}
+                  loading="lazy"
+                  decoding="async"
                   className="h-28 w-full object-cover"
                 />
                 <Button

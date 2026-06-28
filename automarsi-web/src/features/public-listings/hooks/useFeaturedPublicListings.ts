@@ -20,6 +20,7 @@ export function useFeaturedPublicListings() {
   const listingsQuery = useQuery({
     queryKey: ['public', 'homepage-listings'],
     queryFn: () => getPublicListings(homepageListingFilters),
+    staleTime: 60_000,
   })
 
   return {

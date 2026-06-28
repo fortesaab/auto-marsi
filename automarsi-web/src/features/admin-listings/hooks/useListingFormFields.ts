@@ -30,12 +30,14 @@ export function useListingFormFields(
   const makesQuery = useQuery({
     queryKey: ['listing-form', 'makes'],
     queryFn: getListingMakes,
+    staleTime: 5 * 60_000,
   })
 
   const carModelsQuery = useQuery({
     queryKey: ['listing-form', 'car-models', selectedMakeId],
     enabled: selectedMakeId > 0,
     queryFn: () => getListingCarModels(selectedMakeId),
+    staleTime: 5 * 60_000,
   })
 
   const equipment = useListingEquipment({

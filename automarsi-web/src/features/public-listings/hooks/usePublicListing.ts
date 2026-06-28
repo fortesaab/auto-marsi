@@ -10,6 +10,7 @@ export function usePublicListing({ listingId }: UsePublicListingParams) {
     queryKey: ['public', 'listing', listingId],
     enabled: Number.isFinite(listingId) && listingId > 0,
     queryFn: () => getPublicListing({ listingId }),
+    staleTime: 60_000,
   })
 
   return {

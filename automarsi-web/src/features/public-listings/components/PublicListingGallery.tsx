@@ -33,6 +33,7 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
             <img
               src={selectedImage.image_url}
               alt={selectedImage.alt_text ?? listing.title}
+              decoding="async"
               className="size-full object-cover"
             />
           ) : (
@@ -85,6 +86,8 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
                     <img
                       src={image.image_url}
                       alt={image.alt_text ?? listing.title}
+                      loading="lazy"
+                      decoding="async"
                       className="size-full object-cover"
                     />
                   ) : (

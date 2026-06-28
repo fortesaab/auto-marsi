@@ -106,6 +106,8 @@ function ListingImageCard({
           <img
             src={image.image_url}
             alt={image.alt_text ?? `Listing image ${image.id}`}
+            loading="lazy"
+            decoding="async"
             className="size-full object-cover"
           />
 

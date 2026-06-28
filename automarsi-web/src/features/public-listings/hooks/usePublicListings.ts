@@ -10,6 +10,7 @@ export function usePublicListings({ filters }: UsePublicListingsParams) {
   const listingsQuery = useQuery({
     queryKey: ['public', 'listings', filters],
     queryFn: () => getPublicListings(filters),
+    staleTime: 60_000,
   })
 
   return {

@@ -291,6 +291,7 @@ function ListingImageLightbox({
               ref={imageRef}
               src={currentImage.image_url}
               alt={currentImage.alt_text ?? listingTitle}
+              decoding="async"
               className="max-h-[calc(100vh-11rem)] max-w-full select-none object-contain transition-transform duration-200"
               style={{ transform: `scale(${zoom})` }}
               draggable={false}
@@ -346,6 +347,8 @@ function ListingImageLightbox({
               <img
                 src={image.image_url}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="size-full object-cover"
               />
             </button>

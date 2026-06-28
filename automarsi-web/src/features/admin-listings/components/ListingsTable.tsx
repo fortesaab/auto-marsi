@@ -77,6 +77,8 @@ function ListingsTable({
                       <img
                         src={primaryImage.image_url}
                         alt={primaryImage.alt_text ?? listing.title}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover"
                       />
                     ) : null}

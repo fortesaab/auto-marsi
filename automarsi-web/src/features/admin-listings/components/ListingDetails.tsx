@@ -88,6 +88,7 @@ function ListingDetails({ listing }: ListingDetailsProps) {
               <img
                 src={heroImage.image_url}
                 alt={heroImage.alt_text ?? listing.title}
+                decoding="async"
                 className="aspect-[16/9] w-full object-cover transition-transform duration-200 group-hover:scale-[1.01]"
               />
               <span className="absolute bottom-3 right-3 flex items-center gap-2 rounded-md bg-black/65 px-3 py-2 text-xs font-medium text-white">
@@ -269,6 +270,8 @@ function ListingDetails({ listing }: ListingDetailsProps) {
                 <img
                   src={image.image_url}
                   alt={image.alt_text ?? listing.title}
+                  loading="lazy"
+                  decoding="async"
                   className="aspect-[4/3] w-full object-cover transition-transform duration-200 group-hover:scale-105"
                 />
               </button>
