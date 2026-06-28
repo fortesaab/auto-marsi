@@ -6,6 +6,10 @@ type GetAdminListingsParams = {
   perPage?: number
   search?: string
   status?: string
+  condition?: string
+  makeId?: string
+  carModelId?: string
+  isFeatured?: string
 }
 
 export async function getAdminListings({
@@ -14,6 +18,10 @@ export async function getAdminListings({
   perPage,
   search,
   status,
+  condition,
+  makeId,
+  carModelId,
+  isFeatured,
 }: GetAdminListingsParams): Promise<AdminListingsResponse> {
   const apiUrl = import.meta.env.VITE_API_URL
   const queryParams = new URLSearchParams()
@@ -30,6 +38,22 @@ export async function getAdminListings({
 
   if (status) {
     queryParams.set('status', status)
+  }
+
+  if (condition) {
+    queryParams.set('condition', condition)
+  }
+
+  if (makeId) {
+    queryParams.set('make_id', makeId)
+  }
+
+  if (carModelId) {
+    queryParams.set('car_model_id', carModelId)
+  }
+
+  if (isFeatured) {
+    queryParams.set('is_featured', isFeatured)
   }
 
   const response = await fetch(

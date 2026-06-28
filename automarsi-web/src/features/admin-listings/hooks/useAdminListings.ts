@@ -8,7 +8,34 @@ import {
   type AdminListingStatusAction,
 } from '../api/updateAdminListingStatus'
 
-export function useAdminListings() {
+type UseAdminListingsFilters = {
+  search?: string
+  status?: string
+  condition?: string
+  makeId?: string
+  carModelId?: string
+  isFeatured?: string
+  page?: number
+  perPage?: number
+}
+
+const emptyMeta = {
+  current_page: 1,
+  last_page: 1,
+  per_page: 15,
+  total: 0,
+}
+
+export function useAdminListings({
+  search = '',
+  status = '',
+  condition = '',
+  makeId = '',
+  carModelId = '',
+  isFeatured = '',
+  page = 1,
+  perPage = 15,
+}: UseAdminListingsFilters = {}) {
   const { getToken, isLoaded, isSignedIn } = useAuth()
   const queryClient = useQueryClient()
 
@@ -23,12 +50,35 @@ export function useAdminListings() {
   }
 
   const listingsQuery = useQuery({
-    queryKey: ['admin', 'listings'],
+    queryKey: [
+      'admin',
+      'listings',
+      {
+        search,
+        status,
+        condition,
+        makeId,
+        carModelId,
+        isFeatured,
+        page,
+        perPage,
+      },
+    ],
     enabled: isLoaded && isSignedIn,
     queryFn: async () => {
       const token = await getAuthToken()
 
-      return getAdminListings({ token })
+      return getAdminListings({
+        token,
+        search,
+        status,
+        condition,
+        makeId,
+        carModelId,
+        isFeatured,
+        page,
+        perPage,
+      })
     },
   })
 
@@ -98,11 +148,13 @@ export function useAdminListings() {
   }
 
   const listings = listingsQuery.data?.data ?? []
+  const meta = listingsQuery.data?.meta ?? emptyMeta
   const errorMessage =
     listingsQuery.error instanceof Error ? listingsQuery.error.message : null
 
   return {
     listings,
+    meta,
     listingsQuery,
     errorMessage,
 
