@@ -1,6 +1,9 @@
 import {
   ArrowLeft,
+  Archive,
+  BadgeDollarSign,
   CheckCircle2,
+  ExternalLink,
   Images,
   Pencil,
   Send,
@@ -13,6 +16,7 @@ import ListingDetails from '@/features/admin-listings/components/ListingDetails'
 import ListingWorkflowSteps from '@/features/admin-listings/components/ListingWorkflowSteps'
 import { useAdminListing } from '@/features/admin-listings/hooks/useAdminListing'
 import { usePublishListing } from '@/features/admin-listings/hooks/usePublishListing'
+import { useUpdateListingStatus } from '@/features/admin-listings/hooks/useUpdateListingStatus'
 
 type ListingViewPageProps = {
   listingId: string
@@ -22,8 +26,12 @@ type ListingViewPageProps = {
 function ListingViewPage({ listingId, onNavigate }: ListingViewPageProps) {
   const { listing, listingQuery, errorMessage } = useAdminListing({ listingId })
   const publishMutation = usePublishListing({ listingId })
+  const statusMutation = useUpdateListingStatus({ listingId })
   const isPublished = listing?.status === 'active'
+  const isSold = listing?.status === 'sold'
+  const isArchived = listing?.status === 'archived'
   const canPublish = Boolean(listing && listing.images.length > 0)
+  const isChangingStatus = publishMutation.isPending || statusMutation.isPending
 
   return (
     <section className="grid gap-4">
@@ -32,8 +40,12 @@ function ListingViewPage({ listingId, onNavigate }: ListingViewPageProps) {
         title={listing?.title ?? `Listing #${listingId}`}
         description={
           isPublished
-            ? 'This listing is published and visible to customers.'
-            : 'Review the vehicle details and images before publishing.'
+            ? 'Visible to customers in the public inventory.'
+            : isSold
+              ? 'Sold listings are kept for internal history.'
+              : isArchived
+                ? 'Archived listings stay internal and hidden from customers.'
+                : 'Review details and images before publishing.'
         }
         action={
           <div className="flex flex-wrap justify-end gap-2">
@@ -45,6 +57,18 @@ function ListingViewPage({ listingId, onNavigate }: ListingViewPageProps) {
               <ArrowLeft />
               Back to listings
             </Button>
+
+            {isPublished ? (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onNavigate(`/inventory/${listingId}`)}
+              >
+                <ExternalLink />
+                Public page
+              </Button>
+            ) : null}
+
             <Button
               type="button"
               variant="outline"
@@ -65,14 +89,14 @@ function ListingViewPage({ listingId, onNavigate }: ListingViewPageProps) {
             </Button>
 
             {isPublished ? (
-              <Button type="button" disabled>
+              <Button type="button" disabled={isChangingStatus}>
                 <CheckCircle2 />
-                Published
+                Active
               </Button>
             ) : (
               <Button
                 type="button"
-                disabled={!canPublish || publishMutation.isPending}
+                disabled={!canPublish || isChangingStatus}
                 title={
                   canPublish
                     ? 'Publish listing'
@@ -83,9 +107,33 @@ function ListingViewPage({ listingId, onNavigate }: ListingViewPageProps) {
                 <Send />
                 {publishMutation.isPending
                   ? 'Publishing...'
-                  : 'Publish listing'}
+                  : 'Publish'}
               </Button>
             )}
+
+            {listing && listing.status !== 'sold' ? (
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isChangingStatus}
+                onClick={() => statusMutation.mutate('sold')}
+              >
+                <BadgeDollarSign />
+                Sold
+              </Button>
+            ) : null}
+
+            {listing && listing.status !== 'archived' ? (
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isChangingStatus}
+                onClick={() => statusMutation.mutate('archived')}
+              >
+                <Archive />
+                Archive
+              </Button>
+            ) : null}
           </div>
         }
       />

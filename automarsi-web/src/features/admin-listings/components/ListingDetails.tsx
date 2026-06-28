@@ -1,6 +1,8 @@
 import {
   CalendarDays,
   CarFront,
+  Eye,
+  EyeOff,
   Fuel,
   Gauge,
   Images,
@@ -67,8 +69,42 @@ function formatPrice(price: string, currency: string) {
   }).format(numericPrice)
 }
 
+function getVisibilityDetails(status: string) {
+  if (status === 'active') {
+    return {
+      label: 'Public listing',
+      description: 'Customers can see this vehicle in the public inventory.',
+      icon: Eye,
+    }
+  }
+
+  if (status === 'sold') {
+    return {
+      label: 'Sold vehicle',
+      description: 'Hidden from public inventory and kept for records.',
+      icon: EyeOff,
+    }
+  }
+
+  if (status === 'archived') {
+    return {
+      label: 'Internal record',
+      description: 'Archived listings stay hidden from customers.',
+      icon: EyeOff,
+    }
+  }
+
+  return {
+    label: 'Draft listing',
+    description: 'Not visible publicly until it is published.',
+    icon: EyeOff,
+  }
+}
+
 function ListingDetails({ listing }: ListingDetailsProps) {
   const heroImage = listing.primary_image ?? listing.images[0] ?? null
+  const visibility = getVisibilityDetails(listing.status)
+  const VisibilityIcon = visibility.icon
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const heroImageIndex = heroImage
     ? listing.images.findIndex((image) => image.id === heroImage.id)
@@ -108,11 +144,16 @@ function ListingDetails({ listing }: ListingDetailsProps) {
 
         <Card>
           <CardHeader className="border-b">
-            <div className="flex flex-wrap items-center gap-2">
-              <ListingStatusBadge status={listing.status} />
-              {listing.is_featured ? (
-                <Badge variant="secondary">Featured</Badge>
-              ) : null}
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <ListingStatusBadge status={listing.status} />
+                {listing.is_featured ? (
+                  <Badge variant="secondary">Featured</Badge>
+                ) : null}
+              </div>
+              <span className="text-xs text-muted-foreground">
+                #{listing.id}
+              </span>
             </div>
             <CardTitle className="mt-2 text-xl">{listing.title}</CardTitle>
           </CardHeader>
@@ -123,6 +164,18 @@ function ListingDetails({ listing }: ListingDetailsProps) {
               <p className="text-2xl font-semibold">
                 {formatPrice(listing.price, listing.currency)}
               </p>
+            </div>
+
+            <div className="flex gap-3 rounded-lg border bg-muted/25 p-3">
+              <span className="grid size-9 shrink-0 place-items-center rounded-md bg-background text-muted-foreground">
+                <VisibilityIcon className="size-4" />
+              </span>
+              <div>
+                <p className="text-sm font-medium">{visibility.label}</p>
+                <p className="mt-0.5 text-sm leading-5 text-muted-foreground">
+                  {visibility.description}
+                </p>
+              </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -151,9 +204,9 @@ function ListingDetails({ listing }: ListingDetailsProps) {
         </Card>
       </div>
 
-      <Card>
-        <CardHeader className="border-b">
-          <CardTitle>Vehicle specifications</CardTitle>
+      <Card className="overflow-hidden">
+        <CardHeader className="border-b bg-muted/20">
+          <CardTitle className="text-base">Vehicle specifications</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <DetailItem
@@ -208,13 +261,23 @@ function ListingDetails({ listing }: ListingDetailsProps) {
             }
             icon={Gauge}
           />
+          <DetailItem
+            label="VIN"
+            value={formatValue(listing.vin)}
+            icon={Settings2}
+          />
+          <DetailItem
+            label="Registration"
+            value={formatValue(listing.registration_until)}
+            icon={CalendarDays}
+          />
         </CardContent>
       </Card>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="border-b">
-            <CardTitle>Features</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="border-b bg-muted/20">
+            <CardTitle className="text-base">Features</CardTitle>
           </CardHeader>
           <CardContent>
             {listing.features.length === 0 ? (
@@ -241,9 +304,9 @@ function ListingDetails({ listing }: ListingDetailsProps) {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="border-b">
-            <CardTitle>Description</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="border-b bg-muted/20">
+            <CardTitle className="text-base">Description</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="whitespace-pre-wrap text-sm leading-6 text-muted-foreground">
@@ -254,9 +317,9 @@ function ListingDetails({ listing }: ListingDetailsProps) {
       </div>
 
       {listing.images.length > 1 ? (
-        <Card>
-          <CardHeader className="border-b">
-            <CardTitle>Gallery</CardTitle>
+        <Card className="overflow-hidden">
+          <CardHeader className="border-b bg-muted/20">
+            <CardTitle className="text-base">Gallery</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
             {listing.images.map((image, index) => (
