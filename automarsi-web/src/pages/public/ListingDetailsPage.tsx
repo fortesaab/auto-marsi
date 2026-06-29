@@ -7,6 +7,7 @@ import PublicListingGallery from '@/features/public-listings/components/PublicLi
 import PublicListingSpecs from '@/features/public-listings/components/PublicListingSpecs'
 import PublicListingInquiryForm from '@/features/public-listings/components/PublicListingInquiryForm'
 import { usePublicListing } from '@/features/public-listings/hooks/usePublicListing'
+import { useI18n } from '@/i18n/useI18n'
 
 type ListingDetailsPageProps = {
   listingId: number
@@ -17,6 +18,7 @@ function ListingDetailsPage({
   listingId,
   onNavigate,
 }: ListingDetailsPageProps) {
+  const { messages } = useI18n()
   const { listing, listingQuery, errorMessage } = usePublicListing({
     listingId,
   })
@@ -25,7 +27,7 @@ function ListingDetailsPage({
     return (
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="rounded-xl border bg-card p-8 text-sm text-muted-foreground">
-          Loading vehicle details...
+          {messages.listingDetails.loading}
         </div>
       </section>
     )
@@ -37,7 +39,7 @@ function ListingDetailsPage({
         <BackToInventoryButton onNavigate={onNavigate} />
 
         <div className="grid gap-3 rounded-xl border bg-card p-8">
-          <p className="font-medium">Could not load this vehicle.</p>
+          <p className="font-medium">{messages.listingDetails.couldNotLoad}</p>
           <p className="text-sm text-muted-foreground">{errorMessage}</p>
           <Button
             type="button"
@@ -45,7 +47,7 @@ function ListingDetailsPage({
             className="w-fit"
             onClick={() => listingQuery.refetch()}
           >
-            Try again
+            {messages.common.tryAgain}
           </Button>
         </div>
       </section>
@@ -58,7 +60,7 @@ function ListingDetailsPage({
         <BackToInventoryButton onNavigate={onNavigate} />
 
         <div className="rounded-xl border bg-card p-8 text-sm text-muted-foreground">
-          Vehicle not found.
+          {messages.listingDetails.notFound}
         </div>
       </section>
     )
@@ -90,6 +92,8 @@ type BackToInventoryButtonProps = {
 }
 
 function BackToInventoryButton({ onNavigate }: BackToInventoryButtonProps) {
+  const { messages } = useI18n()
+
   return (
     <Button
       type="button"
@@ -98,7 +102,7 @@ function BackToInventoryButton({ onNavigate }: BackToInventoryButtonProps) {
       onClick={() => onNavigate('/inventory')}
     >
       <ArrowLeft className="size-4" />
-      Back to inventory
+      {messages.listingDetails.backToInventory}
     </Button>
   )
 }

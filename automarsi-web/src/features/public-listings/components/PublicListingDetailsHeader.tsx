@@ -1,4 +1,5 @@
 import { BadgeCheck } from 'lucide-react'
+import { useI18n } from '@/i18n/useI18n'
 import type { PublicListing } from '../types'
 
 type PublicListingDetailsHeaderProps = {
@@ -8,6 +9,8 @@ type PublicListingDetailsHeaderProps = {
 function PublicListingDetailsHeader({
   listing,
 }: PublicListingDetailsHeaderProps) {
+  const { messages } = useI18n()
+
   return (
     <section className="rounded-xl border bg-card p-5 sm:p-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
@@ -23,7 +26,7 @@ function PublicListingDetailsHeader({
 
         <div className="inline-flex w-fit items-center gap-2 rounded-full border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
           <BadgeCheck className="size-3.5 text-red-600" />
-          Active listing
+          {messages.listingDetails.activeListing}
         </div>
       </div>
 
@@ -33,8 +36,7 @@ function PublicListingDetailsHeader({
         </p>
       ) : (
         <p className="mt-5 max-w-3xl text-sm leading-7 text-muted-foreground">
-          Contact AutoMarsi for availability, condition details, and showroom
-          follow-up for this vehicle.
+          {messages.listingDetails.fallbackDescription}
         </p>
       )}
     </section>

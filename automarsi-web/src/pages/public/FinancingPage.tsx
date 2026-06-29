@@ -5,31 +5,32 @@ import { Button } from '@/components/ui/button'
 import FinancingCalculator from '@/features/public-financing/components/FinancingCalculator'
 import FinancingCta from '@/features/public-financing/components/FinancingCta'
 import FinancingSteps from '@/features/public-financing/components/FinancingSteps'
+import { useI18n } from '@/i18n/useI18n'
 
 type FinancingPageProps = {
   onNavigate: (path: string) => void
 }
 
 function FinancingPage({ onNavigate }: FinancingPageProps) {
+  const { messages } = useI18n()
+
   return (
     <div className="grid gap-6">
       <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:px-8">
         <div className="grid max-w-3xl gap-5">
           <SectionHeader
-            eyebrow="Financing"
-            title="Plan the next step before you visit."
-            description="Use this page as guidance before speaking with AutoMarsi. The estimate helps you prepare better questions, not receive guaranteed approval."
+            eyebrow={messages.financing.eyebrow}
+            title={messages.financing.title}
+            description={messages.financing.description}
           />
 
           <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
-            Financing depends on real terms, customer details, vehicle price,
-            and the final offer reviewed by the customer. Nothing on this page
-            is saved or sent to a bank.
+            {messages.financing.body}
           </p>
 
           <div className="flex flex-wrap gap-3">
             <Button type="button" onClick={() => onNavigate('/inventory')}>
-              Browse vehicles
+              {messages.financing.browseVehicles}
               <ArrowRight className="size-4" />
             </Button>
 
@@ -38,7 +39,7 @@ function FinancingPage({ onNavigate }: FinancingPageProps) {
               variant="outline"
               onClick={() => onNavigate('/contact')}
             >
-              Ask about financing
+              {messages.financing.askAboutFinancing}
             </Button>
           </div>
         </div>

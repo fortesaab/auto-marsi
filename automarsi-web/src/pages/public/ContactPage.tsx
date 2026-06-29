@@ -2,39 +2,41 @@ import type { ReactNode } from 'react'
 import { Clock, Mail, MapPin, Phone } from 'lucide-react'
 import SectionHeader from '@/components/public/SectionHeader'
 import PublicContactInquiryForm from '@/features/public-inquiries/components/PublicContactInquiryForm'
-
-const contactDetails = [
-  {
-    icon: <Phone className="size-4" />,
-    label: 'Phone',
-    value: '+383 44 123 456',
-  },
-  {
-    icon: <Mail className="size-4" />,
-    label: 'Email',
-    value: 'info@automarsi.com',
-  },
-  {
-    icon: <MapPin className="size-4" />,
-    label: 'Location',
-    value: 'Prishtina, Kosovo',
-  },
-  {
-    icon: <Clock className="size-4" />,
-    label: 'Response',
-    value: 'Usually within business hours',
-  },
-]
+import { useI18n } from '@/i18n/useI18n'
 
 function ContactPage() {
+  const { messages } = useI18n()
+  const contactDetails = [
+    {
+      icon: <Phone className="size-4" />,
+      label: messages.common.phone,
+      value: messages.contact.phone,
+    },
+    {
+      icon: <Mail className="size-4" />,
+      label: messages.common.email,
+      value: messages.contact.email,
+    },
+    {
+      icon: <MapPin className="size-4" />,
+      label: messages.contact.locationLabel,
+      value: messages.contact.location,
+    },
+    {
+      icon: <Clock className="size-4" />,
+      label: messages.contact.response,
+      value: messages.contact.responseValue,
+    },
+  ]
+
   return (
     <section className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:px-8">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(420px,0.6fr)] lg:items-start">
         <div className="grid gap-6">
           <SectionHeader
-            eyebrow="Contact"
-            title="Ask before you visit."
-            description="Send a question about availability, financing, trade-in, or a showroom visit. The AutoMarsi team will follow up clearly."
+            eyebrow={messages.contact.eyebrow}
+            title={messages.contact.title}
+            description={messages.contact.description}
           />
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -50,11 +52,10 @@ function ContactPage() {
 
           <div className="rounded-xl bg-slate-950 p-5 text-white">
             <p className="text-xs font-semibold uppercase text-red-300">
-              What happens next
+              {messages.contact.nextEyebrow}
             </p>
             <p className="mt-2 text-sm leading-6 text-slate-300">
-              Your message becomes an inquiry in the admin dashboard. The team
-              reviews it, responds, and schedules a showroom visit if needed.
+              {messages.contact.nextDescription}
             </p>
           </div>
         </div>

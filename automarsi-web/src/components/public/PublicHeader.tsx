@@ -1,22 +1,25 @@
 import { MapPin, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useI18n } from '@/i18n/useI18n'
 import { cn } from '@/lib/utils'
+import LanguageToggle from './LanguageToggle'
 
 type PublicHeaderProps = {
   currentPath: string
   onNavigate: (path: string) => void
 }
 
-const navigationItems = [
-  { label: 'Home', path: '/' },
-  { label: 'Inventory', path: '/inventory' },
-  { label: 'About', path: '/about' },
-  { label: 'Services', path: '/services' },
-  { label: 'Financing', path: '/financing' },
-  { label: 'Contact', path: '/contact' },
-]
-
 function PublicHeader({ currentPath, onNavigate }: PublicHeaderProps) {
+  const { messages } = useI18n()
+  const navigationItems = [
+    { label: messages.nav.home, path: '/' },
+    { label: messages.nav.inventory, path: '/inventory' },
+    { label: messages.nav.about, path: '/about' },
+    { label: messages.nav.services, path: '/services' },
+    { label: messages.nav.financing, path: '/financing' },
+    { label: messages.nav.contact, path: '/contact' },
+  ]
+
   return (
     <header className="sticky top-0 z-40 border-b bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
@@ -44,25 +47,32 @@ function PublicHeader({ currentPath, onNavigate }: PublicHeaderProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 text-xs text-muted-foreground lg:flex">
+        <div className="hidden items-center gap-3 text-xs text-muted-foreground lg:flex">
           <span className="inline-flex items-center gap-1.5">
             <Phone className="size-3.5" />
-            +383 44 123 456
+            {messages.contact.phone}
           </span>
           <span className="inline-flex items-center gap-1.5">
             <MapPin className="size-3.5" />
-            Prishtina, Kosovo
+            {messages.contact.location}
           </span>
+          <LanguageToggle />
         </div>
 
-        <Button
-          type="button"
-          size="sm"
-          className="md:hidden"
-          onClick={() => onNavigate('/inventory')}
-        >
-          Browse
-        </Button>
+        <div className="hidden md:flex lg:hidden">
+          <LanguageToggle />
+        </div>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageToggle />
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => onNavigate('/inventory')}
+          >
+            {messages.common.browse}
+          </Button>
+        </div>
       </div>
     </header>
   )

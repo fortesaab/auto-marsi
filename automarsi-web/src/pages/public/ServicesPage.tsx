@@ -10,63 +10,35 @@ import {
 } from 'lucide-react'
 import SectionHeader from '@/components/public/SectionHeader'
 import { Button } from '@/components/ui/button'
+import { useI18n } from '@/i18n/useI18n'
 
 type ServicesPageProps = {
   onNavigate: (path: string) => void
 }
 
-const serviceItems = [
-  {
-    icon: <Car className="size-5" />,
-    title: 'Vehicle guidance',
-    description:
-      'We help customers compare vehicles by budget, usage, and practical needs.',
-  },
-  {
-    icon: <ClipboardCheck className="size-5" />,
-    title: 'Clear listing information',
-    description:
-      'Published vehicles include the key details customers need before asking more.',
-  },
-  {
-    icon: <Handshake className="size-5" />,
-    title: 'Trade-in discussion',
-    description:
-      'Customers can ask the team about possible trade-in steps before visiting.',
-  },
-  {
-    icon: <BadgeCheck className="size-5" />,
-    title: 'Financing guidance',
-    description:
-      'We help customers prepare the right questions before reviewing real terms.',
-  },
-  {
-    icon: <FileCheck2 className="size-5" />,
-    title: 'Purchase support',
-    description:
-      'The team helps with practical purchase steps, documents, and registration direction.',
-  },
-  {
-    icon: <Wrench className="size-5" />,
-    title: 'After-sale follow-up',
-    description:
-      'Customers can stay in contact for questions and service direction after purchase.',
-  },
-]
-
 function ServicesPage({ onNavigate }: ServicesPageProps) {
+  const { messages } = useI18n()
+  const serviceIcons = [
+    <Car className="size-5" />,
+    <ClipboardCheck className="size-5" />,
+    <Handshake className="size-5" />,
+    <BadgeCheck className="size-5" />,
+    <FileCheck2 className="size-5" />,
+    <Wrench className="size-5" />,
+  ]
+
   return (
     <section className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 lg:px-8">
       <div className="grid max-w-3xl gap-4">
         <SectionHeader
-          eyebrow="Services"
-          title="Practical support before and after you choose a vehicle."
-          description="AutoMarsi keeps the process simple: browse, ask, visit, and decide with clear information from the team."
+          eyebrow={messages.services.eyebrow}
+          title={messages.services.title}
+          description={messages.services.description}
         />
 
         <div className="flex flex-wrap gap-3">
           <Button type="button" onClick={() => onNavigate('/inventory')}>
-            Browse cars
+            {messages.services.browseCars}
             <ArrowRight className="size-4" />
           </Button>
 
@@ -75,16 +47,16 @@ function ServicesPage({ onNavigate }: ServicesPageProps) {
             variant="outline"
             onClick={() => onNavigate('/contact')}
           >
-            Contact us
+            {messages.services.contactUs}
           </Button>
         </div>
       </div>
 
       <div className="grid gap-x-12 gap-y-8 md:grid-cols-2">
-        {serviceItems.map((service) => (
+        {messages.services.items.map((service, index) => (
           <article key={service.title} className="flex gap-4">
             <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-red-50 text-red-600">
-              {service.icon}
+              {serviceIcons[index]}
             </div>
 
             <div>
@@ -102,21 +74,22 @@ function ServicesPage({ onNavigate }: ServicesPageProps) {
           <div>
             <div className="flex items-center gap-2 text-red-300">
               <MessageSquare className="size-4" />
-              <p className="text-xs font-semibold uppercase">Need help?</p>
+              <p className="text-xs font-semibold uppercase">
+                {messages.services.needHelp}
+              </p>
             </div>
 
             <h2 className="mt-2 text-2xl font-semibold">
-              Ask before you visit.
+              {messages.services.askBeforeVisit}
             </h2>
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
-              Send a question about availability, financing, trade-in, or
-              showroom follow-up.
+              {messages.services.helpDescription}
             </p>
           </div>
 
           <Button type="button" onClick={() => onNavigate('/contact')}>
-            Send inquiry
+            {messages.services.sendInquiry}
           </Button>
         </div>
       </section>

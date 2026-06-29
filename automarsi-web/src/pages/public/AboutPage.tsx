@@ -8,64 +8,37 @@ import {
 } from 'lucide-react'
 import SectionHeader from '@/components/public/SectionHeader'
 import { Button } from '@/components/ui/button'
+import { useI18n } from '@/i18n/useI18n'
 
 type AboutPageProps = {
   onNavigate: (path: string) => void
 }
 
-const principles = [
-  {
-    icon: <ShieldCheck className="size-4" />,
-    title: 'Selected inventory',
-    description: 'Customers see active vehicles prepared for real interest.',
-  },
-  {
-    icon: <MessageSquare className="size-4" />,
-    title: 'Clear communication',
-    description: 'Questions and visit requests enter the admin lead flow.',
-  },
-  {
-    icon: <Users className="size-4" />,
-    title: 'Human follow-up',
-    description: 'The team reviews every inquiry before the next step.',
-  },
-]
-
-const processSteps = [
-  {
-    title: 'Vehicle published',
-    description: 'The AutoMarsi team creates and activates the listing.',
-  },
-  {
-    title: 'Customer asks',
-    description: 'The customer sends a question, viewing request, or financing interest.',
-  },
-  {
-    title: 'Team follows up',
-    description: 'The team confirms availability and schedules the next step.',
-  },
-]
-
 function AboutPage({ onNavigate }: AboutPageProps) {
+  const { messages } = useI18n()
+  const principleIcons = [
+    <ShieldCheck className="size-4" />,
+    <MessageSquare className="size-4" />,
+    <Users className="size-4" />,
+  ]
+
   return (
     <div className="grid gap-10">
       <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(340px,0.5fr)] lg:items-center lg:px-8">
         <div className="grid max-w-3xl gap-5">
           <SectionHeader
-            eyebrow="About AutoMarsi"
-            title="A practical autosallon with a clear customer flow."
-            description="AutoMarsi connects real active vehicles with customers who want clear information before visiting the showroom."
+            eyebrow={messages.about.eyebrow}
+            title={messages.about.title}
+            description={messages.about.description}
           />
 
           <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
-            The public website is connected to the admin workflow, so listings,
-            inquiries, and showroom follow-up stay organized from the first
-            customer message.
+            {messages.about.body}
           </p>
 
           <div className="flex flex-wrap gap-3">
             <Button type="button" onClick={() => onNavigate('/inventory')}>
-              Browse vehicles
+              {messages.about.browseVehicles}
               <ArrowRight className="size-4" />
             </Button>
 
@@ -74,21 +47,21 @@ function AboutPage({ onNavigate }: AboutPageProps) {
               variant="outline"
               onClick={() => onNavigate('/contact')}
             >
-              Contact the team
+              {messages.about.contactTeam}
             </Button>
           </div>
         </div>
 
         <div className="rounded-xl border bg-card p-5 shadow-sm">
           <p className="text-xs font-semibold uppercase text-red-600">
-            What matters
+            {messages.about.mattersEyebrow}
           </p>
 
           <div className="mt-4 grid gap-4">
-            {principles.map((principle) => (
+            {messages.about.principles.map((principle, index) => (
               <div key={principle.title} className="flex gap-3">
                 <div className="grid size-9 shrink-0 place-items-center rounded-lg bg-red-50 text-red-600">
-                  {principle.icon}
+                  {principleIcons[index]}
                 </div>
 
                 <div>
@@ -107,18 +80,18 @@ function AboutPage({ onNavigate }: AboutPageProps) {
         <div className="grid gap-5 rounded-xl border bg-card p-6 md:grid-cols-[280px_1fr] md:items-start">
           <div>
             <p className="text-xs font-semibold uppercase text-red-600">
-              Our process
+              {messages.about.processEyebrow}
             </p>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-              From online interest to showroom visit.
+              {messages.about.processTitle}
             </h2>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              A simple flow keeps the customer and team aligned.
+              {messages.about.processDescription}
             </p>
           </div>
 
           <div className="grid gap-4">
-            {processSteps.map((step, index) => (
+            {messages.about.processSteps.map((step, index) => (
               <div key={step.title} className="flex gap-4">
                 <div className="grid size-8 shrink-0 place-items-center rounded-full bg-slate-950 text-xs font-semibold text-white">
                   {index + 1}
@@ -141,21 +114,22 @@ function AboutPage({ onNavigate }: AboutPageProps) {
           <div className="grid gap-2">
             <div className="flex items-center gap-2 text-red-300">
               <BadgeCheck className="size-4" />
-              <p className="text-xs font-semibold uppercase">Visit AutoMarsi</p>
+              <p className="text-xs font-semibold uppercase">
+                {messages.about.ctaEyebrow}
+              </p>
             </div>
 
             <h2 className="text-2xl font-semibold">
-              Start with a vehicle you like.
+              {messages.about.ctaTitle}
             </h2>
 
             <p className="max-w-2xl text-sm leading-6 text-slate-300">
-              Browse active inventory and send an inquiry when you want more
-              details, availability, or showroom guidance.
+              {messages.about.ctaDescription}
             </p>
           </div>
 
           <Button type="button" onClick={() => onNavigate('/inventory')}>
-            View inventory
+            {messages.about.viewInventory}
             <Car className="size-4" />
           </Button>
         </div>

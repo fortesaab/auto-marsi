@@ -1,22 +1,23 @@
 import { Mail, MapPin, Phone } from 'lucide-react'
+import { useI18n } from '@/i18n/useI18n'
 
 type PublicFooterProps = {
   onNavigate: (path: string) => void
 }
 
-const inventoryLinks = [
-  { label: 'All vehicles', path: '/inventory' },
-  { label: 'Financing guidance', path: '/financing' },
-  { label: 'Contact team', path: '/contact' },
-]
-
-const companyLinks = [
-  { label: 'About', path: '/about' },
-  { label: 'Services', path: '/services' },
-  { label: 'Contact', path: '/contact' },
-]
-
 function PublicFooter({ onNavigate }: PublicFooterProps) {
+  const { messages } = useI18n()
+  const inventoryLinks = [
+    { label: messages.footer.allVehicles, path: '/inventory' },
+    { label: messages.footer.financingGuidance, path: '/financing' },
+    { label: messages.footer.contactTeam, path: '/contact' },
+  ]
+  const companyLinks = [
+    { label: messages.nav.about, path: '/about' },
+    { label: messages.nav.services, path: '/services' },
+    { label: messages.nav.contact, path: '/contact' },
+  ]
+
   return (
     <footer className="border-t bg-slate-950 text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.4fr_0.8fr_0.8fr_1fr] lg:px-8">
@@ -25,44 +26,45 @@ function PublicFooter({ onNavigate }: PublicFooterProps) {
             Auto<span className="text-red-500">Marsi</span>
           </p>
           <p className="max-w-sm text-sm leading-6 text-slate-400">
-            Selected vehicles, clear communication, and showroom follow-up for
-            drivers across Kosovo.
+            {messages.footer.description}
           </p>
         </div>
 
         <FooterLinkGroup
-          title="Inventory"
+          title={messages.footer.inventory}
           links={inventoryLinks}
           onNavigate={onNavigate}
         />
 
         <FooterLinkGroup
-          title="Company"
+          title={messages.footer.company}
           links={companyLinks}
           onNavigate={onNavigate}
         />
 
         <div className="grid content-start gap-3">
-          <h3 className="text-sm font-semibold text-white">Contact</h3>
+          <h3 className="text-sm font-semibold text-white">
+            {messages.footer.contact}
+          </h3>
           <div className="grid gap-2 text-sm text-slate-400">
             <span className="inline-flex items-center gap-2">
               <Phone className="size-4" />
-              +383 44 123 456
+              {messages.contact.phone}
             </span>
             <span className="inline-flex items-center gap-2">
               <Mail className="size-4" />
-              info@automarsi.com
+              {messages.contact.email}
             </span>
             <span className="inline-flex items-center gap-2">
               <MapPin className="size-4" />
-              Prishtina, Kosovo
+              {messages.contact.location}
             </span>
           </div>
         </div>
       </div>
 
       <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-slate-500">
-        (c) 2026 AutoMarsi. All rights reserved.
+        {messages.footer.copyright}
       </div>
     </footer>
   )

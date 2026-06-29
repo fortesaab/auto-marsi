@@ -1,4 +1,5 @@
 import { Car, Gauge, MapPin } from 'lucide-react'
+import { useI18n } from '@/i18n/useI18n'
 import type { PublicListing } from '../types'
 
 type PublicListingCardProps = {
@@ -29,6 +30,16 @@ function formatKilometers(kilometers: number | null): string {
 }
 
 function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
+  const { messages } = useI18n()
+  const transmissionLabel =
+    messages.inventory.values[
+      listing.transmission as keyof typeof messages.inventory.values
+    ] ?? listing.transmission
+  const fuelLabel =
+    messages.inventory.values[
+      listing.fuel_type as keyof typeof messages.inventory.values
+    ] ?? listing.fuel_type
+
   return (
     <article className="group overflow-hidden rounded-xl border bg-card text-card-foreground shadow-xs transition hover:-translate-y-0.5 hover:shadow-md">
       <button
@@ -51,7 +62,9 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
                 <div className="grid size-10 place-items-center rounded-full bg-white shadow-xs">
                   <Car className="size-5" />
                 </div>
-                <span className="text-sm">Photos coming soon</span>
+                <span className="text-sm">
+                  {messages.inventory.card.photosComingSoon}
+                </span>
               </div>
             </div>
           )}
@@ -74,16 +87,18 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
         <div className="grid gap-2 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <Gauge className="size-3.5" />
-            {formatKilometers(listing.kilometers)}
+            {listing.kilometers === null
+              ? messages.common.mileageUnavailable
+              : formatKilometers(listing.kilometers)}
           </span>
 
           <span className="capitalize">
-            {listing.transmission} / {listing.fuel_type}
+            {transmissionLabel} / {fuelLabel}
           </span>
 
           <span className="inline-flex items-center gap-1.5">
             <MapPin className="size-3.5" />
-            {listing.location ?? 'Location unavailable'}
+            {listing.location ?? messages.common.locationUnavailable}
           </span>
         </div>
 
@@ -92,7 +107,7 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
           onClick={() => onNavigate(`/inventory/${listing.id}`)}
           className="mt-1 inline-flex h-9 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
         >
-          View details
+          {messages.inventory.card.viewDetails}
         </button>
       </div>
     </article>

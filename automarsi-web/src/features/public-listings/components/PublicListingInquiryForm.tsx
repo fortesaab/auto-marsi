@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { Clock, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useCreatePublicInquiry } from '@/features/public-inquiries/hooks/useCreatePublicInquiry'
+import { useI18n } from '@/i18n/useI18n'
 
 type PublicListingInquiryFormProps = {
   listingId: number
@@ -18,12 +19,6 @@ type InquiryFormState = {
   message: string
 }
 
-const intentLabels: Record<InquiryIntent, string> = {
-  question: 'Ask a question',
-  viewing: 'Book a viewing',
-  financing: 'Discuss financing',
-}
-
 const initialFormState: InquiryFormState = {
   name: '',
   phone: '',
@@ -36,6 +31,7 @@ const inputClassName =
   'h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
 
 function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) {
+  const { messages } = useI18n()
   const [formState, setFormState] = useState<InquiryFormState>(initialFormState)
   const createInquiryMutation = useCreatePublicInquiry()
 
@@ -49,6 +45,11 @@ function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) 
   async function submitInquiry(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
+    const intentLabels: Record<InquiryIntent, string> = {
+      question: messages.listingDetails.inquiry.askQuestion,
+      viewing: messages.listingDetails.inquiry.bookViewing,
+      financing: messages.listingDetails.inquiry.discussFinancing,
+    }
     const intentLabel = intentLabels[formState.intent]
 
     const message = [
@@ -70,7 +71,7 @@ function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) 
       })
 
       setFormState(initialFormState)
-      toast.success('Inquiry sent successfully.')
+      toast.success(messages.listingDetails.inquiry.successToast)
     } catch {
       // Inline error state below handles the message.
     }
@@ -87,13 +88,15 @@ function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) 
       className="grid gap-4 rounded-xl border bg-card p-5 text-card-foreground"
     >
       <div>
-        <h2 className="text-lg font-semibold">Ask about this vehicle</h2>
+        <h2 className="text-lg font-semibold">
+          {messages.listingDetails.inquiry.title}
+        </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Leave your details and the team will follow up.
+          {messages.listingDetails.inquiry.description}
         </p>
         <p className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
           <Clock className="size-3.5" />
-          Usually within business hours.
+          {messages.listingDetails.inquiry.responseTime}
         </p>
       </div>
 
@@ -104,18 +107,18 @@ function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) 
       ) : null}
 
       <label className="grid gap-1.5 text-sm font-medium">
-        Name
+        {messages.common.name}
         <input
           value={formState.name}
           onChange={(event) => updateField('name', event.target.value)}
           required
-          placeholder="Your name"
+          placeholder={messages.common.name}
           className={inputClassName}
         />
       </label>
 
       <label className="grid gap-1.5 text-sm font-medium">
-        Phone
+        {messages.common.phone}
         <input
           value={formState.phone}
           onChange={(event) => updateField('phone', event.target.value)}
@@ -126,7 +129,7 @@ function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) 
       </label>
 
       <label className="grid gap-1.5 text-sm font-medium">
-        Email
+        {messages.common.email}
         <input
           value={formState.email}
           onChange={(event) => updateField('email', event.target.value)}
@@ -137,7 +140,7 @@ function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) 
       </label>
 
       <label className="grid gap-1.5 text-sm font-medium">
-        I want to
+        {messages.listingDetails.inquiry.intentLabel}
         <select
           value={formState.intent}
           onChange={(event) =>
@@ -145,18 +148,24 @@ function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) 
           }
           className={inputClassName}
         >
-          <option value="question">Ask a question</option>
-          <option value="viewing">Book a viewing</option>
-          <option value="financing">Discuss financing</option>
+          <option value="question">
+            {messages.listingDetails.inquiry.askQuestion}
+          </option>
+          <option value="viewing">
+            {messages.listingDetails.inquiry.bookViewing}
+          </option>
+          <option value="financing">
+            {messages.listingDetails.inquiry.discussFinancing}
+          </option>
         </select>
       </label>
 
       <label className="grid gap-1.5 text-sm font-medium">
-        Message
+        {messages.common.message}
         <textarea
           value={formState.message}
           onChange={(event) => updateField('message', event.target.value)}
-          placeholder="I am interested in this vehicle..."
+          placeholder={messages.listingDetails.inquiry.messagePlaceholder}
           rows={4}
           className="min-h-24 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         />
@@ -164,7 +173,9 @@ function PublicListingInquiryForm({ listingId }: PublicListingInquiryFormProps) 
 
       <Button type="submit" disabled={createInquiryMutation.isPending}>
         <Send className="size-4" />
-        {createInquiryMutation.isPending ? 'Sending...' : 'Send inquiry'}
+        {createInquiryMutation.isPending
+          ? messages.common.sending
+          : messages.listingDetails.inquiry.send}
       </Button>
     </form>
   )

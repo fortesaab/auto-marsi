@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useI18n } from '@/i18n/useI18n'
 import type { PublicListingsResponse } from '../types'
 
 type PublicListingPaginationProps = {
@@ -11,13 +12,15 @@ function PublicListingPagination({
   meta,
   onPageChange,
 }: PublicListingPaginationProps) {
+  const { messages } = useI18n()
   const canGoPrevious = meta.current_page > 1
   const canGoNext = meta.current_page < meta.last_page
 
   return (
     <div className="flex items-center justify-between gap-3 border-t pt-4">
       <p className="text-sm text-muted-foreground">
-        Page {meta.current_page} of {meta.last_page}
+        {messages.inventory.pagination.page} {meta.current_page}{' '}
+        {messages.inventory.pagination.of} {meta.last_page}
       </p>
 
       <div className="flex items-center gap-2">
@@ -29,7 +32,7 @@ function PublicListingPagination({
           onClick={() => onPageChange(meta.current_page - 1)}
         >
           <ChevronLeft />
-          Previous
+          {messages.inventory.pagination.previous}
         </Button>
         <Button
           type="button"
@@ -38,7 +41,7 @@ function PublicListingPagination({
           disabled={!canGoNext}
           onClick={() => onPageChange(meta.current_page + 1)}
         >
-          Next
+          {messages.inventory.pagination.next}
           <ChevronRight />
         </Button>
       </div>

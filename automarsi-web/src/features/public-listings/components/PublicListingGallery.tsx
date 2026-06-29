@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { ImageIcon } from 'lucide-react'
+import { useI18n } from '@/i18n/useI18n'
 import type { PublicListing, PublicListingImage } from '../types'
 
 type PublicListingGalleryProps = {
@@ -17,6 +18,7 @@ function getGalleryImages(listing: PublicListing): PublicListingImage[] {
 }
 
 function PublicListingGallery({ listing }: PublicListingGalleryProps) {
+  const { messages } = useI18n()
   const images = useMemo(() => getGalleryImages(listing), [listing])
   const [selectedImageId, setSelectedImageId] = useState<number | null>(
     listing.primary_image?.id ?? images[0]?.id ?? null,
@@ -44,11 +46,10 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
                 </div>
                 <div>
                   <p className="font-medium text-foreground">
-                    Photos coming soon
+                    {messages.listingDetails.galleryFallbackTitle}
                   </p>
                   <p className="mt-1 text-sm leading-6">
-                    This vehicle is available, but photos have not been uploaded
-                    yet.
+                    {messages.listingDetails.galleryFallbackDescription}
                   </p>
                 </div>
               </div>
@@ -57,7 +58,10 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
 
           {images.length > 0 ? (
             <div className="absolute bottom-3 right-3 rounded-full bg-background/90 px-3 py-1 text-xs font-medium shadow-sm">
-              {images.length} {images.length === 1 ? 'image' : 'images'}
+              {images.length}{' '}
+              {images.length === 1
+                ? messages.listingDetails.imageSingular
+                : messages.listingDetails.imagePlural}
             </div>
           ) : null}
         </div>
@@ -73,7 +77,9 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
                 key={image.id}
                 type="button"
                 onClick={() => setSelectedImageId(image.id)}
-                aria-label={`View image ${index + 1} for ${listing.title}`}
+                aria-label={`${messages.listingDetails.viewImage} ${
+                  index + 1
+                } ${listing.title}`}
                 aria-pressed={isSelected}
                 className={
                   isSelected
@@ -92,7 +98,7 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
                     />
                   ) : (
                     <span className="grid size-full place-items-center text-xs text-muted-foreground">
-                      No image
+                      {messages.common.noImage}
                     </span>
                   )}
                 </span>

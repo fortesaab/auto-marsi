@@ -2,13 +2,10 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { CheckCircle2, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useI18n } from '@/i18n/useI18n'
 import { useCreatePublicInquiry } from '../hooks/useCreatePublicInquiry'
 
-type ContactIntent =
-  | 'General question'
-  | 'Book a showroom visit'
-  | 'Financing question'
-  | 'Vehicle availability'
+type ContactIntent = 'general' | 'availability' | 'visit' | 'financing'
 
 type ContactInquiryFormState = {
   name: string
@@ -22,31 +19,35 @@ const initialFormState: ContactInquiryFormState = {
   name: '',
   phone: '',
   email: '',
-  intent: 'General question',
+  intent: 'general',
   message: '',
 }
 
 const intentOptions: ContactIntent[] = [
-  'General question',
-  'Vehicle availability',
-  'Book a showroom visit',
-  'Financing question',
+  'general',
+  'availability',
+  'visit',
+  'financing',
 ]
 
 const inputClassName =
   'h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
 
-function buildMessage(formState: ContactInquiryFormState): string {
+function buildMessage(
+  formState: ContactInquiryFormState,
+  intentLabel: string,
+): string {
   const message = formState.message.trim()
 
   if (!message) {
-    return `Contact page intent: ${formState.intent}`
+    return `Contact page intent: ${intentLabel}`
   }
 
-  return `Contact page intent: ${formState.intent}\n\n${message}`
+  return `Contact page intent: ${intentLabel}\n\n${message}`
 }
 
 function PublicContactInquiryForm() {
+  const { messages } = useI18n()
   const [formState, setFormState] =
     useState<ContactInquiryFormState>(initialFormState)
   const [wasSubmitted, setWasSubmitted] = useState(false)
@@ -74,14 +75,17 @@ function PublicContactInquiryForm() {
         name: formState.name.trim(),
         phone: formState.phone.trim(),
         email: formState.email.trim() || null,
-        message: buildMessage(formState),
+        message: buildMessage(
+          formState,
+          messages.contact.intents[formState.intent],
+        ),
         source: 'contact_page',
       },
       {
         onSuccess: () => {
           setFormState(initialFormState)
           setWasSubmitted(true)
-          toast.success('Message sent successfully.')
+          toast.success(messages.contact.successToast)
         },
       },
     )
@@ -99,10 +103,10 @@ function PublicContactInquiryForm() {
     >
       <div className="grid gap-1">
         <h2 className="text-xl font-semibold tracking-tight">
-          Send us a message
+          {messages.contact.formTitle}
         </h2>
         <p className="text-sm text-muted-foreground">
-          Share your details and what you need help with.
+          {messages.contact.formDescription}
         </p>
       </div>
 
@@ -116,25 +120,25 @@ function PublicContactInquiryForm() {
         <div className="flex items-start gap-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
           <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
           <span>
-            Inquiry sent successfully. The AutoMarsi team will follow up soon.
+            {messages.contact.successMessage}
           </span>
         </div>
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-1.5 text-sm font-medium">
-          Name
+          {messages.common.name}
           <input
             value={formState.name}
             onChange={(event) => updateField('name', event.target.value)}
             required
-            placeholder="Your name"
+            placeholder={messages.common.name}
             className={inputClassName}
           />
         </label>
 
         <label className="grid gap-1.5 text-sm font-medium">
-          Phone
+          {messages.common.phone}
           <input
             value={formState.phone}
             onChange={(event) => updateField('phone', event.target.value)}
@@ -146,7 +150,7 @@ function PublicContactInquiryForm() {
       </div>
 
       <label className="grid gap-1.5 text-sm font-medium">
-        Email
+        {messages.common.email}
         <input
           value={formState.email}
           onChange={(event) => updateField('email', event.target.value)}
@@ -157,7 +161,7 @@ function PublicContactInquiryForm() {
       </label>
 
       <label className="grid gap-1.5 text-sm font-medium">
-        What can we help with?
+        {messages.contact.intentLabel}
         <select
           value={formState.intent}
           onChange={(event) =>
@@ -167,18 +171,18 @@ function PublicContactInquiryForm() {
         >
           {intentOptions.map((intent) => (
             <option key={intent} value={intent}>
-              {intent}
+              {messages.contact.intents[intent]}
             </option>
           ))}
         </select>
       </label>
 
       <label className="grid gap-1.5 text-sm font-medium">
-        Message
+        {messages.common.message}
         <textarea
           value={formState.message}
           onChange={(event) => updateField('message', event.target.value)}
-          placeholder="Tell us what you are looking for..."
+          placeholder={messages.contact.messagePlaceholder}
           rows={5}
           className="min-h-28 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         />
@@ -188,17 +192,17 @@ function PublicContactInquiryForm() {
         {createInquiryMutation.isPending ? (
           <>
             <Send className="size-4 animate-pulse" />
-            Sending...
+            {messages.common.sending}
           </>
         ) : wasSubmitted ? (
           <>
             <CheckCircle2 className="size-4" />
-            Inquiry sent
+            {messages.contact.inquirySent}
           </>
         ) : (
           <>
             <Send className="size-4" />
-            Send message
+            {messages.contact.sendMessage}
           </>
         )}
       </Button>

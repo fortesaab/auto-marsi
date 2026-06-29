@@ -1,5 +1,6 @@
 import { usePublicMakeOptions } from '../hooks/usePublicMakeOptions'
 import type { PublicListingFilters as PublicListingFilterValues } from '../types'
+import { useI18n } from '@/i18n/useI18n'
 
 const fieldClassName =
   'grid min-w-0 gap-1.5 text-sm font-medium text-foreground'
@@ -18,6 +19,7 @@ function PublicListingFilters({
   filters,
   onFiltersChange,
 }: PublicListingFiltersProps) {
+  const { messages } = useI18n()
   const { makes, models, makesQuery, modelsQuery } = usePublicMakeOptions({
     makeId: filters.make_id,
   })
@@ -57,19 +59,19 @@ function PublicListingFilters({
   return (
     <aside className="h-fit rounded-lg border bg-card text-card-foreground shadow-xs">
       <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
-        <h2 className="font-semibold">Filters</h2>
+        <h2 className="font-semibold">{messages.inventory.filters.title}</h2>
         <button
           type="button"
           onClick={clearFilters}
           className="text-xs font-medium text-muted-foreground transition hover:text-red-600"
         >
-          Reset
+          {messages.inventory.filters.reset}
         </button>
       </div>
 
       <div className="grid gap-4 p-4">
         <label className={fieldClassName}>
-          Make
+          {messages.inventory.filters.make}
           <select
             value={filters.make_id}
             onChange={(event) => updateMake(event.target.value)}
@@ -77,7 +79,9 @@ function PublicListingFilters({
             disabled={makesQuery.isLoading}
           >
             <option value="">
-              {makesQuery.isLoading ? 'Loading makes...' : 'All makes'}
+              {makesQuery.isLoading
+                ? messages.inventory.filters.loadingMakes
+                : messages.inventory.filters.allMakes}
             </option>
 
             {makes.map((make) => (
@@ -89,7 +93,7 @@ function PublicListingFilters({
         </label>
 
         <label className={fieldClassName}>
-          Model
+          {messages.inventory.filters.model}
           <select
             value={filters.car_model_id}
             onChange={(event) =>
@@ -100,10 +104,10 @@ function PublicListingFilters({
           >
             <option value="">
               {!filters.make_id
-                ? 'Select make first'
+                ? messages.inventory.filters.selectMakeFirst
                 : modelsQuery.isLoading
-                  ? 'Loading models...'
-                  : 'All models'}
+                  ? messages.inventory.filters.loadingModels
+                  : messages.inventory.filters.allModels}
             </option>
 
             {models.map((model) => (
@@ -115,17 +119,17 @@ function PublicListingFilters({
         </label>
 
         <label className={fieldClassName}>
-          Keyword
+          {messages.inventory.filters.keyword}
           <input
             value={filters.search}
             onChange={(event) => updateFilter('search', event.target.value)}
-            placeholder="Title, description, location"
+            placeholder={messages.inventory.filters.searchPlaceholder}
             className={controlClassName}
           />
         </label>
 
         <label className={fieldClassName}>
-          Year
+          {messages.inventory.filters.year}
           <input
             value={filters.year}
             onChange={(event) => updateFilter('year', event.target.value)}
@@ -137,7 +141,7 @@ function PublicListingFilters({
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           <label className={fieldClassName}>
-            Min price
+            {messages.inventory.filters.minPrice}
             <input
               value={filters.min_price}
               onChange={(event) =>
@@ -150,7 +154,7 @@ function PublicListingFilters({
           </label>
 
           <label className={fieldClassName}>
-            Max price
+            {messages.inventory.filters.maxPrice}
             <input
               value={filters.max_price}
               onChange={(event) =>
@@ -164,22 +168,24 @@ function PublicListingFilters({
         </div>
 
         <label className={fieldClassName}>
-          Fuel type
+          {messages.inventory.filters.fuelType}
           <select
             value={filters.fuel_type}
             onChange={(event) => updateFilter('fuel_type', event.target.value)}
             className={selectClassName}
           >
-            <option value="">Any</option>
-            <option value="diesel">Diesel</option>
-            <option value="petrol">Petrol</option>
-            <option value="hybrid">Hybrid</option>
-            <option value="electric">Electric</option>
+            <option value="">{messages.inventory.filters.any}</option>
+            <option value="diesel">{messages.inventory.values.diesel}</option>
+            <option value="petrol">{messages.inventory.values.petrol}</option>
+            <option value="hybrid">{messages.inventory.values.hybrid}</option>
+            <option value="electric">
+              {messages.inventory.values.electric}
+            </option>
           </select>
         </label>
 
         <label className={fieldClassName}>
-          Transmission
+          {messages.inventory.filters.transmission}
           <select
             value={filters.transmission}
             onChange={(event) =>
@@ -187,25 +193,29 @@ function PublicListingFilters({
             }
             className={selectClassName}
           >
-            <option value="">Any</option>
-            <option value="automatic">Automatic</option>
-            <option value="manual">Manual</option>
+            <option value="">{messages.inventory.filters.any}</option>
+            <option value="automatic">
+              {messages.inventory.values.automatic}
+            </option>
+            <option value="manual">{messages.inventory.values.manual}</option>
           </select>
         </label>
 
         <label className={fieldClassName}>
-          Body type
+          {messages.inventory.filters.bodyType}
           <select
             value={filters.body_type}
             onChange={(event) => updateFilter('body_type', event.target.value)}
             className={selectClassName}
           >
-            <option value="">Any</option>
-            <option value="sedan">Sedan</option>
-            <option value="suv">SUV</option>
-            <option value="hatchback">Hatchback</option>
-            <option value="wagon">Wagon</option>
-            <option value="coupe">Coupe</option>
+            <option value="">{messages.inventory.filters.any}</option>
+            <option value="sedan">{messages.inventory.values.sedan}</option>
+            <option value="suv">{messages.inventory.values.suv}</option>
+            <option value="hatchback">
+              {messages.inventory.values.hatchback}
+            </option>
+            <option value="wagon">{messages.inventory.values.wagon}</option>
+            <option value="coupe">{messages.inventory.values.coupe}</option>
           </select>
         </label>
       </div>
