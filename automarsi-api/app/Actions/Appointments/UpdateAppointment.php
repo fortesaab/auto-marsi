@@ -2,6 +2,7 @@
 
 namespace App\Actions\Appointments;
 
+use App\Jobs\SendAppointmentEmail;
 use App\Models\Appointment;
 
 class UpdateAppointment
@@ -10,10 +11,24 @@ class UpdateAppointment
     {
         $appointment->update($data);
 
-        return $appointment->fresh([
+        $updatedAppointment = $appointment->fresh([
             'listing.make',
             'listing.carModel',
             'inquiry',
         ]);
+
+        if ($updatedAppointment->email && $appointment->wasChanged([
+            'listing_id',
+            'name',
+            'phone',
+            'email',
+            'preferred_at',
+            'message',
+            'status',
+        ])) {
+            SendAppointmentEmail::dispatch($updatedAppointment, 'updated');
+        }
+
+        return $updatedAppointment;
     }
 }

@@ -4,12 +4,14 @@ namespace Tests\Feature;
 
 use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Middleware\VerifyClerkToken;
+use App\Jobs\SendAppointmentEmail;
 use App\Models\Appointment;
 use App\Models\CarModel;
 use App\Models\Inquiry;
 use App\Models\Listing;
 use App\Models\Make;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class AdminInquiryAppointmentControllerTest extends TestCase
@@ -24,6 +26,8 @@ class AdminInquiryAppointmentControllerTest extends TestCase
             VerifyClerkToken::class,
             EnsureIsAdmin::class,
         ]);
+
+        Bus::fake();
     }
 
     public function test_admin_can_convert_inquiry_to_appointment(): void
@@ -73,6 +77,8 @@ class AdminInquiryAppointmentControllerTest extends TestCase
         $this->getJson('/api/admin/inquiries')
             ->assertOk()
             ->assertJsonPath('data.0.has_appointment', true);
+
+        Bus::assertDispatched(SendAppointmentEmail::class);
     }
 
     public function test_converted_appointment_defaults_to_pending_and_uses_inquiry_message(): void

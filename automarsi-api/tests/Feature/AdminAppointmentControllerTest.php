@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Middleware\VerifyClerkToken;
+use App\Jobs\SendAppointmentEmail;
 use App\Models\Appointment;
 use App\Models\CarModel;
 use App\Models\Listing;
 use App\Models\Make;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class AdminAppointmentControllerTest extends TestCase
@@ -23,6 +25,8 @@ class AdminAppointmentControllerTest extends TestCase
             VerifyClerkToken::class,
             EnsureIsAdmin::class,
         ]);
+
+        Bus::fake();
     }
 
     public function test_admin_can_list_appointments(): void
@@ -174,6 +178,8 @@ class AdminAppointmentControllerTest extends TestCase
             'phone' => '+38344111222',
             'status' => 'confirmed',
         ]);
+
+        Bus::assertDispatched(SendAppointmentEmail::class);
     }
 
     public function test_manual_appointment_defaults_status_to_pending(): void
@@ -285,6 +291,11 @@ class AdminAppointmentControllerTest extends TestCase
             'message' => 'Customer requested a later visit.',
             'status' => 'confirmed',
         ]);
+
+        Bus::assertDispatched(
+            SendAppointmentEmail::class,
+            fn (SendAppointmentEmail $job) => $job->context === 'updated'
+        );
     }
 
     public function test_admin_cannot_update_appointment_to_invalid_status(): void

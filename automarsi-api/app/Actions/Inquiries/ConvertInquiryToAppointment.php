@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Inquiry;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use App\Jobs\SendAppointmentEmail;
 
 class ConvertInquiryToAppointment
 {
@@ -32,6 +33,8 @@ class ConvertInquiryToAppointment
                 'message' => $data['message'] ?? $lockedInquiry->message,
                 'status' => $data['status'] ?? 'pending',
             ]);
+
+            SendAppointmentEmail::dispatch($appointment);
 
             $lockedInquiry->update([
                 'status' => 'closed',

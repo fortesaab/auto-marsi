@@ -42,15 +42,42 @@ type AppointmentFormDialogProps = {
   onSubmit: (payload: AppointmentFormPayload) => Promise<void>
 }
 
-function toLocalDateTime(value?: string): string {
+type DateTimeParts = {
+  date: string
+  time: string
+}
+
+function toLocalDateTimeParts(value?: string): DateTimeParts {
   if (!value) {
-    return ''
+    return { date: '', time: '' }
   }
 
   const date = new Date(value)
   const offset = date.getTimezoneOffset() * 60_000
+  const localValue = new Date(date.getTime() - offset)
+    .toISOString()
+    .slice(0, 16)
 
-  return new Date(date.getTime() - offset).toISOString().slice(0, 16)
+  return {
+    date: localValue.slice(0, 10),
+    time: localValue.slice(11, 16),
+  }
+}
+
+function nextWholeHour(): DateTimeParts {
+  const date = new Date()
+
+  date.setHours(date.getHours() + 1, 0, 0, 0)
+
+  return toLocalDateTimeParts(date.toISOString())
+}
+
+function initialPreferredAt(value?: string): DateTimeParts {
+  return value ? toLocalDateTimeParts(value) : nextWholeHour()
+}
+
+function toIsoDateTime(date: string, time: string): string {
+  return new Date(`${date}T${time}:00`).toISOString()
 }
 
 function nullable(value: string): string | null {
@@ -79,9 +106,9 @@ function AppointmentFormDialog({
   const [name, setName] = useState(initialValues.name ?? '')
   const [phone, setPhone] = useState(initialValues.phone ?? '')
   const [email, setEmail] = useState(initialValues.email ?? '')
-  const [preferredAt, setPreferredAt] = useState(
-    toLocalDateTime(initialValues.preferredAt)
-  )
+  const initialDateTime = initialPreferredAt(initialValues.preferredAt)
+  const [appointmentDate, setAppointmentDate] = useState(initialDateTime.date)
+  const [appointmentTime, setAppointmentTime] = useState(initialDateTime.time)
   const [message, setMessage] = useState(initialValues.message ?? '')
   const [status, setStatus] = useState<AppointmentStatus>(
     initialValues.status ?? allowedStatuses[0]
@@ -95,7 +122,7 @@ function AppointmentFormDialog({
       name: name.trim(),
       phone: phone.trim(),
       email: nullable(email),
-      preferred_at: new Date(preferredAt).toISOString(),
+      preferred_at: toIsoDateTime(appointmentDate, appointmentTime),
       message: nullable(message),
       status,
     })
@@ -153,13 +180,24 @@ function AppointmentFormDialog({
               />
             </FormField>
 
-            <FormField label="Scheduled date and time">
+            <FormField label="Date">
               <input
                 className="h-9 rounded-md border bg-background px-3 text-sm"
-                type="datetime-local"
-                value={preferredAt}
-                min={toLocalDateTime(new Date().toISOString())}
-                onChange={(event) => setPreferredAt(event.target.value)}
+                type="date"
+                value={appointmentDate}
+                min={nextWholeHour().date}
+                onChange={(event) => setAppointmentDate(event.target.value)}
+                required
+              />
+            </FormField>
+
+            <FormField label="Time">
+              <input
+                className="h-9 rounded-md border bg-background px-3 text-sm"
+                type="time"
+                value={appointmentTime}
+                step={60}
+                onChange={(event) => setAppointmentTime(event.target.value)}
                 required
               />
             </FormField>

@@ -2,15 +2,20 @@
 
 namespace App\Actions\Appointments;
 
+use App\Jobs\SendAppointmentEmail;
 use App\Models\Appointment;
 
 class CreateAppointment
 {
     public function handle(array $data): Appointment
     {
-        $data['status'] = $data['status'] ?? 'pending';
+        $appointment = Appointment::create([
+            ...$data,
+            'status' => $data['status'] ?? 'pending',
+        ])->load(['listing']);
 
-        return Appointment::create($data)
-            ->load(['listing.make', 'listing.carModel', 'inquiry']);
+        SendAppointmentEmail::dispatch($appointment);
+
+        return $appointment;
     }
 }
