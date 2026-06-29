@@ -63,10 +63,12 @@ function ListingsTable({
 
       <TableBody>
         {listings.map((listing) => {
+          const listingImages = listing.images ?? []
           const primaryImage =
             listing.primary_image ??
-            listing.images.find((image) => image.is_primary) ??
-            listing.images[0]
+            listingImages.find((image) => image.is_primary) ??
+            listingImages[0] ??
+            null
 
           return (
             <TableRow key={listing.id}>

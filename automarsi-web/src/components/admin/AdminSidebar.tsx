@@ -74,15 +74,17 @@ function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
                     key={item.href}
                     variant={isActive ? 'secondary' : 'ghost'}
                     onClick={() => onNavigate(item.href)}
-                    className="h-8 w-full justify-start gap-2 rounded-md px-2 text-[13px]"
+                    className="group h-9 w-full justify-start gap-2 rounded-md px-2 text-[13px]"
                   >
-                    <item.icon
+                    <span
                       className={
                         isActive
-                          ? 'size-4 text-primary'
-                          : 'size-4 text-muted-foreground'
+                          ? 'grid size-6 place-items-center rounded-md bg-primary text-primary-foreground'
+                          : 'grid size-6 place-items-center rounded-md text-muted-foreground transition-colors group-hover:bg-sidebar-accent group-hover:text-sidebar-accent-foreground'
                       }
-                    />
+                    >
+                      <item.icon className="size-3.5" />
+                    </span>
                     <span className="min-w-0 flex-1 text-left">{item.label}</span>
                   </Button>
                 )
