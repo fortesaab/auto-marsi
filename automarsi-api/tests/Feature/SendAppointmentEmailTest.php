@@ -75,6 +75,32 @@ class SendAppointmentEmailTest extends TestCase
         $this->assertStringContainsString('29 Jun 2026, 18:30', $html);
     }
 
+    public function test_cancelled_appointment_email_has_cancelled_copy(): void
+    {
+        $appointment = Appointment::create([
+            'name' => 'Cancelled Customer',
+            'phone' => '+38344111222',
+            'email' => 'cancelled@example.com',
+            'preferred_at' => now()->addDay(),
+            'status' => 'cancelled',
+        ]);
+
+        $mail = new AppointmentScheduledMail($appointment, 'updated');
+        $html = $mail->render();
+
+        $this->assertSame(
+            'Your AutoMarsi appointment was cancelled',
+            $mail->subjectText()
+        );
+        $this->assertStringContainsString('Your appointment was cancelled', $html);
+        $this->assertStringContainsString('Status', $html);
+        $this->assertStringContainsString('Cancelled', $html);
+        $this->assertStringContainsString(
+            'your AutoMarsi appointment has been cancelled.',
+            $html
+        );
+    }
+
     private function createListing(): Listing
     {
         $make = Make::create([

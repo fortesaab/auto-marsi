@@ -1,14 +1,34 @@
 <!DOCTYPE html>
 @php
     $mailContext = $context ?? 'scheduled';
+    $statusLabel = ucfirst($appointment->status);
+    $titleText = $titleText ?? match ($appointment->status) {
+        'cancelled' => 'Your appointment was cancelled',
+        'confirmed' => 'Your appointment is confirmed',
+        'completed' => 'Your appointment was completed',
+        default => $mailContext === 'updated'
+            ? 'Your appointment was updated'
+            : 'Your appointment is scheduled',
+    };
+    $introText = $introText ?? match ($appointment->status) {
+        'cancelled' => 'your AutoMarsi appointment has been cancelled.',
+        'confirmed' => 'your AutoMarsi appointment is confirmed.',
+        'completed' => 'your AutoMarsi appointment has been completed. Thank you for visiting AutoMarsi.',
+        default => $mailContext === 'updated'
+            ? 'your AutoMarsi appointment details have changed.'
+            : 'we have scheduled your visit with AutoMarsi.',
+    };
+    $noteText = $noteText ?? match ($appointment->status) {
+        'cancelled' => 'If this was unexpected or you want to book a new time, please contact the AutoMarsi team.',
+        'completed' => 'If you have any follow-up questions, the AutoMarsi team is here to help.',
+        default => 'If you need to change the time, please contact the AutoMarsi team before your appointment.',
+    };
 @endphp
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        {{ $mailContext === 'updated' ? 'Your AutoMarsi appointment was updated' : 'Your AutoMarsi appointment is scheduled' }}
-    </title>
+    <title>{{ $titleText }}</title>
 </head>
 <body style="margin: 0; background: #f6f7f9; color: #111827; font-family: Arial, sans-serif;">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #f6f7f9; padding: 32px 16px;">
@@ -22,16 +42,12 @@
                             </p>
 
                             <h1 style="margin: 0; color: #111827; font-size: 26px; line-height: 1.25;">
-                                {{ $mailContext === 'updated' ? 'Your appointment was updated' : 'Your appointment is scheduled' }}
+                                {{ $titleText }}
                             </h1>
 
                             <p style="margin: 14px 0 0; color: #6b7280; font-size: 15px; line-height: 1.6;">
                                 Hello {{ $appointment->name }},
-                                @if ($mailContext === 'updated')
-                                    your AutoMarsi appointment details have changed.
-                                @else
-                                    we have scheduled your visit with AutoMarsi.
-                                @endif
+                                {{ $introText }}
                             </p>
                         </td>
                     </tr>
@@ -44,6 +60,15 @@
                                         <p style="margin: 0 0 6px; color: #6b7280; font-size: 13px;">Date and time</p>
                                         <p style="margin: 0; color: #111827; font-size: 18px; font-weight: 700;">
                                             {{ $appointment->preferred_at?->timezone(config('automarsi.timezone'))->format('d M Y, H:i') }}
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding: 0 20px 18px;">
+                                        <p style="margin: 0 0 6px; color: #6b7280; font-size: 13px;">Status</p>
+                                        <p style="margin: 0; color: #111827; font-size: 15px; font-weight: 700;">
+                                            {{ $statusLabel }}
                                         </p>
                                     </td>
                                 </tr>
@@ -76,7 +101,7 @@
                     <tr>
                         <td style="padding: 0 32px 28px;">
                             <p style="margin: 0; color: #4b5563; font-size: 15px; line-height: 1.6;">
-                                If you need to change the time, please contact the AutoMarsi team before your appointment.
+                                {{ $noteText }}
                             </p>
                         </td>
                     </tr>
