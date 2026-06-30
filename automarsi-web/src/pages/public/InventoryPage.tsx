@@ -25,6 +25,10 @@ const initialFilters: PublicListingFiltersType = {
   body_type: '',
 }
 
+function formatCount(value: number) {
+  return String(Math.trunc(Number(String(value).replace(',', '.'))))
+}
+
 function InventoryPage({ onNavigate }: InventoryPageProps) {
   const { messages } = useI18n()
   const [filters, setFilters] =
@@ -35,11 +39,7 @@ function InventoryPage({ onNavigate }: InventoryPageProps) {
   })
 
   const vehiclesFoundLabel = meta
-    ? `${meta.total} ${
-        meta.total === 1
-          ? messages.inventory.vehicleFound
-          : messages.inventory.vehiclesFound
-      }`
+    ? `${formatCount(listings.length)}/${formatCount(meta.total)}`
     : messages.inventory.loadingVehicles
 
   return (

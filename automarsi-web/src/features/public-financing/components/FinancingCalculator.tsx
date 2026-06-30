@@ -8,7 +8,11 @@ import {
 } from '@/features/public-financing/utils/financingCalculator'
 import { useI18n } from '@/i18n/useI18n'
 
-function FinancingCalculator() {
+type FinancingCalculatorProps = {
+  onAskAboutEstimate: () => void
+}
+
+function FinancingCalculator({ onAskAboutEstimate }: FinancingCalculatorProps) {
   const { messages } = useI18n()
   const [vehiclePrice, setVehiclePrice] = useState(25000)
   const [downPayment, setDownPayment] = useState(5000)
@@ -29,7 +33,7 @@ function FinancingCalculator() {
   const financedAmount = Math.max(vehiclePrice - downPayment, 0)
 
   return (
-    <aside className="rounded-xl border bg-card p-4 shadow-sm">
+    <aside className="rounded-xl border bg-card p-4 shadow-sm lg:sticky lg:top-24">
       <div className="mb-4 flex items-start gap-3">
         <div className="grid size-9 shrink-0 place-items-center rounded-lg bg-red-50 text-red-600">
           <Calculator className="size-4" />
@@ -133,7 +137,13 @@ function FinancingCalculator() {
           {messages.financing.calculator.note}
         </p>
 
-        <Button type="button" variant="outline" size="sm" className="justify-center">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="justify-center"
+          onClick={onAskAboutEstimate}
+        >
           <MessageCircle className="size-4" />
           {messages.financing.calculator.askAboutEstimate}
         </Button>

@@ -1,5 +1,6 @@
 import { MapPin, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import automarsiLogo from '@/assets/automarsi-logo.png'
 import { useI18n } from '@/i18n/useI18n'
 import { cn } from '@/lib/utils'
 import LanguageToggle from './LanguageToggle'
@@ -26,9 +27,14 @@ function PublicHeader({ currentPath, onNavigate }: PublicHeaderProps) {
         <button
           type="button"
           onClick={() => onNavigate('/')}
-          className="text-lg font-semibold tracking-tight"
+          aria-label={messages.common.brand}
+          className="flex h-12 shrink-0 items-center"
         >
-          Auto<span className="text-red-600">Marsi</span>
+          <img
+            src={automarsiLogo}
+            alt={messages.common.brand}
+            className="h-10 w-auto object-contain sm:h-11"
+          />
         </button>
 
         <nav className="hidden items-center gap-1 md:flex">

@@ -9,6 +9,7 @@ import {
 import SectionHeader from '@/components/public/SectionHeader'
 import StatBand from '@/components/public/StatBand'
 import { Button } from '@/components/ui/button'
+import supraHeroImage from '@/assets/home-hero-supra.jpg'
 import FeaturedListingsSection from '@/features/public-listings/components/FeaturedListingsSection'
 import { useI18n } from '@/i18n/useI18n'
 
@@ -26,43 +27,55 @@ function HomePage({ onNavigate }: HomePageProps) {
 
   return (
     <div className="grid gap-12">
-      <section className="bg-slate-950 text-white">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-16 sm:px-6 lg:px-8">
-          <div className="grid max-w-3xl gap-5">
-            <p className="text-xs font-semibold uppercase text-red-400">
-              AutoMarsi
-            </p>
+      <section className="px-4 pt-4 sm:px-6 lg:px-8">
+        <div className="relative mx-auto overflow-hidden rounded-2xl bg-slate-950 text-white shadow-sm">
+          <img
+            src={supraHeroImage}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover object-[58%_center] opacity-100"
+          />
+          <div className="absolute inset-0 bg-slate-950/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-slate-950/10" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950/65 to-transparent" />
 
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">
-              {messages.home.heroTitle}
-            </h1>
+          <div className="relative mx-auto grid min-h-[520px] max-w-7xl content-center gap-6 px-5 py-14 sm:px-8 lg:px-14">
+            <div className="grid max-w-3xl gap-5">
+              <p className="text-xs font-semibold uppercase text-red-400">
+                AutoMarsi
+              </p>
 
-            <p className="max-w-2xl text-sm leading-6 text-slate-300">
-              {messages.home.heroDescription}
-            </p>
+              <h1 className="text-4xl font-semibold tracking-tight drop-shadow-sm sm:text-6xl">
+                {messages.home.heroTitle}
+              </h1>
 
-            <div className="flex flex-wrap gap-3">
-              <Button type="button" onClick={() => onNavigate('/inventory')}>
-                {messages.home.browseInventory}
-                <ArrowRight className="size-4" />
-              </Button>
+              <p className="max-w-2xl text-sm leading-6 text-slate-200">
+                {messages.home.heroDescription}
+              </p>
 
-              <Button
-                type="button"
-                variant="outline"
-                className="border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
-                onClick={() => onNavigate('/contact')}
-              >
-                {messages.home.contactTeam}
-              </Button>
-            </div>
+              <div className="flex flex-wrap gap-3">
+                <Button type="button" onClick={() => onNavigate('/inventory')}>
+                  {messages.home.browseInventory}
+                  <ArrowRight className="size-4" />
+                </Button>
 
-            <div className="flex flex-wrap gap-4 pt-4 text-sm text-slate-300">
-              <span>{messages.contact.location}</span>
-              <span className="hidden text-slate-600 sm:inline">/</span>
-              <span>{messages.home.selectedActiveVehicles}</span>
-              <span className="hidden text-slate-600 sm:inline">/</span>
-              <span>{messages.home.showroomFollowUp}</span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                  onClick={() => onNavigate('/contact')}
+                >
+                  {messages.home.contactTeam}
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap gap-4 pt-4 text-sm text-slate-200">
+                <span>{messages.contact.location}</span>
+                <span className="hidden text-slate-500 sm:inline">/</span>
+                <span>{messages.home.selectedActiveVehicles}</span>
+                <span className="hidden text-slate-500 sm:inline">/</span>
+                <span>{messages.home.showroomFollowUp}</span>
+              </div>
             </div>
           </div>
         </div>

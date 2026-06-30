@@ -338,6 +338,30 @@ export const sq: typeof en = {
       'Financimi varet nga kushtet reale, te dhenat e klientit, cmimi i vetures dhe oferta finale qe shqyrtohet nga klienti. Asgje ne kete faqe nuk ruhet ose dergohet ne banke.',
     browseVehicles: 'Shfleto veturat',
     askAboutFinancing: 'Pyet per financim',
+    prepareTitle: 'Pergatit pyetjet e duhura para vizites.',
+    prepareItems: [
+      'Cmimi i vetures dhe parapagimi i mundshem',
+      'Pagesa mujore qe preferon',
+      'Detajet per nderrim ose veturen aktuale',
+      'Pyetje per dokumente dhe afate',
+    ],
+    highlights: [
+      {
+        title: 'Jo premtim final',
+        description:
+          'Ky eshte vleresim planifikues para shqyrtimit te kushteve reale.',
+      },
+      {
+        title: 'Percjellje e shpejte',
+        description:
+          'Dergo pyetjen dhe ekipi mund ta vazhdoje biseden me ty.',
+      },
+      {
+        title: 'Pergatitje e qarte',
+        description:
+          'Shko ne vizite me buxhet, afat dhe pyetje per veturen te organizuara.',
+      },
+    ],
     calculator: {
       title: 'Planifikues buxheti',
       description: 'Vlereso pagesen mujore te perafert.',

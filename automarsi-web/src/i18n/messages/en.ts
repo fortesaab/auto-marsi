@@ -331,6 +331,27 @@ export const en = {
       'Financing depends on real terms, customer details, vehicle price, and the final offer reviewed by the customer. Nothing on this page is saved or sent to a bank.',
     browseVehicles: 'Browse vehicles',
     askAboutFinancing: 'Ask about financing',
+    prepareTitle: 'Prepare the right questions before you visit.',
+    prepareItems: [
+      'Vehicle price and down payment range',
+      'Preferred monthly payment',
+      'Trade-in or current vehicle details',
+      'Questions about documents and timing',
+    ],
+    highlights: [
+      {
+        title: 'No hard promise',
+        description: 'This is a planning estimate before real terms are reviewed.',
+      },
+      {
+        title: 'Fast showroom follow-up',
+        description: 'Send your question and the team can continue the conversation.',
+      },
+      {
+        title: 'Clear preparation',
+        description: 'Arrive with budget, term, and vehicle questions already organized.',
+      },
+    ],
     calculator: {
       title: 'Budget planner',
       description: 'Estimate a rough monthly payment.',
