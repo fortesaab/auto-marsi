@@ -19,6 +19,10 @@ class Listing extends Model
         'description',
         'year',
         'price',
+        'purchase_price',
+        'sale_price',
+        'sales_expenses',
+        'sale_notes',
         'currency',
         'kilometers',
         'fuel_type',
@@ -41,6 +45,9 @@ class Listing extends Model
     {
         return [
             'price' => 'decimal:2',
+            'purchase_price' => 'decimal:2',
+            'sale_price' => 'decimal:2',
+            'sales_expenses' => 'decimal:2',
             'engine_size' => 'decimal:1',
             'is_featured' => 'boolean',
             'registration_until' => 'date',

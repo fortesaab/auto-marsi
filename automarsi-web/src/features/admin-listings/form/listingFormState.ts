@@ -9,6 +9,10 @@ export type ListingFormState = {
   title: string
   year: string
   price: string
+  purchasePrice: string
+  salePrice: string
+  salesExpenses: string
+  saleNotes: string
   currency: string
   kilometers: string
   fuelType: string
@@ -22,6 +26,8 @@ export type ListingFormState = {
   featureIds: string[]
   engineSize: string
   horsepower: string
+  vin: string
+  registrationUntil: string
 }
 
 export const initialListingFormState: ListingFormState = {
@@ -30,6 +36,10 @@ export const initialListingFormState: ListingFormState = {
   title: '',
   year: String(new Date().getFullYear()),
   price: '',
+  purchasePrice: '',
+  salePrice: '',
+  salesExpenses: '',
+  saleNotes: '',
   currency: 'EUR',
   kilometers: '',
   fuelType: 'diesel',
@@ -43,6 +53,8 @@ export const initialListingFormState: ListingFormState = {
   featureIds: [],
   engineSize: '',
   horsepower: '',
+  vin: '',
+  registrationUntil: '',
 }
 
 export function listingToFormState(
@@ -56,6 +68,19 @@ export function listingToFormState(
     title: listing.title,
     year: String(listing.year),
     price: String(Math.trunc(Number(listing.price))),
+    purchasePrice:
+      listing.purchase_price === null
+        ? ''
+        : String(Math.trunc(Number(listing.purchase_price))),
+    salePrice:
+      listing.sale_price === null
+        ? ''
+        : String(Math.trunc(Number(listing.sale_price))),
+    salesExpenses:
+      listing.sales_expenses === null
+        ? ''
+        : String(Math.trunc(Number(listing.sales_expenses))),
+    saleNotes: listing.sale_notes ?? '',
     currency: listing.currency,
     kilometers:
       listing.kilometers === null
@@ -74,6 +99,8 @@ export function listingToFormState(
       listing.horsepower === null
         ? ''
         : String(listing.horsepower),
+    vin: listing.vin ?? '',
+    registrationUntil: listing.registration_until ?? '',
     featureIds: listing.features.map((feature) =>
       String(feature.id)
     ),
@@ -99,6 +126,10 @@ export function buildListingPayload(
     title: formState.title.trim(),
     year: Number(formState.year),
     price: Number(formState.price),
+    purchase_price: nullableNumber(formState.purchasePrice),
+    sale_price: nullableNumber(formState.salePrice),
+    sales_expenses: nullableNumber(formState.salesExpenses),
+    sale_notes: nullableText(formState.saleNotes),
     currency: formState.currency,
     kilometers: nullableNumber(formState.kilometers),
     fuel_type: formState.fuelType,
@@ -112,6 +143,8 @@ export function buildListingPayload(
     feature_ids: formState.featureIds.map(Number),
     engine_size: nullableNumber(formState.engineSize),
     horsepower: nullableNumber(formState.horsepower),
+    vin: nullableText(formState.vin),
+    registration_until: nullableText(formState.registrationUntil),
   }
 }
 

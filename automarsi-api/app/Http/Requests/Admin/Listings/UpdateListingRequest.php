@@ -25,6 +25,10 @@ class UpdateListingRequest extends FormRequest
 
             'year' => ['sometimes', 'integer', 'min:1900', 'max:' . now()->addYear()->year],
             'price' => ['sometimes', 'numeric', 'min:0'],
+            'purchase_price' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+            'sale_price' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+            'sales_expenses' => ['sometimes', 'nullable', 'numeric', 'min:0'],
+            'sale_notes' => ['sometimes', 'nullable', 'string'],
             'currency' => ['sometimes', 'string', 'size:3'],
 
             'kilometers' => ['sometimes', 'nullable', 'integer', 'min:0'],

@@ -7,6 +7,7 @@ import ListingGalleryPanel from './details/ListingGalleryPanel'
 import ListingHeroImage from './details/ListingHeroImage'
 import ListingSpecsGrid from './details/ListingSpecsGrid'
 import ListingSummaryPanel from './details/ListingSummaryPanel'
+import SalesSummaryPanel from './details/SalesSummaryPanel'
 
 type ListingDetailsProps = {
   listing: AdminListing
@@ -34,6 +35,10 @@ function ListingDetails({ listing }: ListingDetailsProps) {
       </div>
 
       <ListingSpecsGrid listing={listing} />
+
+      {listing.status === 'sold' ? (
+        <SalesSummaryPanel listing={listing} />
+      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <ListingFeaturesPanel features={listing.features} />

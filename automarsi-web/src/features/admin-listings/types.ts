@@ -17,6 +17,10 @@ export type CreateAdminListingPayload = {
   title: string
   year: number
   price: number
+  purchase_price?: number | null
+  sale_price?: number | null
+  sales_expenses?: number | null
+  sale_notes?: string | null
   currency: string
   kilometers?: number | null
   fuel_type: string
@@ -30,6 +34,8 @@ export type CreateAdminListingPayload = {
   feature_ids: number[]
   engine_size?: number | null
   horsepower?: number | null
+  vin?: string | null
+  registration_until?: string | null
 }
 
 export type CreateAdminListingResponse = {
@@ -74,6 +80,14 @@ export type AdminListing = {
 
   year: number
   price: string
+  purchase_price: string | null
+  sale_price: string | null
+  sales_expenses: string | null
+  sale_notes: string | null
+  sales_summary: {
+    profit: number | null
+    margin_percent: number | null
+  }
   currency: string
   kilometers: number | null
 

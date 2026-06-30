@@ -54,6 +54,45 @@ function ListingSaleFields({
           </div>
         </FormField>
 
+        <FormField label="Purchase price">
+          <input
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            type="number"
+            min="0"
+            value={formState.purchasePrice}
+            onChange={(event) => {
+              void onFieldChange('purchasePrice', event.target.value)
+            }}
+            placeholder="28000"
+          />
+        </FormField>
+
+        <FormField label="Sale price">
+          <input
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            type="number"
+            min="0"
+            value={formState.salePrice}
+            onChange={(event) => {
+              void onFieldChange('salePrice', event.target.value)
+            }}
+            placeholder="35000"
+          />
+        </FormField>
+
+        <FormField label="Sales expenses">
+          <input
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            type="number"
+            min="0"
+            value={formState.salesExpenses}
+            onChange={(event) => {
+              void onFieldChange('salesExpenses', event.target.value)
+            }}
+            placeholder="500"
+          />
+        </FormField>
+
         <FormField label="Kilometers">
           <input
             className="h-9 rounded-md border bg-background px-3 text-sm"
@@ -112,6 +151,17 @@ function ListingSaleFields({
           </FormField>
         ) : null}
       </div>
+
+      <FormField label="Sale notes">
+        <textarea
+          className="min-h-24 rounded-md border bg-background px-3 py-2 text-sm"
+          value={formState.saleNotes}
+          onChange={(event) => {
+            void onFieldChange('saleNotes', event.target.value)
+          }}
+          placeholder="Buyer notes, negotiation details, expenses, or next follow-up."
+        />
+      </FormField>
     </ListingFormSection>
   )
 }

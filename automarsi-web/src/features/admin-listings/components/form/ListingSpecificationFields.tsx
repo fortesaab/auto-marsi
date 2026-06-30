@@ -104,6 +104,28 @@ function ListingSpecificationFields({
             inputMode="numeric"
           />
         </FormField>
+
+        <FormField label="VIN">
+          <input
+            className="h-9 rounded-md border bg-background px-3 text-sm uppercase"
+            value={formState.vin}
+            onChange={(event) => {
+              void onFieldChange('vin', event.target.value.toUpperCase())
+            }}
+            placeholder="WDD..."
+          />
+        </FormField>
+
+        <FormField label="Registration until">
+          <input
+            className="h-9 rounded-md border bg-background px-3 text-sm"
+            type="date"
+            value={formState.registrationUntil}
+            onChange={(event) => {
+              void onFieldChange('registrationUntil', event.target.value)
+            }}
+          />
+        </FormField>
       </div>
     </ListingFormSection>
   )

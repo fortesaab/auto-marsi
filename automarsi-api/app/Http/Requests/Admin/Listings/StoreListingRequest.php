@@ -22,6 +22,10 @@ class StoreListingRequest extends FormRequest
 
             'year' => ['required', 'integer', 'min:1900', 'max:' . now()->addYear()->year],
             'price' => ['required', 'numeric', 'min:0'],
+            'purchase_price' => ['nullable', 'numeric', 'min:0'],
+            'sale_price' => ['nullable', 'numeric', 'min:0'],
+            'sales_expenses' => ['nullable', 'numeric', 'min:0'],
+            'sale_notes' => ['nullable', 'string'],
             'currency' => ['nullable', 'string', 'size:3'],
 
             'kilometers' => ['nullable', 'integer', 'min:0'],
