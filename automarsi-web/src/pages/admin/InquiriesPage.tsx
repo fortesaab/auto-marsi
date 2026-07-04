@@ -7,7 +7,7 @@ import PageHeader from '@/components/admin/PageHeader'
 import PaginationControls from '@/components/admin/PaginationControls'
 import { Button } from '@/components/ui/button'
 import AppointmentFormDialog from '@/features/admin-appointments/components/AppointmentFormDialog'
-import InquiriesTable from '@/features/admin-inquiries/components/InquiriesTable'
+import InquiriesKanban from '@/features/admin-inquiries/components/InquiriesKanban'
 import { useAdminInquiries } from '@/features/admin-inquiries/hooks/useAdminInquiries'
 import type {
   AdminInquiry,
@@ -124,7 +124,7 @@ function InquiriesPage() {
         !errorMessage &&
         inquiries.length > 0 ? (
           <>
-            <InquiriesTable
+            <InquiriesKanban
               inquiries={inquiries}
               isUpdating={updateStatusMutation.isPending}
               onScheduleAppointment={setSchedulingInquiry}

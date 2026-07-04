@@ -72,6 +72,39 @@ class AdminVehicleFeatureControllerTest extends TestCase
             ->assertJsonPath('data.slug', 'backup-camera');
     }
 
+    public function test_admin_can_toggle_vehicle_feature_active_state(): void
+    {
+        $feature = VehicleFeature::create([
+            'name' => 'Massage Seats',
+            'slug' => 'massage-seats',
+            'is_active' => true,
+        ]);
+
+        $response = $this->patchJson("/api/admin/vehicle-features/{$feature->id}", [
+            'is_active' => false,
+        ]);
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('data.is_active', false);
+
+        $this->assertDatabaseHas('vehicle_features', [
+            'id' => $feature->id,
+            'is_active' => false,
+        ]);
+    }
+
+    public function test_created_vehicle_feature_defaults_to_active(): void
+    {
+        $response = $this->postJson('/api/admin/vehicle-features', [
+            'name' => 'Soft Close Doors',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('data.is_active', true);
+    }
+
     public function test_admin_cannot_delete_feature_that_is_used_by_listings(): void
     {
         $make = Make::create(['name' => 'Audi', 'slug' => 'audi']);

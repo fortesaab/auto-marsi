@@ -1,3 +1,6 @@
+import { Bell, Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import AdminSearchBox from './AdminSearchBox'
 import AdminUserButton from './AdminUserButton'
 
 const pageTitles: Record<string, { eyebrow: string; title: string }> = {
@@ -33,9 +36,10 @@ const pageTitles: Record<string, { eyebrow: string; title: string }> = {
 
 type AdminTopbarProps = {
   currentPath: string
+  onNavigate: (path: string) => void
 }
 
-function AdminTopbar({ currentPath }: AdminTopbarProps) {
+function AdminTopbar({ currentPath, onNavigate }: AdminTopbarProps) {
   const page = currentPath.startsWith('/admin/listings/')
     ? pageTitles['/admin/listings']
     : pageTitles[currentPath] ?? pageTitles['/admin']
@@ -47,17 +51,29 @@ function AdminTopbar({ currentPath }: AdminTopbarProps) {
   }).format(new Date())
 
   return (
-    <header className="sticky top-0 z-30 flex min-h-12 items-center justify-between border-b bg-card/95 px-5 backdrop-blur lg:px-7 max-md:px-4">
-      <div className="flex items-center gap-2 text-xs">
-        <span className="text-muted-foreground">{page.eyebrow}</span>
-        <span className="text-muted-foreground/50">/</span>
-        <span className="font-semibold text-foreground">{page.title}</span>
+    <header className="sticky top-0 z-30 flex min-h-16 items-center justify-between border-b bg-background/90 px-5 backdrop-blur-xl lg:px-8 max-md:px-4">
+      <div className="grid gap-0.5">
+        <h1 className="text-lg font-bold tracking-[-0.035em]">{page.title}</h1>
+        <p className="text-[11px] text-muted-foreground">{page.eyebrow}</p>
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="hidden rounded-md border bg-muted/40 px-2.5 py-1.5 text-[11px] tabular-nums text-muted-foreground sm:block">
+        <AdminSearchBox />
+        <span className="hidden rounded-xl border bg-card px-2.5 py-1.5 text-[11px] tabular-nums text-muted-foreground sm:block">
           {today}
         </span>
+        <Button type="button" size="icon" variant="outline" className="size-9 rounded-xl">
+          <Bell className="size-4" />
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          className="hidden rounded-xl md:inline-flex"
+          onClick={() => onNavigate('/admin/listings/new')}
+        >
+          <Plus className="size-4" />
+          Add listing
+        </Button>
         <AdminUserButton />
       </div>
     </header>

@@ -10,6 +10,7 @@ class AdminVehicleFeatureQuery
     public function all(): Collection
     {
         return VehicleFeature::query()
+            ->withCount('listings')
             ->orderBy('name')
             ->get();
     }

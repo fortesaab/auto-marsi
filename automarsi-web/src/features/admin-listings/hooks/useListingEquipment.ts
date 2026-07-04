@@ -134,7 +134,9 @@ export function useListingEquipment({
           }),
       })
 
-      return suggestions.map((feature) => String(feature.id))
+      return suggestions
+        .filter((feature) => feature.is_active)
+        .map((feature) => String(feature.id))
     } catch (error) {
       toast.error(
         error instanceof Error
@@ -155,9 +157,16 @@ export function useListingEquipment({
     ])
   }
 
+  const activeFeatures = (featuresQuery.data ?? []).filter(
+    (feature) => feature.is_active
+  )
+  const activeSuggestions = (suggestionsQuery.data ?? []).filter(
+    (feature) => feature.is_active
+  )
+
   const formProps: ListingEquipmentFormProps = {
-    features: featuresQuery.data ?? [],
-    suggestions: suggestionsQuery.data ?? [],
+    features: activeFeatures,
+    suggestions: activeSuggestions,
     isLoading:
       !isAuthReady ||
       featuresQuery.isLoading ||

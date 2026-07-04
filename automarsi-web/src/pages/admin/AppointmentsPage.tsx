@@ -7,7 +7,7 @@ import PageHeader from '@/components/admin/PageHeader'
 import PaginationControls from '@/components/admin/PaginationControls'
 import { Button } from '@/components/ui/button'
 import AppointmentFormDialog from '@/features/admin-appointments/components/AppointmentFormDialog'
-import AppointmentsTable from '@/features/admin-appointments/components/AppointmentsTable'
+import AppointmentsSchedule from '@/features/admin-appointments/components/AppointmentsSchedule'
 import { useAdminAppointments } from '@/features/admin-appointments/hooks/useAdminAppointments'
 import type {
   AdminAppointment,
@@ -133,7 +133,7 @@ function AppointmentsPage() {
         !errorMessage &&
         appointments.length > 0 ? (
           <>
-            <AppointmentsTable
+            <AppointmentsSchedule
               appointments={appointments}
               isUpdating={updateStatusMutation.isPending}
               onEdit={setEditingAppointment}

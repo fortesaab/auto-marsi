@@ -22,9 +22,11 @@ function DataTableShell({
   children,
 }: DataTableShellProps) {
   return (
-    <Card className="overflow-hidden rounded-lg border-border bg-card shadow-none">
-      <CardHeader className="min-h-14 border-b px-4 py-3">
-        <CardTitle className="text-sm">{title}</CardTitle>
+    <Card className="overflow-hidden rounded-2xl border-border bg-card shadow-[0_18px_45px_rgba(15,23,42,0.04)]">
+      <CardHeader className="min-h-16 border-b px-5 py-4">
+        <CardTitle className="text-base font-bold tracking-[-0.025em]">
+          {title}
+        </CardTitle>
         {description ? (
           <CardDescription>{description}</CardDescription>
         ) : null}

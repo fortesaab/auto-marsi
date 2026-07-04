@@ -60,19 +60,19 @@ function AdminListingsFilters({
     isFeatured
 
   return (
-    <div className="grid gap-3 border-b p-4">
+    <div className="grid gap-3 border-b bg-muted/20 p-4">
       <div className="grid gap-3 md:grid-cols-[minmax(220px,1.5fr)_repeat(5,minmax(0,1fr))_auto]">
         <input
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
           placeholder="Search title, VIN, location"
-          className="h-9 rounded-md border bg-background px-3 text-sm"
+          className="h-9 rounded-xl border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/25"
         />
 
         <select
           value={status}
           onChange={(event) => onStatusChange(event.target.value)}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
+          className="h-9 rounded-xl border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/25"
         >
           <option value="">All statuses</option>
           {listingStatusOptions.map((option) => (
@@ -85,7 +85,7 @@ function AdminListingsFilters({
         <select
           value={condition}
           onChange={(event) => onConditionChange(event.target.value)}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
+          className="h-9 rounded-xl border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/25"
         >
           <option value="">All conditions</option>
           {conditionOptions.map((option) => (
@@ -98,7 +98,7 @@ function AdminListingsFilters({
         <select
           value={makeId}
           onChange={(event) => onMakeChange(event.target.value)}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
+          className="h-9 rounded-xl border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/25"
           disabled={makesQuery.isLoading}
         >
           <option value="">All makes</option>
@@ -112,7 +112,7 @@ function AdminListingsFilters({
         <select
           value={carModelId}
           onChange={(event) => onCarModelChange(event.target.value)}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
+          className="h-9 rounded-xl border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/25"
           disabled={!makeId || carModelsQuery.isLoading}
         >
           <option value="">All models</option>
@@ -126,7 +126,7 @@ function AdminListingsFilters({
         <select
           value={isFeatured}
           onChange={(event) => onFeaturedChange(event.target.value)}
-          className="h-9 rounded-md border bg-background px-3 text-sm"
+          className="h-9 rounded-xl border bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/25"
         >
           <option value="">Featured: all</option>
           <option value="1">Featured only</option>

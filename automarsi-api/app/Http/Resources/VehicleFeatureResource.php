@@ -17,6 +17,8 @@ class VehicleFeatureResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'icon' => $this->icon,
+            'is_active' => $this->is_active,
+            'listings_count' => $this->whenCounted('listings'),
         ];
     }
 }

@@ -3,6 +3,8 @@ export type AdminVehicleFeature = {
   name: string
   slug: string
   icon: string | null
+  is_active: boolean
+  listings_count?: number
 }
 
 export type AdminVehicleFeaturesResponse = {
@@ -16,9 +18,11 @@ export type AdminVehicleFeatureResponse = {
 export type CreateAdminVehicleFeaturePayload = {
   name: string
   icon: string | null
+  is_active?: boolean
 }
 
 export type UpdateAdminVehicleFeaturePayload = {
-  name: string
-  icon: string | null
+  name?: string
+  icon?: string | null
+  is_active?: boolean
 }

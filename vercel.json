@@ -1,0 +1,11 @@
+{
+  "installCommand": "cd automarsi-web && npm ci",
+  "buildCommand": "cd automarsi-web && npm run build",
+  "outputDirectory": "automarsi-web/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

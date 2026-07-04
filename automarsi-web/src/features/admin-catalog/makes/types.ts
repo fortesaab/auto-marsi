@@ -4,6 +4,8 @@ export type AdminMake = {
   slug: string
   logo_url: string | null
   models_count?: number
+  listings_count?: number
+  models?: AdminModel[]
 }
 
 export type AdminModel = {

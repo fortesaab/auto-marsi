@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import AdminSurface from '@/components/admin/AdminSurface'
 
 type OverviewPanelProps = {
   title: string
@@ -12,9 +13,9 @@ function OverviewPanel({
   children,
 }: OverviewPanelProps) {
   return (
-    <section className="overflow-hidden rounded-lg border bg-card">
-      <div className="border-b px-4 py-3">
-        <h3 className="text-xs font-semibold uppercase text-muted-foreground">
+    <AdminSurface>
+      <div className="border-b px-5 py-4">
+        <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
           {title}
         </h3>
         {description ? (
@@ -24,7 +25,7 @@ function OverviewPanel({
         ) : null}
       </div>
       {children}
-    </section>
+    </AdminSurface>
   )
 }
 

@@ -1,9 +1,7 @@
 import { Plus } from 'lucide-react'
 import PageHeader from '@/components/admin/PageHeader'
 import { Button } from '@/components/ui/button'
-import CreateMakeForm from '@/features/admin-catalog/makes/components/CreateMakeForm'
-import MakesPanel from '@/features/admin-catalog/makes/components/MakesPanel'
-import ModelsPanel from '@/features/admin-catalog/makes/components/ModelsPanel'
+import MakeModelCards from '@/features/admin-catalog/makes/components/MakeModelCards'
 import { useMakeModelCatalog } from '@/features/admin-catalog/makes/hooks/useMakeModelCatalog'
 
 function CatalogMakesPage() {
@@ -28,24 +26,7 @@ function CatalogMakesPage() {
         }
       />
 
-      {catalog.isCreateMakeOpen ? (
-        <CreateMakeForm
-          isSubmitting={catalog.createMakeMutation.isPending}
-          errorMessage={
-            catalog.createMakeMutation.error instanceof Error
-              ? catalog.createMakeMutation.error.message
-              : null
-          }
-          onSubmit={async (payload) => {
-            await catalog.createMakeMutation.mutateAsync(payload)
-          }}
-        />
-      ) : null}
-
-      <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
-        <MakesPanel catalog={catalog} />
-        <ModelsPanel catalog={catalog} />
-      </div>
+      <MakeModelCards catalog={catalog} />
     </section>
   )
 }

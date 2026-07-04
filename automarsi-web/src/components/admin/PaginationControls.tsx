@@ -19,7 +19,7 @@ function PaginationControls({
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-t bg-muted/25 px-5 py-4">
       <p className="text-xs text-muted-foreground">
         Page {currentPage} of {lastPage} · {total} records
       </p>

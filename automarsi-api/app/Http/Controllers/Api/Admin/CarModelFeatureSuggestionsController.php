@@ -16,6 +16,7 @@ class CarModelFeatureSuggestionsController extends Controller
     ): AnonymousResourceCollection {
         return VehicleFeatureResource::collection(
             $carModel->suggestedFeatures()
+                ->where('vehicle_features.is_active', true)
                 ->orderBy('name')
                 ->get()
         );

@@ -18,13 +18,13 @@ function AdminLayout({ children, currentPath, onNavigate }: AdminLayoutProps) {
   }, [])
 
   return (
-    <div className="admin-shell grid min-h-screen grid-cols-[212px_1fr] bg-background text-foreground max-md:grid-cols-1">
+    <div className="admin-shell grid min-h-screen grid-cols-[236px_1fr] bg-background text-foreground max-md:grid-cols-1">
       <AdminSidebar currentPath={currentPath} onNavigate={onNavigate} />
 
       <div className="flex min-w-0 flex-col">
-        <AdminTopbar currentPath={currentPath} />
+        <AdminTopbar currentPath={currentPath} onNavigate={onNavigate} />
 
-        <main className="admin-scrollbar flex-1 overflow-y-auto p-5 lg:p-7 max-md:p-4">
+        <main className="admin-scrollbar flex-1 overflow-y-auto p-5 lg:p-8 max-md:p-4">
           {children}
         </main>
       </div>

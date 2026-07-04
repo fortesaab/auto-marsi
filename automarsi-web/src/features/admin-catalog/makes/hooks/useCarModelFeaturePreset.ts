@@ -144,9 +144,16 @@ export function useCarModelFeaturePreset({
         ? suggestionsQuery.error.message
         : null
 
+  const activeFeatures = (featuresQuery.data ?? []).filter(
+    (feature) => feature.is_active
+  )
+  const activeSuggestions = (suggestionsQuery.data ?? []).filter(
+    (feature) => feature.is_active
+  )
+
   return {
-    features: featuresQuery.data ?? [],
-    suggestions: suggestionsQuery.data ?? [],
+    features: activeFeatures,
+    suggestions: activeSuggestions,
     isLoading: featuresQuery.isLoading || suggestionsQuery.isLoading,
     errorMessage,
     createFeatureMutation,

@@ -23,7 +23,13 @@ class ListingController extends Controller
         abort_unless($listing->status === 'active', 404);
 
         return new ListingResource(
-            $listing->load(['make', 'carModel', 'primaryImage', 'images', 'features'])
+            $listing->load([
+                'make',
+                'carModel',
+                'primaryImage',
+                'images',
+                'features' => fn ($query) => $query->where('vehicle_features.is_active', true),
+            ])
         );
     }
 }

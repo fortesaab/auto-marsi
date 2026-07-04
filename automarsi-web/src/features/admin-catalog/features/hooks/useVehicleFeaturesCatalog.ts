@@ -92,6 +92,25 @@ export function useVehicleFeaturesCatalog() {
     },
   })
 
+  const toggleFeatureMutation = useMutation({
+    mutationFn: async (feature: AdminVehicleFeature) => {
+      const token = await getAdminToken()
+
+      return updateAdminVehicleFeature({
+        token,
+        featureId: feature.id,
+        payload: {
+          is_active: !feature.is_active,
+        },
+      })
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['admin', 'catalog', 'vehicle-features'],
+      })
+    },
+  })
+
   const installDefaultsMutation = useMutation({
     mutationFn: async () => {
       const token = await getAdminToken()
@@ -125,6 +144,11 @@ export function useVehicleFeaturesCatalog() {
       ? deleteFeatureMutation.error.message
       : null
 
+  const toggleErrorMessage =
+    toggleFeatureMutation.error instanceof Error
+      ? toggleFeatureMutation.error.message
+      : null
+
   const installDefaultsErrorMessage =
     installDefaultsMutation.error instanceof Error
       ? installDefaultsMutation.error.message
@@ -149,6 +173,9 @@ export function useVehicleFeaturesCatalog() {
 
     deleteFeatureMutation,
     deleteErrorMessage,
+
+    toggleFeatureMutation,
+    toggleErrorMessage,
 
     installDefaultsMutation,
     installDefaultsErrorMessage,

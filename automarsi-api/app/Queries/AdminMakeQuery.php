@@ -10,7 +10,10 @@ class AdminMakeQuery
     public function all(): Collection
     {
         return Make::query()
-            ->withCount('carModels')
+            ->with([
+                'carModels' => fn ($query) => $query->orderBy('name'),
+            ])
+            ->withCount(['carModels', 'listings'])
             ->orderBy('name')
             ->get();
     }

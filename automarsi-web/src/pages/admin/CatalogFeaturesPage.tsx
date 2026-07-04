@@ -6,7 +6,7 @@ import PageHeader from '@/components/admin/PageHeader'
 import { Button } from '@/components/ui/button'
 import CreateVehicleFeatureForm from '@/features/admin-catalog/features/components/CreateVehicleFeatureForm'
 import EditVehicleFeatureForm from '@/features/admin-catalog/features/components/EditVehicleFeatureForm'
-import VehicleFeaturesTable from '@/features/admin-catalog/features/components/VehicleFeaturesTable'
+import FeatureCatalogBoard from '@/features/admin-catalog/features/components/FeatureCatalogBoard'
 import { useVehicleFeaturesCatalog } from '@/features/admin-catalog/features/hooks/useVehicleFeaturesCatalog'
 
 function CatalogFeaturesPage() {
@@ -30,6 +30,9 @@ function CatalogFeaturesPage() {
     deleteFeatureMutation,
     deleteErrorMessage,
 
+    toggleFeatureMutation,
+    toggleErrorMessage,
+
     installDefaultsMutation,
     installDefaultsErrorMessage,
   } = useVehicleFeaturesCatalog()
@@ -40,6 +43,7 @@ function CatalogFeaturesPage() {
   const pageErrorMessage =
     featuresErrorMessage ||
     deleteErrorMessage ||
+    toggleErrorMessage ||
     installDefaultsErrorMessage
 
   return (
@@ -110,10 +114,7 @@ function CatalogFeaturesPage() {
         />
       ) : null}
 
-      <DataTableShell
-        title="Vehicle features"
-        description="Features like leather seats, navigation, camera, parking sensors, and more."
-      >
+      <DataTableShell title="Vehicle features" description="Feature catalog">
         {isLoading ? <LoadingState label="Loading vehicle features" /> : null}
 
         {!isLoading && !pageErrorMessage && !hasFeatures ? (
@@ -124,9 +125,17 @@ function CatalogFeaturesPage() {
         ) : null}
 
         {!isLoading && !pageErrorMessage && hasFeatures ? (
-          <VehicleFeaturesTable
+          <FeatureCatalogBoard
             features={features}
             isDeleting={deleteFeatureMutation.isPending}
+            isToggling={toggleFeatureMutation.isPending}
+            onAdd={() => {
+              setIsCreateFeatureOpen(true)
+              setEditingFeature(null)
+            }}
+            onToggle={async (feature) => {
+              await toggleFeatureMutation.mutateAsync(feature)
+            }}
             onEdit={(feature) => {
               setEditingFeature(feature)
               setIsCreateFeatureOpen(false)

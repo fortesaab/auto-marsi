@@ -13,6 +13,7 @@ class CreateVehicleFeature
 
     public function handle(array $data): VehicleFeature
     {
+        $data['is_active'] ??= true;
         $data['slug'] = $this->slugService->unique(VehicleFeature::class, $data['name']);
 
         return VehicleFeature::create($data);

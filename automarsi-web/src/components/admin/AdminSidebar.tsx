@@ -1,13 +1,14 @@
 import {
   CalendarClock,
   CarFront,
-  ChartNoAxesCombined,
   LayoutDashboard,
   MessagesSquare,
   Wrench,
   BadgeCheck,
+  ChevronDown,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 const navSections = [
   {
@@ -35,19 +36,19 @@ type AdminSidebarProps = {
 
 function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
   return (
-    <aside className="sticky top-0 flex h-screen flex-col border-r border-sidebar-border bg-sidebar p-2 max-md:relative max-md:h-auto max-md:border-b max-md:border-r-0">
+    <aside className="sticky top-0 flex h-screen flex-col bg-sidebar p-3 text-sidebar-foreground max-md:relative max-md:h-auto max-md:border-b max-md:border-r-0">
       <Button
         type="button"
         variant="ghost"
-        className="mb-2 h-auto w-full justify-start gap-2.5 rounded-md px-2 py-2 text-[15px] font-semibold hover:bg-sidebar-accent"
+        className="mb-5 h-auto w-full justify-start gap-3 rounded-xl px-2 py-2 text-[15px] font-bold text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         onClick={() => onNavigate('/admin')}
       >
-        <span className="grid size-8 place-items-center rounded-md bg-primary text-primary-foreground">
-          <ChartNoAxesCombined className="size-[17px]" />
+        <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground">
+          <span className="text-sm font-bold">A</span>
         </span>
         <span className="grid gap-0.5 text-left leading-none">
           <span>AutoMarsi</span>
-          <span className="text-[11px] font-medium uppercase text-muted-foreground">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/45">
             Admin console
           </span>
         </span>
@@ -57,9 +58,9 @@ function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
         <div className="grid gap-5">
           {navSections.map((section) => (
             <div key={section.label}>
-              <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {section.label}
-              </p>
+                <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[0.22em] text-sidebar-foreground/40">
+                  {section.label}
+                </p>
 
               <nav className="grid gap-1">
                 {section.items.map((item) => {
@@ -74,13 +75,18 @@ function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
                       key={item.href}
                       variant={isActive ? 'secondary' : 'ghost'}
                       onClick={() => onNavigate(item.href)}
-                      className="group h-10 w-full justify-start gap-2.5 rounded-md px-2 text-[15px] font-medium"
+                      className={cn(
+                        'group h-10 w-full justify-start gap-2.5 rounded-xl px-2 text-[14px] font-semibold',
+                        isActive
+                          ? 'bg-sidebar-accent text-primary hover:bg-sidebar-accent hover:text-primary'
+                          : 'text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                      )}
                     >
                       <span
                         className={
                           isActive
-                            ? 'grid size-7 place-items-center rounded-md bg-primary text-primary-foreground'
-                            : 'grid size-7 place-items-center rounded-md text-muted-foreground transition-colors group-hover:bg-sidebar-accent group-hover:text-sidebar-accent-foreground'
+                            ? 'grid size-7 place-items-center rounded-lg bg-primary text-primary-foreground'
+                            : 'grid size-7 place-items-center rounded-lg text-sidebar-foreground/55 transition-colors group-hover:text-sidebar-accent-foreground'
                         }
                       >
                         <item.icon className="size-4" />
@@ -97,8 +103,19 @@ function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
         </div>
       </div>
 
-      <div className="border-t border-sidebar-border p-2 text-xs text-muted-foreground">
-        Inventory and customer operations
+      <div className="rounded-xl border border-sidebar-border bg-white/5 p-3 text-xs text-sidebar-foreground/65">
+        <div className="flex items-center gap-3">
+          <span className="grid size-9 place-items-center rounded-full bg-primary/15 text-primary">
+            LB
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold text-sidebar-foreground">
+              Sales Manager
+            </span>
+            <span className="block truncate">Inventory operations</span>
+          </span>
+          <ChevronDown className="size-4" />
+        </div>
       </div>
     </aside>
   )

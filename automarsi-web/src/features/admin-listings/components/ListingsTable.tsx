@@ -24,7 +24,7 @@ type ListingsTableProps = {
 }
 
 function formatCurrency(price: string, currency: string) {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency,
     maximumFractionDigits: 0,
@@ -36,7 +36,7 @@ function formatKilometers(kilometers: number | null) {
     return '-'
   }
 
-  return `${new Intl.NumberFormat('en-US').format(kilometers)} km`
+  return `${new Intl.NumberFormat('de-DE').format(kilometers)} km`
 }
 
 function ListingsTable({
@@ -50,13 +50,25 @@ function ListingsTable({
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead>Listing</TableHead>
-          <TableHead>Vehicle</TableHead>
-          <TableHead>Year</TableHead>
-          <TableHead>Price</TableHead>
-          <TableHead>Kilometers</TableHead>
-          <TableHead>Status</TableHead>
+        <TableRow className="bg-muted/40 hover:bg-muted/40">
+          <TableHead className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            Vehicle
+          </TableHead>
+          <TableHead className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            Make / Model
+          </TableHead>
+          <TableHead className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            Year
+          </TableHead>
+          <TableHead className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            Price
+          </TableHead>
+          <TableHead className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            Mileage
+          </TableHead>
+          <TableHead className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            Status
+          </TableHead>
           <TableHead className="w-16 text-right">Actions</TableHead>
         </TableRow>
       </TableHeader>
@@ -71,10 +83,10 @@ function ListingsTable({
             null
 
           return (
-            <TableRow key={listing.id}>
+            <TableRow key={listing.id} className="hover:bg-muted/35">
               <TableCell>
                 <div className="flex items-center gap-3">
-                  <div className="h-11 w-11 overflow-hidden rounded-md border bg-muted">
+                  <div className="h-12 w-14 overflow-hidden rounded-xl border bg-muted">
                     {primaryImage ? (
                       <img
                         src={primaryImage.image_url}
@@ -87,8 +99,8 @@ function ListingsTable({
                   </div>
 
                   <div className="min-w-0">
-                    <p className="truncate font-medium">{listing.title}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="truncate text-sm font-bold">{listing.title}</p>
+                    <p className="text-xs text-muted-foreground">
                       {listing.location ?? 'No location'}
                     </p>
                   </div>
@@ -97,8 +109,8 @@ function ListingsTable({
 
               <TableCell>
                 <div>
-                  <p className="font-medium">{listing.make?.name ?? '-'}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm font-semibold">{listing.make?.name ?? '-'}</p>
+                  <p className="text-xs text-muted-foreground">
                     {listing.car_model?.name ?? '-'}
                   </p>
                 </div>
@@ -106,11 +118,13 @@ function ListingsTable({
 
               <TableCell>{listing.year}</TableCell>
 
-              <TableCell>
+              <TableCell className="font-semibold tabular-nums">
                 {formatCurrency(listing.price, listing.currency)}
               </TableCell>
 
-              <TableCell>{formatKilometers(listing.kilometers)}</TableCell>
+              <TableCell className="text-muted-foreground">
+                {formatKilometers(listing.kilometers)}
+              </TableCell>
 
               <TableCell>
                 <ListingStatusBadge status={listing.status} />
