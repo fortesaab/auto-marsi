@@ -42,7 +42,7 @@ export const en = {
   },
   contact: {
     phone: '+383 44 333 310',
-    email: 'info@automarsi.com',
+    email: 'autosallonmarsi@gmail.com',
     location: 'Prishtina, Kosovo',
     locationLabel: 'Location',
     response: 'Response',

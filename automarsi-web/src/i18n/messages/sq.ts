@@ -44,7 +44,7 @@ export const sq: typeof en = {
   },
   contact: {
     phone: '+383 44 333 310',
-    email: 'info@automarsi.com',
+    email: 'autosallonmarsi@gmail.com',
     location: 'Prishtine, Kosove',
     locationLabel: 'Lokacioni',
     response: 'Pergjigja',
