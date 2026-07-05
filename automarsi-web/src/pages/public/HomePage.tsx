@@ -18,6 +18,7 @@ import supraHeroImage from '@/assets/home-hero-supra.jpg'
 import FeaturedListingsSection from '@/features/public-listings/components/FeaturedListingsSection'
 import RecentlySoldSection from '@/features/public-listings/components/RecentlySoldSection'
 import { usePublicStats } from '@/features/public-stats/hooks/usePublicStats'
+import { usePublicSiteMedia } from '@/features/site-media/hooks/usePublicSiteMedia'
 import { useI18n } from '@/i18n/useI18n'
 
 type HomePageProps = {
@@ -27,6 +28,8 @@ type HomePageProps = {
 function HomePage({ onNavigate }: HomePageProps) {
   const { messages } = useI18n()
   const { stats } = usePublicStats()
+  const homeHeroMediaQuery = usePublicSiteMedia('home_hero')
+  const homeHeroMedia = homeHeroMediaQuery.data?.[0]
 
   function formatStat(value: number | undefined) {
     if (value === undefined) {
@@ -115,8 +118,8 @@ function HomePage({ onNavigate }: HomePageProps) {
 
           <div className="hidden gap-4 md:grid">
             <PublicMediaFrame
-              src={supraHeroImage}
-              alt="AutoMarsi hero vehicle"
+              src={homeHeroMedia?.image_url ?? supraHeroImage}
+              alt={homeHeroMedia?.alt_text ?? 'AutoMarsi hero vehicle'}
               label="Hero car"
               className="shadow-[0_24px_70px_rgba(31,25,76,0.13)]"
             />
@@ -143,6 +146,7 @@ function HomePage({ onNavigate }: HomePageProps) {
         </div>
 
         <PublicStatsBand
+          className="mt-8"
           items={[
             {
               value: formatStat(stats?.vehicles_in_stock),

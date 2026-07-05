@@ -7,6 +7,10 @@ type SiteMediaUploaderProps = {
   mediaItems: SiteMedia[]
   isSubmitting: boolean
   errorMessage: string | null
+  emptyLabel: string
+  galleryTitle: string
+  inputLabel?: string
+  uploadLabel?: string
   onSubmit: (payload: { images: File[]; altText: string }) => Promise<void>
 }
 
@@ -14,6 +18,10 @@ function SiteMediaUploader({
   mediaItems,
   isSubmitting,
   errorMessage,
+  emptyLabel,
+  galleryTitle,
+  inputLabel = 'Image',
+  uploadLabel = 'Upload image',
   onSubmit,
 }: SiteMediaUploaderProps) {
   const [images, setImages] = useState<File[]>([])
@@ -68,7 +76,7 @@ function SiteMediaUploader({
             <div className="grid size-full place-items-center text-muted-foreground">
               <div className="grid justify-items-center gap-2">
                 <ImagePlus className="size-8" />
-                <span className="text-sm">No About images uploaded yet.</span>
+                <span className="text-sm">{emptyLabel}</span>
               </div>
             </div>
           )}
@@ -77,7 +85,7 @@ function SiteMediaUploader({
 
       <div className="grid gap-4 md:grid-cols-[1fr_1fr_auto] md:items-end">
         <label className="grid gap-1.5 text-sm font-medium">
-          Image
+          {inputLabel}
           <input
             type="file"
             multiple
@@ -105,13 +113,13 @@ function SiteMediaUploader({
             ? 'Uploading...'
             : images.length > 1
               ? `Upload ${images.length} images`
-              : 'Upload image'}
+              : uploadLabel}
         </Button>
       </div>
 
       {mediaItems.length > 0 ? (
         <div className="grid gap-3 border-t pt-4">
-          <p className="text-sm font-semibold">Carousel images</p>
+          <p className="text-sm font-semibold">{galleryTitle}</p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {mediaItems.map((media) => (
               <div

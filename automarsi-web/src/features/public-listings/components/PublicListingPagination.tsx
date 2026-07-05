@@ -8,13 +8,21 @@ type PublicListingPaginationProps = {
   onPageChange: (page: number) => void
 }
 
+function getPageNumber(value: unknown, fallback: number) {
+  const parsedValue = Number(value)
+
+  return Number.isFinite(parsedValue) && parsedValue > 0
+    ? Math.trunc(parsedValue)
+    : fallback
+}
+
 function PublicListingPagination({
   meta,
   onPageChange,
 }: PublicListingPaginationProps) {
   const { messages } = useI18n()
-  const currentPage = Number(meta.current_page)
-  const lastPage = Number(meta.last_page)
+  const currentPage = getPageNumber(meta.current_page, 1)
+  const lastPage = Math.max(getPageNumber(meta.last_page, currentPage), 1)
   const canGoPrevious = currentPage > 1
   const canGoNext = currentPage < lastPage
   const firstVisiblePage = Math.max(1, Math.min(currentPage - 2, lastPage - 4))
