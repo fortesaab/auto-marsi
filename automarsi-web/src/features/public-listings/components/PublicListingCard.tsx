@@ -42,7 +42,7 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
     ] ?? listing.fuel_type
 
   return (
-    <article className="group overflow-hidden rounded-2xl border bg-card text-card-foreground shadow-[0_18px_45px_rgba(31,25,76,0.07)] transition hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(31,25,76,0.11)]">
+    <article className="group overflow-hidden rounded-[1.75rem] border bg-card text-card-foreground shadow-[0_18px_45px_rgba(31,25,76,0.07)] transition hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(31,25,76,0.11)]">
       <button
         type="button"
         onClick={() => onNavigate(`/inventory/${listing.id}`)}
@@ -52,6 +52,10 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
           <Badge className="absolute left-4 top-4 z-10 rounded-full bg-emerald-500 px-3 py-1 text-white shadow-md hover:bg-emerald-500">
             {messages.inventory.card.goodPrice}
           </Badge>
+
+          <span className="absolute bottom-4 right-4 z-10 rounded-full bg-foreground/70 px-4 py-2 text-lg font-black text-white shadow-lg md:hidden">
+            {formatPrice(listing)}
+          </span>
 
           {listing.primary_image?.image_url ? (
             <img
@@ -78,7 +82,7 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
             <h3 className="text-xl font-black leading-tight tracking-[-0.035em]">
               {listing.title}
             </h3>
-            <p className="shrink-0 text-lg font-black text-primary">
+            <p className="hidden shrink-0 text-lg font-black text-primary md:block">
               {formatPrice(listing)}
             </p>
           </div>

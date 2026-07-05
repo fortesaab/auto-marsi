@@ -8,6 +8,7 @@ import PublicListingFeatures from '@/features/public-listings/components/PublicL
 import PublicListingGallery from '@/features/public-listings/components/PublicListingGallery'
 import PublicListingSpecs from '@/features/public-listings/components/PublicListingSpecs'
 import PublicListingInquiryForm from '@/features/public-listings/components/PublicListingInquiryForm'
+import PublicListingMobileCta from '@/features/public-listings/components/PublicListingMobileCta'
 import { usePublicListing } from '@/features/public-listings/hooks/usePublicListing'
 import { useI18n } from '@/i18n/useI18n'
 
@@ -52,9 +53,11 @@ function ListingDetailsPage({
   }
 
   return (
-    <PublicSection>
+    <PublicSection className="pt-0 md:pt-12">
       <div className="grid gap-5">
-      <BackToInventoryButton onNavigate={onNavigate} />
+      <div className="hidden md:block">
+        <BackToInventoryButton onNavigate={onNavigate} />
+      </div>
 
       <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="grid min-w-0 gap-5">
@@ -65,11 +68,21 @@ function ListingDetailsPage({
 
         <aside className="grid h-fit gap-4 lg:sticky lg:top-20">
           <PublicListingSpecs listing={listing} />
-          <PublicListingInquiryForm listingId={listing.id} />
+          <div id="listing-inquiry">
+            <PublicListingInquiryForm listingId={listing.id} />
+          </div>
           <PublicListingContactReassurance />
         </aside>
       </div>
       </div>
+
+      <PublicListingMobileCta
+        onContactClick={() =>
+          document
+            .getElementById('listing-inquiry')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      />
     </PublicSection>
   )
 }

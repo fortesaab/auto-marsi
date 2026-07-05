@@ -29,8 +29,8 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
 
   return (
     <div className="grid gap-3">
-      <div className="overflow-hidden rounded-2xl border bg-card shadow-[0_18px_45px_rgba(31,25,76,0.06)]">
-        <div className="relative aspect-[16/10] bg-slate-100">
+      <div className="-mx-4 overflow-hidden border-y bg-card shadow-[0_18px_45px_rgba(31,25,76,0.06)] sm:mx-0 sm:rounded-2xl sm:border">
+        <div className="relative aspect-[4/3] bg-slate-100 sm:aspect-[16/10]">
           {selectedImage?.image_url ? (
             <img
               src={selectedImage.image_url}

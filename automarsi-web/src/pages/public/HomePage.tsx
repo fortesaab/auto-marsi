@@ -2,10 +2,13 @@ import {
   ArrowRight,
   Car,
   MessageSquare,
+  ReceiptText,
   ShieldCheck,
   Wrench,
 } from 'lucide-react'
 import PublicMediaFrame from '@/components/public/PublicMediaFrame'
+import PublicMobileQuickActions from '@/components/public/PublicMobileQuickActions'
+import PublicMobileSearch from '@/components/public/PublicMobileSearch'
 import PublicSection from '@/components/public/PublicSection'
 import PublicSectionHeader from '@/components/public/PublicSectionHeader'
 import PublicStatsBand from '@/components/public/PublicStatsBand'
@@ -28,11 +31,30 @@ function HomePage({ onNavigate }: HomePageProps) {
       <PublicSection className="pt-12 lg:pt-16">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(360px,0.9fr)] lg:items-center">
           <div className="grid gap-6">
-            <PublicSectionHeader
-              eyebrow={messages.home.heroEyebrow}
-              title={messages.home.heroTitle}
-              description={messages.home.heroDescription}
-            />
+            <div className="grid gap-4 md:hidden">
+              <div>
+                <p className="text-xl font-bold text-muted-foreground">
+                  {messages.home.mobileWelcome}
+                </p>
+                <h1 className="mt-1 text-5xl font-black tracking-[-0.06em]">
+                  {messages.nav.home}
+                </h1>
+              </div>
+
+              <PublicMobileSearch
+                readOnly
+                placeholder={messages.home.mobileSearchPlaceholder}
+                onClick={() => onNavigate('/inventory')}
+              />
+            </div>
+
+            <div className="hidden md:block">
+              <PublicSectionHeader
+                eyebrow={messages.home.heroEyebrow}
+                title={messages.home.heroTitle}
+                description={messages.home.heroDescription}
+              />
+            </div>
 
             <div className="flex flex-wrap gap-3">
               <Button type="button" size="lg" onClick={() => onNavigate('/inventory')}>
@@ -50,7 +72,25 @@ function HomePage({ onNavigate }: HomePageProps) {
               </Button>
             </div>
 
-            <div className="flex flex-wrap gap-3 pt-2 text-sm text-muted-foreground">
+            <PublicMobileQuickActions
+              onNavigate={onNavigate}
+              items={[
+                {
+                  title: messages.nav.financing,
+                  description: messages.home.mobileFinancingAction,
+                  icon: ReceiptText,
+                  path: '/financing',
+                },
+                {
+                  title: messages.nav.contact,
+                  description: messages.home.mobileContactAction,
+                  icon: MessageSquare,
+                  path: '/contact',
+                },
+              ]}
+            />
+
+            <div className="hidden flex-wrap gap-3 pt-2 text-sm text-muted-foreground md:flex">
               {[messages.home.selectedActiveVehicles, messages.home.showroomFollowUp, messages.footer.financingGuidance].map((item) => (
                 <span
                   key={item}
@@ -63,7 +103,7 @@ function HomePage({ onNavigate }: HomePageProps) {
             </div>
           </div>
 
-          <div className="grid gap-4">
+          <div className="hidden gap-4 md:grid">
             <PublicMediaFrame
               src={supraHeroImage}
               alt="AutoMarsi hero vehicle"

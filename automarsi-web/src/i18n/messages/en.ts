@@ -71,6 +71,10 @@ export const en = {
     },
   },
   home: {
+    mobileWelcome: 'Welcome',
+    mobileSearchPlaceholder: 'Search make, model...',
+    mobileFinancingAction: 'Calculate payment',
+    mobileContactAction: 'Write to us',
     heroEyebrow: 'Autosallon · Prishtina',
     heroTitle: 'Quality cars. Clear next steps.',
     heroDescription:
@@ -120,6 +124,7 @@ export const en = {
       'Try changing the make, model, price, or keyword filters.',
     filters: {
       title: 'Filters',
+      all: 'All',
       reset: 'Reset',
       make: 'Make',
       model: 'Model',

@@ -73,6 +73,10 @@ export const sq: typeof en = {
     },
   },
   home: {
+    mobileWelcome: 'Mire se erdhe',
+    mobileSearchPlaceholder: 'Kerko marke, model...',
+    mobileFinancingAction: 'Llogarit kestin',
+    mobileContactAction: 'Na shkruaj',
     heroEyebrow: 'Autosallon · Prishtine',
     heroTitle: 'Vetura cilesore. Hapa te qarte.',
     heroDescription:
@@ -123,6 +127,7 @@ export const sq: typeof en = {
       'Provo te ndryshosh marken, modelin, cmimin ose fjalet kyce.',
     filters: {
       title: 'Filtrat',
+      all: 'Te gjitha',
       reset: 'Pastro',
       make: 'Marka',
       model: 'Modeli',

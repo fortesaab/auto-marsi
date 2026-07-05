@@ -20,7 +20,7 @@ function PublicHeader({ currentPath, onNavigate }: PublicHeaderProps) {
   ]
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur-xl md:border-b">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
         <button
           type="button"
@@ -28,7 +28,9 @@ function PublicHeader({ currentPath, onNavigate }: PublicHeaderProps) {
           aria-label={messages.common.brand}
           className="flex shrink-0 items-center gap-3 text-xl font-black tracking-[-0.04em]"
         >
-          <span className="size-2.5 rounded-full bg-primary shadow-[0_0_0_6px_rgba(107,75,255,0.12)]" />
+          <span className="grid size-9 place-items-center rounded-2xl bg-primary text-sm font-black text-white shadow-[0_10px_25px_rgba(107,75,255,0.18)] md:size-2.5 md:bg-primary md:text-transparent md:shadow-[0_0_0_6px_rgba(107,75,255,0.12)]">
+            A
+          </span>
           <span>
             Auto<span className="text-primary">Marsi</span>
           </span>
