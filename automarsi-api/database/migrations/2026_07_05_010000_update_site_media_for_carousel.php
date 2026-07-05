@@ -19,7 +19,9 @@ return new class extends Migration
             }
         });
 
-        DB::statement('DROP INDEX IF EXISTS site_media_key_unique');
+        DB::statement(
+            'ALTER TABLE site_media DROP CONSTRAINT IF EXISTS site_media_key_unique'
+        );
     }
 
     public function down(): void
