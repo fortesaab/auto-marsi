@@ -7,7 +7,7 @@ type SiteMediaUploaderProps = {
   mediaItems: SiteMedia[]
   isSubmitting: boolean
   errorMessage: string | null
-  onSubmit: (payload: { image: File; altText: string }) => Promise<void>
+  onSubmit: (payload: { images: File[]; altText: string }) => Promise<void>
 }
 
 function SiteMediaUploader({
@@ -16,31 +16,35 @@ function SiteMediaUploader({
   errorMessage,
   onSubmit,
 }: SiteMediaUploaderProps) {
-  const [image, setImage] = useState<File | null>(null)
+  const [images, setImages] = useState<File[]>([])
   const [altText, setAltText] = useState('')
   const firstMedia = mediaItems[0] ?? null
+  const firstSelectedImage = images[0] ?? null
   const previewUrl = useMemo(
-    () => (image ? URL.createObjectURL(image) : firstMedia?.image_url),
-    [image, firstMedia?.image_url]
+    () =>
+      firstSelectedImage
+        ? URL.createObjectURL(firstSelectedImage)
+        : firstMedia?.image_url,
+    [firstSelectedImage, firstMedia?.image_url]
   )
 
   useEffect(() => {
     return () => {
-      if (image && previewUrl) {
+      if (firstSelectedImage && previewUrl) {
         URL.revokeObjectURL(previewUrl)
       }
     }
-  }, [image, previewUrl])
+  }, [firstSelectedImage, previewUrl])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (!image) {
+    if (images.length === 0) {
       return
     }
 
-    await onSubmit({ image, altText })
-    setImage(null)
+    await onSubmit({ images, altText })
+    setImages([])
     setAltText('')
   }
 
@@ -76,8 +80,11 @@ function SiteMediaUploader({
           Image
           <input
             type="file"
+            multiple
             accept="image/jpeg,image/png,image/webp"
-            onChange={(event) => setImage(event.target.files?.[0] ?? null)}
+            onChange={(event) =>
+              setImages(Array.from(event.target.files ?? []))
+            }
             className="h-10 rounded-md border bg-background px-3 py-2 text-sm"
           />
         </label>
@@ -92,9 +99,13 @@ function SiteMediaUploader({
           />
         </label>
 
-        <Button type="submit" disabled={!image || isSubmitting}>
+        <Button type="submit" disabled={images.length === 0 || isSubmitting}>
           <Upload className="size-4" />
-          {isSubmitting ? 'Uploading...' : 'Upload image'}
+          {isSubmitting
+            ? 'Uploading...'
+            : images.length > 1
+              ? `Upload ${images.length} images`
+              : 'Upload image'}
         </Button>
       </div>
 

@@ -20,20 +20,24 @@ export function useAdminSiteMedia(key: string) {
 
   const updateMediaMutation = useMutation({
     mutationFn: async ({
-      image,
+      images,
       altText,
     }: {
-      image: File
+      images: File[]
       altText: string
     }) => {
       const token = await getAdminToken()
 
-      return updateAdminSiteMedia({
-        token,
-        key,
-        image,
-        altText,
-      })
+      return Promise.all(
+        images.map((image) =>
+          updateAdminSiteMedia({
+            token,
+            key,
+            image,
+            altText,
+          })
+        )
+      )
     },
     onSuccess: async () => {
       toast.success('About image updated.')
