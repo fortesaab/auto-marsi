@@ -43,6 +43,14 @@ class VerifyClerkToken
                 ]
             );
 
+            $adminEmails = collect(explode(',', config('automarsi.admin_emails', '')))
+                ->map(fn ($email) => strtolower(trim($email)))
+                ->filter();
+
+            if ($user->email && $adminEmails->contains(strtolower($user->email))) {
+                $user->forceFill(['role' => 'admin'])->save();
+            }
+
             Auth::setUser($user);
         } catch (Throwable) {
             return response()->json(['message' => 'Invalid token.'], 401);
