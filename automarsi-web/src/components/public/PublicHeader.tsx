@@ -26,12 +26,12 @@ function PublicHeader({ currentPath, onNavigate }: PublicHeaderProps) {
           type="button"
           onClick={() => onNavigate('/')}
           aria-label={messages.common.brand}
-          className="flex h-12 shrink-0 items-center"
+          className="flex h-12 shrink-0 items-center justify-center"
         >
           <img
             src="/automarsi-logo.png"
             alt={messages.common.brand}
-            className="h-30 w-40 object-cover object-center"
+            className="h-30 w-36 object-contain object-center"
           />
         </button>
 
