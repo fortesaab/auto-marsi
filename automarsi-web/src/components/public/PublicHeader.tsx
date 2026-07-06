@@ -31,7 +31,7 @@ function PublicHeader({ currentPath, onNavigate }: PublicHeaderProps) {
           <img
             src="/automarsi-logo.png"
             alt={messages.common.brand}
-            className="h-30 w-36 object-contain object-center"
+            className="h-30 w-40 object-contain object-center"
           />
         </button>
 
