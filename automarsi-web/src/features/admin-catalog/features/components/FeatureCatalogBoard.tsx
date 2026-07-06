@@ -19,7 +19,7 @@ type FeatureGroup = 'Safety' | 'Comfort' | 'Infotainment' | 'Performance'
 const groupColors: Record<FeatureGroup, string> = {
   Safety: 'bg-emerald-500',
   Comfort: 'bg-amber-500',
-  Infotainment: 'bg-sky-500',
+  Infotainment: 'bg-primary',
   Performance: 'bg-foreground',
 }
 

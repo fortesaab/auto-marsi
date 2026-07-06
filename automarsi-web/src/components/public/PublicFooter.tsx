@@ -24,7 +24,8 @@ function PublicFooter({ onNavigate }: PublicFooterProps) {
         <div className="grid content-start gap-3">
           <p className="inline-flex items-center gap-3 text-xl font-black tracking-[-0.04em] text-white">
             <span className="size-2.5 rounded-full bg-[#A8741D]" />
-            Auto<span className="text-[#A8741D]">Marsi</span>
+            <span className="text-[#FBD969]">Auto</span>
+            <span className="text-[#A8741D]">Marsi</span>
           </p>
           <p className="max-w-sm text-sm leading-6 text-slate-400">
             {messages.footer.description}

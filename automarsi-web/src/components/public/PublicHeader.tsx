@@ -32,7 +32,8 @@ function PublicHeader({ currentPath, onNavigate }: PublicHeaderProps) {
             A
           </span>
           <span>
-            Auto<span className="text-[#A8741D]">Marsi</span>
+            <span className="text-[#FBD969]">Auto</span>
+            <span className="text-[#A8741D]">Marsi</span>
           </span>
         </button>
 

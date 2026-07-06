@@ -62,7 +62,7 @@ function monthDays(today: Date): Date[] {
 function statusAccent(status: AppointmentStatus): string {
   const accents: Record<AppointmentStatus, string> = {
     pending: 'border-amber-400',
-    confirmed: 'border-sky-400',
+    confirmed: 'border-primary',
     completed: 'border-emerald-500',
     cancelled: 'border-rose-400',
   }
