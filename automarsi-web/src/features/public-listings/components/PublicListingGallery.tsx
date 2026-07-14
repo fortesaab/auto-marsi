@@ -34,23 +34,28 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
   const { messages } = useI18n()
   const images = useMemo(() => getGalleryImages(listing), [listing])
   const mainImage = listing.primary_image ?? images[0] ?? null
-  const galleryImages = images.filter((image) => image.id !== mainImage?.id)
-  const interiorImages = galleryImages.filter(isInteriorImage)
-  const exteriorImages = galleryImages.filter(isExteriorImage)
-  const unsortedImages = galleryImages.filter(
+  const interiorImages = images.filter(isInteriorImage)
+  const exteriorImages = images.filter(isExteriorImage)
+  const unsortedImages = images.filter(
     (image) => !isInteriorImage(image) && !isExteriorImage(image),
   )
+  const firstUnsortedImage =
+    unsortedImages.find((image) => image.id !== mainImage?.id) ??
+    unsortedImages[0]
   const interiorGroup =
     interiorImages.length > 0
       ? interiorImages
-      : unsortedImages[0]
-        ? [unsortedImages[0]]
+      : firstUnsortedImage
+        ? [firstUnsortedImage]
         : []
+  const firstExteriorFallback = unsortedImages.find(
+    (image) => image.id !== interiorGroup[0]?.id && image.id !== mainImage?.id,
+  )
   const exteriorGroup =
     exteriorImages.length > 0
       ? exteriorImages
-      : unsortedImages.find((image) => image.id !== interiorGroup[0]?.id)
-        ? [unsortedImages.find((image) => image.id !== interiorGroup[0]?.id)!]
+      : firstExteriorFallback
+        ? [firstExteriorFallback]
         : []
   const actionImages = [
     interiorGroup[0]
