@@ -12,14 +12,14 @@ function PublicListingDetailsHeader({
   const { messages } = useI18n()
 
   return (
-    <section className="rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-6">
+    <section className="rounded-lg border border-white/10 bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
         <div className="grid gap-2">
           <p className="text-sm text-muted-foreground">
             {listing.make?.name ?? '-'} {listing.car_model?.name ?? ''}
           </p>
 
-          <h1 className="max-w-3xl text-3xl font-black uppercase tracking-[-0.045em]">
+          <h1 className="max-w-3xl text-3xl font-black leading-none">
             {listing.title}
           </h1>
         </div>

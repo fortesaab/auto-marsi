@@ -19,12 +19,12 @@ function PublicInfoCard({
   return (
     <article
       className={cn(
-        'rounded-[1.5rem] border border-white/10 bg-white/[0.05] p-5 shadow-[0_20px_70px_rgba(0,0,0,0.25)] backdrop-blur-xl',
+        'rounded-lg border border-white/10 bg-white/[0.05] p-5 shadow-[0_20px_70px_rgba(0,0,0,0.25)] backdrop-blur-xl',
         className
       )}
     >
       {icon ? (
-        <div className="mb-4 grid size-10 place-items-center rounded-xl bg-primary/10 text-primary">
+        <div className="mb-4 grid size-10 place-items-center rounded-md bg-primary/10 text-primary">
           {icon}
         </div>
       ) : null}

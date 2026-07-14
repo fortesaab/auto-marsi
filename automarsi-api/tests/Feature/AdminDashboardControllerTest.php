@@ -71,9 +71,7 @@ class AdminDashboardControllerTest extends TestCase
             ->assertJsonPath('data.listings.sold', 1)
             ->assertJsonPath('data.new_inquiries', 1)
             ->assertJsonPath('data.open_appointments', 2)
-            ->assertJsonPath('data.sales.summary.revenue', 23000)
-            ->assertJsonPath('data.sales.summary.profit', 1500)
-            ->assertJsonPath('data.sales.summary.sold_count', 1)
+            ->assertJsonMissingPath('data.sales')
             ->assertJsonPath('data.recent_inquiries.0.id', $inquiry->id)
             ->assertJsonCount(1, 'data.upcoming_appointments')
             ->assertJsonPath(
@@ -82,42 +80,9 @@ class AdminDashboardControllerTest extends TestCase
             );
     }
 
-    public function test_dashboard_counts_sold_listing_without_sold_at(): void
+    public function test_financial_report_route_is_not_exposed(): void
     {
-        $this->createListing('legacy-sold-listing', 'sold', [
-            'price' => 12000,
-            'purchase_price' => 10000,
-            'sale_price' => 11500,
-            'sales_expenses' => 500,
-            'sold_at' => null,
-        ]);
-
-        $response = $this->getJson('/api/admin/dashboard');
-
-        $response
-            ->assertOk()
-            ->assertJsonPath('data.sales.summary.revenue', 11500)
-            ->assertJsonPath('data.sales.summary.profit', 1000)
-            ->assertJsonPath('data.sales.summary.sold_count', 1);
-    }
-
-    public function test_admin_can_download_sales_report_pdf(): void
-    {
-        $this->createListing('report-sold-listing', 'sold', [
-            'price' => 12000,
-            'purchase_price' => 10000,
-            'sale_price' => 11500,
-            'sales_expenses' => 500,
-            'sold_at' => now(),
-        ]);
-
-        $response = $this->get('/api/admin/reports/sales?sales_range=month');
-
-        $response
-            ->assertOk()
-            ->assertHeader('content-type', 'application/pdf');
-
-        $this->assertStringStartsWith('%PDF', $response->getContent());
+        $this->get('/api/admin/reports/sales')->assertNotFound();
     }
 
     private function createListing(

@@ -19,14 +19,12 @@ function PublicFooter({ onNavigate }: PublicFooterProps) {
   ]
 
   return (
-    <footer className="border-t border-white/10 bg-[#050509] text-slate-200">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.4fr_0.8fr_0.8fr_1fr] lg:px-8">
+    <footer className="border-t border-white/8 bg-background text-muted-foreground">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:px-6 md:grid-cols-[1.4fr_0.8fr_0.8fr_1fr] lg:px-8">
         <div className="grid content-start gap-3">
-          <img
-            src="/automarsi-mark.png"
-            alt={messages.common.brand}
-            className="h-14 w-40 rounded-xl object-cover object-center"
-          />
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-foreground">
+            {messages.common.brand}
+          </p>
           <p className="max-w-sm text-sm leading-6 text-slate-400">
             {messages.footer.description}
           </p>
@@ -65,7 +63,7 @@ function PublicFooter({ onNavigate }: PublicFooterProps) {
         </div>
       </div>
 
-      <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-slate-500">
+      <div className="border-t border-white/8 px-4 py-4 text-center text-xs text-muted-foreground">
         {messages.footer.copyright}
       </div>
     </footer>

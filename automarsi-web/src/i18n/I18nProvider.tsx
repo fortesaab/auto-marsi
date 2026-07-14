@@ -7,7 +7,7 @@ import {
   type Language,
 } from './messages'
 
-const storageKey = 'automarsi.language'
+const storageKey = 'automarsi.language.v2'
 
 function getInitialLanguage(): Language {
   const storedLanguage = window.localStorage.getItem(storageKey)

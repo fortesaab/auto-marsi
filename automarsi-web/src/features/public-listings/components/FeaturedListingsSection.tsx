@@ -13,25 +13,41 @@ type FeaturedListingsSectionProps = {
 function FeaturedListingsSection({ onNavigate }: FeaturedListingsSectionProps) {
   const { messages } = useI18n()
   const { listings, listingsQuery, errorMessage } = useFeaturedPublicListings()
+  const categories = [
+    messages.inventory.filters.all,
+    messages.inventory.values.coupe,
+    messages.inventory.values.wagon,
+    'Limuzine',
+    messages.inventory.values.suv,
+    messages.inventory.values.hatchback,
+  ]
 
   return (
-    <PublicSection bleed>
+    <PublicSection>
       <div className="grid gap-7">
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+      <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
         <PublicSectionHeader
           eyebrow={messages.inventory.featured.eyebrow}
           title={messages.inventory.featured.title}
           description={messages.inventory.featured.description}
         />
 
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => onNavigate('/inventory')}
-        >
-          {messages.inventory.featured.viewAll}
-          <ArrowRight className="size-4" />
-        </Button>
+        <div className="flex flex-wrap gap-2 md:justify-end">
+          {categories.map((category, index) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => onNavigate('/inventory')}
+              className={
+                index === 0
+                  ? 'rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground'
+                  : 'rounded-full bg-white/7 px-4 py-2 text-xs font-bold text-muted-foreground transition hover:bg-white/12 hover:text-foreground'
+              }
+            >
+              {category}
+            </button>
+          ))}
+        </div>
       </div>
 
       {listingsQuery.isLoading ? (
@@ -68,7 +84,18 @@ function FeaturedListingsSection({ onNavigate }: FeaturedListingsSectionProps) {
       ) : null}
 
       {!listingsQuery.isLoading && !errorMessage && listings.length > 0 ? (
-        <PublicListingGrid listings={listings} onNavigate={onNavigate} />
+        <>
+          <PublicListingGrid listings={listings} onNavigate={onNavigate} />
+          <Button
+            type="button"
+            variant="outline"
+            className="mx-auto mt-1 h-10 rounded-md border-white/12 bg-white/[0.03] px-4 hover:bg-white/8"
+            onClick={() => onNavigate('/inventory')}
+          >
+            {messages.inventory.featured.viewAll}
+            <ArrowRight className="size-4" />
+          </Button>
+        </>
       ) : null}
       </div>
     </PublicSection>

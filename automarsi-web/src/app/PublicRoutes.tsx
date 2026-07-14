@@ -34,7 +34,7 @@ function getPublicPage(path: string, onNavigate: (path: string) => void) {
   }
 
   if (path === '/about') {
-    return <AboutPage onNavigate={onNavigate} />
+    return <AboutPage />
   }
 
   if (path === '/services') {

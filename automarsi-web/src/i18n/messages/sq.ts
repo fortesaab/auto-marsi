@@ -77,12 +77,13 @@ export const sq: typeof en = {
     mobileSearchPlaceholder: 'Kerko marke, model...',
     mobileFinancingAction: 'Llogarit kestin',
     mobileContactAction: 'Na shkruaj',
-    heroEyebrow: 'AutoMarsi · Prishtine',
-    heroTitle: 'Gjej veturen e duhur me nje ekip qe te percjell qarte.',
+    heroEyebrow: 'Autosallon · Prishtinë',
+    heroTitle: 'Vetura që tregojnë historinë e tyre.',
     heroDescription:
       'Shfleto veturat e disponueshme, kerko detaje dhe merr pergjigje te qarte nga ekipi yne para vizites.',
-    browseInventory: 'Shfleto veturat',
+    browseInventory: 'Shiko koleksionin',
     contactTeam: 'Kontakto ekipin',
+    showroomCtaTitle: 'Vizito sallonin. Provo veturën.',
     selectedActiveVehicles: 'Vetura aktive te perzgjedhura',
     showroomFollowUp: 'Percjellje nga salloni',
     featuredLocation: 'Featured · Prishtine',
@@ -165,17 +166,16 @@ export const sq: typeof en = {
       goodPrice: '',
     },
     featured: {
-      eyebrow: 'Vetura',
-      title: 'Vetura te shtuara se fundmi.',
-      description:
-        'Shfleto listime reale aktive te publikuara nga paneli admin i AutoMarsi.',
+      eyebrow: 'Koleksioni',
+      title: 'Vetura aktive',
+      description: '',
       viewAll: 'Shiko te gjitha veturat',
       loading: 'Duke ngarkuar veturat e perzgjedhura...',
       couldNotLoad: 'Veturat nuk mund te ngarkoheshin.',
       empty: 'Veturat e reja do te shfaqen ketu se shpejti.',
     },
     recentlySold: {
-      eyebrow: 'Te shitura se fundmi',
+      eyebrow: 'Historiku',
       title: 'Vetura qe klientet tashme i zgjodhen.',
       description:
         'Veturat e shitura qendrojne te ndara nga inventari i disponueshem dhe tregojne historine e sallonit qe klientet mund t’i besojne.',

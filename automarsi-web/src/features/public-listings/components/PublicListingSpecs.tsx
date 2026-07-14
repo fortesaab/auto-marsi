@@ -45,7 +45,7 @@ function PublicListingSpecs({ listing }: PublicListingSpecsProps) {
     : '-'
 
   return (
-    <aside className="h-fit rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.3)] backdrop-blur-xl">
+    <aside className="h-fit rounded-lg border border-white/10 bg-white/[0.05] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.3)] backdrop-blur-xl">
       <p className="text-xs font-semibold uppercase text-muted-foreground">
         {messages.listingDetails.specs.price}
       </p>
@@ -88,7 +88,7 @@ function PublicListingSpecs({ listing }: PublicListingSpecsProps) {
         />
       </dl>
 
-      <p className="mt-5 rounded-xl border border-primary/20 bg-primary/10 px-3 py-2 text-xs leading-5 text-muted-foreground">
+      <p className="mt-5 rounded-md border border-primary/20 bg-primary/10 px-3 py-2 text-xs leading-5 text-muted-foreground">
         {messages.listingDetails.specs.note}
       </p>
     </aside>
@@ -103,7 +103,7 @@ type SpecItemProps = {
 
 function SpecItem({ label, value, capitalize = false }: SpecItemProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+    <div className="rounded-md border border-white/10 bg-white/[0.04] p-4">
       <dt className="text-muted-foreground">{label}</dt>
       <dd className={capitalize ? 'mt-1 font-bold capitalize' : 'mt-1 font-bold'}>
         {value}

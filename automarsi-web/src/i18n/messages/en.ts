@@ -76,11 +76,12 @@ export const en = {
     mobileFinancingAction: 'Calculate payment',
     mobileContactAction: 'Write to us',
     heroEyebrow: 'AutoMarsi · Prishtina',
-    heroTitle: 'Find the right car with a team that follows through.',
+    heroTitle: 'Cars that tell their story.',
     heroDescription:
       'Explore available vehicles, ask for details, and get a clear response from our showroom team before you visit.',
-    browseInventory: 'Browse inventory',
+    browseInventory: 'View the collection',
     contactTeam: 'Contact team',
+    showroomCtaTitle: 'Visit the showroom. Test the car.',
     selectedActiveVehicles: 'Selected active vehicles',
     showroomFollowUp: 'Showroom follow-up',
     featuredLocation: 'Featured · Prishtina',
@@ -162,17 +163,16 @@ export const en = {
       goodPrice: '',
     },
     featured: {
-      eyebrow: 'Inventory',
-      title: 'Recently added vehicles.',
-      description:
-        'Explore real active listings published from the AutoMarsi admin dashboard.',
+      eyebrow: 'Collection',
+      title: 'Active vehicles',
+      description: '',
       viewAll: 'View all inventory',
       loading: 'Loading selected vehicles...',
       couldNotLoad: 'Could not load vehicles.',
       empty: 'New vehicles will appear here soon.',
     },
     recentlySold: {
-      eyebrow: 'Recently sold',
+      eyebrow: 'History',
       title: 'Vehicles customers already chose.',
       description:
         'Sold vehicles stay separate from available inventory, while showing the showroom history customers can trust.',

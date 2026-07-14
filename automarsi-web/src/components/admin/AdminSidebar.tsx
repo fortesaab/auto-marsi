@@ -8,6 +8,7 @@ import {
   BadgeCheck,
   ChevronDown,
 } from 'lucide-react'
+import { useUser } from '@clerk/clerk-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -37,6 +38,25 @@ type AdminSidebarProps = {
 }
 
 function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
+  const { user } = useUser()
+  const email = user?.primaryEmailAddress?.emailAddress ?? ''
+  const emailName = email.split('@')[0] ?? ''
+  const displayName =
+    user?.fullName?.trim() ||
+    user?.username?.trim() ||
+    emailName ||
+    'Admin'
+  const initialParts =
+    user?.firstName || user?.lastName
+      ? [user?.firstName, user?.lastName].filter(Boolean)
+      : emailName.split(/[._-]+/).filter(Boolean)
+  const initials =
+    initialParts
+      .map((part) => part?.[0] ?? '')
+      .join('')
+      .slice(0, 2)
+      .toUpperCase() || 'A'
+
   return (
     <aside className="sticky top-0 flex h-screen flex-col bg-sidebar p-3 text-sidebar-foreground max-md:relative max-md:h-auto max-md:border-b max-md:border-r-0">
       <Button
@@ -108,13 +128,13 @@ function AdminSidebar({ currentPath, onNavigate }: AdminSidebarProps) {
       <div className="rounded-xl border border-sidebar-border bg-white/5 p-3 text-xs text-sidebar-foreground/65">
         <div className="flex items-center gap-3">
           <span className="grid size-9 place-items-center rounded-full bg-primary/15 text-primary">
-            LB
+            {initials}
           </span>
           <span className="min-w-0 flex-1">
             <span className="block font-semibold text-sidebar-foreground">
-              Sales Manager
+              {displayName}
             </span>
-            <span className="block truncate">Inventory operations</span>
+            <span className="block truncate">Admin</span>
           </span>
           <ChevronDown className="size-4" />
         </div>

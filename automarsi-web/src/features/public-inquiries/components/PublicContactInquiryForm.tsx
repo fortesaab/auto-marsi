@@ -31,7 +31,7 @@ const intentOptions: ContactIntent[] = [
 ]
 
 const inputClassName =
-  'h-12 rounded-2xl border border-input bg-white/[0.04] px-4 text-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30'
+  'h-11 min-w-0 w-full rounded-md border border-input bg-white/[0.04] px-4 text-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30'
 
 function buildMessage(
   formState: ContactInquiryFormState,
@@ -99,7 +99,7 @@ function PublicContactInquiryForm() {
   return (
     <form
       onSubmit={submitInquiry}
-      className="grid gap-4 rounded-[1.75rem] border border-white/10 bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:p-6"
+      className="grid gap-4 rounded-lg border border-white/10 bg-white/[0.05] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:p-6"
     >
       <div className="grid gap-1">
         <h2 className="text-xl font-semibold tracking-tight">
@@ -111,13 +111,13 @@ function PublicContactInquiryForm() {
       </div>
 
       {errorMessage ? (
-        <div className="rounded-2xl border border-red-400/25 bg-red-400/10 px-3 py-2 text-sm text-red-200">
+        <div className="rounded-md border border-red-400/25 bg-red-400/10 px-3 py-2 text-sm text-red-200">
           {errorMessage}
         </div>
       ) : null}
 
       {wasSubmitted ? (
-        <div className="flex items-start gap-2 rounded-2xl border border-emerald-400/25 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">
+        <div className="flex items-start gap-2 rounded-md border border-emerald-400/25 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">
           <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
           <span>
             {messages.contact.successMessage}
@@ -125,8 +125,8 @@ function PublicContactInquiryForm() {
         </div>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="grid gap-1.5 text-sm font-medium">
+      <div className="grid min-w-0 gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <label className="grid min-w-0 gap-1.5 text-sm font-medium">
           {messages.common.name}
           <input
             value={formState.name}
@@ -137,7 +137,7 @@ function PublicContactInquiryForm() {
           />
         </label>
 
-        <label className="grid gap-1.5 text-sm font-medium">
+        <label className="grid min-w-0 gap-1.5 text-sm font-medium">
           {messages.common.phone}
           <input
             value={formState.phone}
@@ -184,7 +184,7 @@ function PublicContactInquiryForm() {
           onChange={(event) => updateField('message', event.target.value)}
           placeholder={messages.contact.messagePlaceholder}
           rows={5}
-          className="min-h-28 resize-none rounded-2xl border border-input bg-white/[0.04] px-4 py-3 text-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
+          className="min-h-28 resize-none rounded-md border border-input bg-white/[0.04] px-4 py-3 text-sm outline-none transition placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
         />
       </label>
 

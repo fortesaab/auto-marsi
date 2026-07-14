@@ -1,6 +1,5 @@
-import { BadgeCheck, Car, Clock3 } from 'lucide-react'
+import { BadgeCheck, Car } from 'lucide-react'
 import PublicSection from '@/components/public/PublicSection'
-import PublicSectionHeader from '@/components/public/PublicSectionHeader'
 import { Badge } from '@/components/ui/badge'
 import { useI18n } from '@/i18n/useI18n'
 import type { PublicListing } from '../types'
@@ -10,36 +9,19 @@ type RecentlySoldSectionProps = {
   onNavigate: (path: string) => void
 }
 
-function formatSoldDate(
-  soldAt: string | null,
-  locale: string,
-  fallback: string
-) {
-  if (!soldAt) {
-    return fallback
-  }
-
-  return new Intl.DateTimeFormat(locale, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(new Date(soldAt))
-}
-
 function SoldListingCard({ listing }: { listing: PublicListing }) {
-  const { language, messages } = useI18n()
-  const locale = language === 'sq' ? 'sq-AL' : 'en-GB'
+  const { messages } = useI18n()
 
   return (
-    <article className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.045] text-card-foreground shadow-[0_22px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl">
-      <div className="relative aspect-[4/3] bg-white/[0.04]">
+    <article className="min-w-[220px] snap-start overflow-hidden rounded-md border border-white/10 bg-card text-card-foreground sm:min-w-0">
+      <div className="relative grid aspect-[4/5] place-items-center bg-muted">
         {listing.primary_image?.image_url ? (
           <img
             src={listing.primary_image.image_url}
             alt={listing.primary_image.alt_text ?? listing.title}
             loading="lazy"
             decoding="async"
-            className="size-full object-cover"
+            className="max-h-full max-w-full object-contain grayscale"
           />
         ) : (
           <div className="grid size-full place-items-center bg-white/[0.04] text-muted-foreground">
@@ -54,33 +36,20 @@ function SoldListingCard({ listing }: { listing: PublicListing }) {
           </div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/74 via-transparent to-background/10" />
 
-        <Badge className="absolute left-4 top-4 rounded-full border border-primary/35 bg-primary/15 text-primary shadow-sm hover:bg-primary/15">
+        <Badge className="absolute left-3 top-3 rounded-full border border-white/10 bg-background/70 text-foreground shadow-sm backdrop-blur hover:bg-background/70">
           {messages.inventory.recentlySold.soldBadge}
         </Badge>
-      </div>
 
-      <div className="grid gap-3 p-5">
-        <div className="grid gap-1">
-          <h3 className="text-xl font-black leading-tight tracking-[-0.035em]">
+        <div className="absolute inset-x-0 bottom-0 p-3">
+          <h3 className="truncate text-sm font-black leading-tight">
             {listing.title}
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="mt-1 text-xs text-muted-foreground">
             {listing.make?.name ?? '-'} {listing.car_model?.name ?? ''} ·{' '}
             {listing.year}
           </p>
-        </div>
-
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Clock3 className="size-3.5" />
-          <span>
-            {formatSoldDate(
-              listing.sold_at,
-              locale,
-              messages.inventory.recentlySold.recentlySoldFallback
-            )}
-          </span>
         </div>
       </div>
     </article>
@@ -103,42 +72,40 @@ function RecentlySoldSection({ onNavigate }: RecentlySoldSectionProps) {
   return (
     <PublicSection>
       <div className="grid gap-7">
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-        <PublicSectionHeader
-          eyebrow={messages.inventory.recentlySold.eyebrow}
-          title={messages.inventory.recentlySold.title}
-          description={messages.inventory.recentlySold.description}
-        />
+        <div className="mx-auto flex w-full max-w-4xl flex-col justify-between gap-4 md:flex-row md:items-end">
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-primary">
+            {messages.inventory.recentlySold.eyebrow}
+          </p>
 
-        <button
-          type="button"
-          onClick={() => onNavigate('/contact')}
-          className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 text-sm font-medium transition hover:bg-white/[0.08]"
-        >
-          <BadgeCheck className="size-4" />
-          {messages.inventory.recentlySold.askSimilar}
-        </button>
-      </div>
-
-      {recentlySoldQuery.isLoading ? (
-        <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.05] p-6 text-sm text-muted-foreground">
-          {messages.inventory.recentlySold.loading}
+          <button
+            type="button"
+            onClick={() => onNavigate('/contact')}
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-4 text-sm font-medium transition hover:bg-white/[0.08]"
+          >
+            <BadgeCheck className="size-4" />
+            {messages.inventory.recentlySold.askSimilar}
+          </button>
         </div>
-      ) : null}
 
-      {errorMessage ? (
-        <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.05] p-6 text-sm text-muted-foreground">
-          {messages.inventory.recentlySold.couldNotLoad}
-        </div>
-      ) : null}
+        {recentlySoldQuery.isLoading ? (
+          <div className="rounded-lg border border-white/10 bg-white/[0.05] p-6 text-sm text-muted-foreground">
+            {messages.inventory.recentlySold.loading}
+          </div>
+        ) : null}
 
-      {!recentlySoldQuery.isLoading && !errorMessage && listings.length > 0 ? (
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {listings.map((listing) => (
-            <SoldListingCard key={listing.id} listing={listing} />
-          ))}
-        </div>
-      ) : null}
+        {errorMessage ? (
+          <div className="rounded-lg border border-white/10 bg-white/[0.05] p-6 text-sm text-muted-foreground">
+            {messages.inventory.recentlySold.couldNotLoad}
+          </div>
+        ) : null}
+
+        {!recentlySoldQuery.isLoading && !errorMessage && listings.length > 0 ? (
+          <div className="public-scrollbar mx-auto flex w-full max-w-4xl snap-x gap-3 overflow-x-auto pb-3 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0">
+            {listings.slice(0, 4).map((listing) => (
+              <SoldListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        ) : null}
       </div>
     </PublicSection>
   )

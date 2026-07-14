@@ -11,8 +11,8 @@ function PublicSection({ children, className, bleed = false }: PublicSectionProp
   return (
     <section
       className={cn(
-        bleed ? 'border-y border-white/10 bg-white/[0.03]' : '',
-        'px-4 py-10 sm:px-6 lg:px-8',
+        bleed ? 'border-y border-white/8 bg-white/[0.02]' : '',
+        'px-4 py-12 sm:px-6 lg:px-8',
         className
       )}
     >

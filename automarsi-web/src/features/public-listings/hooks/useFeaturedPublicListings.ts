@@ -13,7 +13,7 @@ const homepageListingFilters: PublicListingFilters = {
   fuel_type: '',
   transmission: '',
   body_type: '',
-  per_page: 3,
+  per_page: 6,
 }
 
 export function useFeaturedPublicListings() {

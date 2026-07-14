@@ -16,17 +16,17 @@ function PublicSectionHeader({
   return (
     <div className={cn('grid max-w-3xl gap-3', className)}>
       {eyebrow ? (
-        <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+        <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-primary">
           {eyebrow}
         </p>
       ) : null}
 
-      <h2 className="text-3xl font-black tracking-[-0.045em] text-foreground sm:text-4xl lg:text-5xl">
+      <h2 className="text-3xl font-black leading-[0.98] text-foreground sm:text-4xl lg:text-5xl">
         {title}
       </h2>
 
       {description ? (
-        <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+        <p className="max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
           {description}
         </p>
       ) : null}

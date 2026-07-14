@@ -49,30 +49,31 @@
 }
 
 :root {
-    --background: oklch(0.975 0.012 286);
-    --foreground: oklch(0.17 0.05 285);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.17 0.05 285);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.17 0.05 285);
-    --primary: #406AAF;
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.94 0.018 286);
-    --secondary-foreground: oklch(0.22 0.05 285);
-    --muted: oklch(0.94 0.014 286);
-    --muted-foreground: oklch(0.55 0.035 285);
-    --accent: #edf3ff;
-    --accent-foreground: #1f3f73;
+    color-scheme: dark;
+    --background: #08090b;
+    --foreground: #f4f1e9;
+    --card: #111114;
+    --card-foreground: #f4f1e9;
+    --popover: #111114;
+    --popover-foreground: #f4f1e9;
+    --primary: #d7aa52;
+    --primary-foreground: #16110a;
+    --secondary: #17181c;
+    --secondary-foreground: #f4f1e9;
+    --muted: #17181c;
+    --muted-foreground: #9f9a90;
+    --accent: #241e16;
+    --accent-foreground: #eac474;
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.89 0.018 286);
-    --input: oklch(0.89 0.018 286);
-    --ring: #406AAF;
-    --chart-1: #406AAF;
+    --border: rgb(255 255 255 / 9%);
+    --input: rgb(255 255 255 / 12%);
+    --ring: #d7aa52;
+    --chart-1: #d7aa52;
     --chart-2: oklch(0.74 0.17 158);
     --chart-3: oklch(0.72 0.16 72);
     --chart-4: oklch(0.64 0.18 315);
     --chart-5: oklch(0.62 0.18 24);
-    --radius: 0.95rem;
+    --radius: 0.5rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -185,7 +186,7 @@
     @apply border-border outline-ring/50;
     }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     }
   html {
     @apply font-sans;
@@ -202,6 +203,31 @@
 }
 
 @layer utilities {
+  .public-image-fade::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(8 9 11 / 0%) 0%, rgb(8 9 11 / 48%) 72%, #08090b 100%),
+      linear-gradient(90deg, rgb(8 9 11 / 82%) 0%, rgb(8 9 11 / 18%) 52%, rgb(8 9 11 / 56%) 100%);
+    pointer-events: none;
+  }
+
+  .public-scrollbar {
+    scrollbar-color: rgb(215 170 82 / 55%) transparent;
+    scrollbar-width: thin;
+  }
+
+  .public-scrollbar::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+
+  .public-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(215 170 82 / 55%);
+    border-radius: 999px;
+  }
+
   .admin-scrollbar {
     scrollbar-color: color-mix(in oklch, var(--foreground) 16%, transparent) transparent;
     scrollbar-width: thin;

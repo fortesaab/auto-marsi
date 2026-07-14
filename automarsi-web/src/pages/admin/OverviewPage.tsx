@@ -5,7 +5,6 @@ import {
   MessageSquareText,
   RefreshCw,
 } from 'lucide-react'
-import { useState } from 'react'
 import EmptyState from '@/components/admin/EmptyState'
 import LoadingState from '@/components/admin/LoadingState'
 import PageHeader from '@/components/admin/PageHeader'
@@ -15,10 +14,7 @@ import InquiryStatusBadge from '@/features/admin-inquiries/components/InquirySta
 import InventoryStatusChart from '@/features/admin-overview/components/InventoryStatusChart'
 import OverviewKpiCard from '@/features/admin-overview/components/OverviewKpiCard'
 import OverviewPanel from '@/features/admin-overview/components/OverviewPanel'
-import SalesPerformanceChart from '@/features/admin-overview/components/SalesPerformanceChart'
 import { useAdminOverview } from '@/features/admin-overview/hooks/useAdminOverview'
-import { useAdminSalesReportDownload } from '@/features/admin-overview/hooks/useAdminSalesReportDownload'
-import type { AdminSalesRange } from '@/features/admin-overview/api/getAdminDashboard'
 
 type OverviewPageProps = {
   onNavigate: (path: string) => void
@@ -35,11 +31,7 @@ function formatDateTime(value: string) {
 }
 
 function OverviewPage({ onNavigate }: OverviewPageProps) {
-  const [salesRange, setSalesRange] = useState<AdminSalesRange>('today')
-  const { overview, overviewQuery, errorMessage } = useAdminOverview({
-    salesRange,
-  })
-  const salesReportMutation = useAdminSalesReportDownload()
+  const { overview, overviewQuery, errorMessage } = useAdminOverview()
 
   return (
     <section className="grid gap-5">
@@ -125,44 +117,6 @@ function OverviewPage({ onNavigate }: OverviewPageProps) {
                 >
                   Open inventory
                 </Button>
-              </div>
-            </OverviewPanel>
-
-            <OverviewPanel
-              title="Sales performance"
-              description="Revenue, profit, and margin from sold listings"
-            >
-              <SalesPerformanceChart
-                range={overview.sales.range}
-                summary={overview.sales.summary}
-                trend={overview.sales.trend}
-                isExporting={salesReportMutation.isPending}
-                onRangeChange={setSalesRange}
-                onExport={() => salesReportMutation.mutate(salesRange)}
-              />
-            </OverviewPanel>
-          </div>
-
-          <div className="grid gap-4 xl:grid-cols-[340px_1fr]">
-            <OverviewPanel
-              title="Sales suggestions"
-              description="Simple next moves based on your current numbers"
-            >
-              <div className="grid gap-2 p-4 text-sm">
-                <div className="rounded-md border bg-background p-3">
-                  <p className="font-medium">Protect margin before discounting</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Check purchase price and expenses before lowering a listing
-                    price. A small discount can remove the whole profit.
-                  </p>
-                </div>
-                <div className="rounded-md border bg-background p-3">
-                  <p className="font-medium">Promote cars with strong interest</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Listings with recent inquiries are good candidates for
-                    social posts, featured placement, and fast follow-up calls.
-                  </p>
-                </div>
               </div>
             </OverviewPanel>
 

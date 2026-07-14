@@ -9,7 +9,7 @@ export const messages = {
 export type Language = keyof typeof messages
 export type Messages = typeof en
 
-export const defaultLanguage: Language = 'en'
+export const defaultLanguage: Language = 'sq'
 
 export function isLanguage(value: string): value is Language {
   return value in messages
