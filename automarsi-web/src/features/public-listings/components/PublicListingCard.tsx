@@ -47,7 +47,7 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
         onClick={() => onNavigate(`/inventory/${listing.id}`)}
         className="block w-full text-left"
       >
-        <div className="relative aspect-[16/11] overflow-hidden bg-muted">
+        <div className="relative aspect-[16/12] overflow-hidden bg-muted">
           {listing.primary_image?.image_url ? (
             <img
               src={listing.primary_image.image_url}
