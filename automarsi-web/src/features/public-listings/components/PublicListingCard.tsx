@@ -41,13 +41,13 @@ function PublicListingCard({ listing, onNavigate }: PublicListingCardProps) {
     ] ?? listing.fuel_type
 
   return (
-    <article className="group overflow-hidden rounded-lg border border-white/10 bg-card text-card-foreground shadow-[0_22px_60px_rgba(0,0,0,0.3)] transition duration-300 hover:-translate-y-1 hover:border-primary/35">
+    <article className="group h-fit overflow-hidden rounded-lg border border-white/10 bg-card text-card-foreground shadow-[0_22px_60px_rgba(0,0,0,0.3)] transition duration-300 hover:-translate-y-1 hover:border-primary/35">
       <button
         type="button"
         onClick={() => onNavigate(`/inventory/${listing.id}`)}
         className="block w-full text-left"
       >
-        <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+        <div className="relative aspect-[16/11] overflow-hidden bg-muted">
           {listing.primary_image?.image_url ? (
             <img
               src={listing.primary_image.image_url}

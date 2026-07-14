@@ -55,7 +55,7 @@ function InventoryPage({ onNavigate }: InventoryPageProps) {
           onFiltersChange={setFilters}
         />
 
-        <div className="grid min-w-0 gap-7 lg:grid-cols-[300px_minmax(0,1fr)]">
+        <div className="grid min-w-0 items-start gap-7 lg:grid-cols-[300px_minmax(0,1fr)]">
           <div className="hidden lg:block">
             <PublicListingFilters
               filters={filters}
