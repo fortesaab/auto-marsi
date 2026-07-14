@@ -55,7 +55,7 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
 
   return (
     <div className="grid gap-3">
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(12rem,15rem)]">
+      <div className="grid items-stretch gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(14rem,18rem)]">
         <div className="relative -mx-4 aspect-[4/3] self-start overflow-hidden border-y border-white/10 bg-card text-left shadow-[0_22px_70px_rgba(0,0,0,0.28)] sm:mx-0 sm:rounded-lg sm:border">
           <div className="absolute inset-0 overflow-hidden bg-white/[0.04]">
             {mainImage?.image_url ? (
@@ -86,7 +86,7 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
         </div>
 
         {actionImages.length > 0 ? (
-          <div className="hidden gap-3 self-start lg:grid">
+          <div className="hidden h-full grid-rows-2 gap-3 lg:grid">
             {actionImages.map(({ image, label }) => (
               <button
                 key={`${label}-${image.id}`}
@@ -98,7 +98,7 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
                     setIsLightboxOpen(true)
                   }
                 }}
-                className="group relative aspect-[4/3] overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] text-left shadow-[0_18px_55px_rgba(0,0,0,0.24)]"
+                className="group relative min-h-0 overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] text-left shadow-[0_18px_55px_rgba(0,0,0,0.24)]"
               >
                 {image.image_url ? (
                   <img
