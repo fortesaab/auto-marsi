@@ -22,26 +22,55 @@ function imageText(image: PublicListingImage): string {
   return `${image.alt_text ?? ''}`.toLowerCase()
 }
 
+function isInteriorImage(image: PublicListingImage): boolean {
+  return imageText(image).includes('interior')
+}
+
+function isExteriorImage(image: PublicListingImage): boolean {
+  return imageText(image).includes('exterior')
+}
+
 function PublicListingGallery({ listing }: PublicListingGalleryProps) {
   const { messages } = useI18n()
   const images = useMemo(() => getGalleryImages(listing), [listing])
   const mainImage = listing.primary_image ?? images[0] ?? null
   const galleryImages = images.filter((image) => image.id !== mainImage?.id)
-  const interiorImage =
-    galleryImages.find((image) => imageText(image).includes('interior')) ??
-    galleryImages[0] ??
-    null
-  const exteriorImage =
-    galleryImages.find((image) => imageText(image).includes('exterior')) ??
-    galleryImages.find((image) => image.id !== interiorImage?.id) ??
-    null
-  const actionImages = [
-    interiorImage ? { image: interiorImage, label: 'Interior' } : null,
-    exteriorImage ? { image: exteriorImage, label: 'Exterior' } : null,
-  ].filter(
-    (item): item is { image: PublicListingImage; label: string } =>
-      item !== null,
+  const interiorImages = galleryImages.filter(isInteriorImage)
+  const exteriorImages = galleryImages.filter(isExteriorImage)
+  const unsortedImages = galleryImages.filter(
+    (image) => !isInteriorImage(image) && !isExteriorImage(image),
   )
+  const interiorGroup =
+    interiorImages.length > 0
+      ? interiorImages
+      : unsortedImages[0]
+        ? [unsortedImages[0]]
+        : []
+  const exteriorGroup =
+    exteriorImages.length > 0
+      ? exteriorImages
+      : unsortedImages.find((image) => image.id !== interiorGroup[0]?.id)
+        ? [unsortedImages.find((image) => image.id !== interiorGroup[0]?.id)!]
+        : []
+  const actionImages = [
+    interiorGroup[0]
+      ? { image: interiorGroup[0], label: 'Interior', images: interiorGroup }
+      : null,
+    exteriorGroup[0]
+      ? { image: exteriorGroup[0], label: 'Exterior', images: exteriorGroup }
+      : null,
+  ].filter(
+    (
+      item,
+    ): item is {
+      image: PublicListingImage
+      label: string
+      images: PublicListingImage[]
+    } => item !== null,
+  )
+  const [activeLightboxImages, setActiveLightboxImages] = useState<
+    PublicListingImage[]
+  >([])
   const [activeLightboxImageId, setActiveLightboxImageId] = useState<
     number | null
   >(
@@ -50,19 +79,22 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const activeLightboxIndex = Math.max(
     0,
-    images.findIndex((image) => image.id === activeLightboxImageId),
+    activeLightboxImages.findIndex(
+      (image) => image.id === activeLightboxImageId,
+    ),
   )
 
   return (
     <div className="grid gap-3">
       {actionImages.length > 0 ? (
         <div className="grid gap-3 md:grid-cols-2">
-          {actionImages.map(({ image, label }, index) => {
+          {actionImages.map(({ image, label, images: lightboxImages }, index) => {
             return (
               <button
                 key={`${label}-${image.id}`}
                 type="button"
                 onClick={() => {
+                  setActiveLightboxImages(lightboxImages)
                   setActiveLightboxImageId(image.id)
                   setIsLightboxOpen(true)
                 }}
@@ -112,12 +144,12 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
       )}
 
       <PublicImageLightbox
-        images={images}
+        images={activeLightboxImages}
         activeIndex={activeLightboxIndex}
         label={listing.title}
         open={isLightboxOpen}
         onActiveIndexChange={(index) =>
-          setActiveLightboxImageId(images[index]?.id ?? null)
+          setActiveLightboxImageId(activeLightboxImages[index]?.id ?? null)
         }
         onClose={() => setIsLightboxOpen(false)}
       />
