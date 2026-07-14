@@ -34,14 +34,14 @@ function PublicListingGallery({ listing }: PublicListingGalleryProps) {
 
   return (
     <div className="grid gap-3">
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_190px]">
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_clamp(10rem,15vw,13rem)]">
         <button
           type="button"
           onClick={() => selectedImage?.image_url && setIsLightboxOpen(true)}
           className="-mx-4 overflow-hidden border-y border-white/10 bg-card text-left shadow-[0_22px_70px_rgba(0,0,0,0.28)] sm:mx-0 sm:rounded-lg sm:border"
           aria-label={`${messages.listingDetails.viewImage} ${listing.title}`}
         >
-          <div className="relative aspect-[4/3] overflow-hidden bg-white/[0.04] sm:aspect-[16/10]">
+          <div className="relative aspect-[4/3] overflow-hidden bg-white/[0.04] sm:aspect-[16/9]">
             {selectedImage?.image_url ? (
               <img
                 src={selectedImage.image_url}

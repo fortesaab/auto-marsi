@@ -13,8 +13,8 @@ function SoldListingCard({ listing }: { listing: PublicListing }) {
   const { messages } = useI18n()
 
   return (
-    <article className="min-w-[220px] snap-start overflow-hidden rounded-md border border-white/10 bg-card text-card-foreground sm:min-w-0">
-      <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+    <article className="min-w-[230px] snap-start overflow-hidden rounded-lg border border-white/10 bg-card text-card-foreground shadow-[0_22px_60px_rgba(0,0,0,0.28)] transition duration-300 hover:-translate-y-1 hover:border-primary/35 sm:min-w-0">
+      <div className="relative aspect-[3/4] overflow-hidden bg-muted">
         {listing.primary_image?.image_url ? (
           <img
             src={listing.primary_image.image_url}
@@ -42,8 +42,8 @@ function SoldListingCard({ listing }: { listing: PublicListing }) {
           {messages.inventory.recentlySold.soldBadge}
         </Badge>
 
-        <div className="absolute inset-x-0 bottom-0 p-3">
-          <h3 className="truncate text-sm font-black leading-tight">
+        <div className="absolute inset-x-0 bottom-0 p-4">
+          <h3 className="line-clamp-2 text-base font-black leading-tight">
             {listing.title}
           </h3>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -70,9 +70,9 @@ function RecentlySoldSection({ onNavigate }: RecentlySoldSectionProps) {
   }
 
   return (
-    <PublicSection>
+    <PublicSection className="pt-8">
       <div className="grid gap-7">
-        <div className="mx-auto flex w-full max-w-4xl flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-end">
           <p className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-primary">
             {messages.inventory.recentlySold.eyebrow}
           </p>
@@ -100,7 +100,7 @@ function RecentlySoldSection({ onNavigate }: RecentlySoldSectionProps) {
         ) : null}
 
         {!recentlySoldQuery.isLoading && !errorMessage && listings.length > 0 ? (
-          <div className="public-scrollbar mx-auto flex w-full max-w-4xl snap-x gap-3 overflow-x-auto pb-3 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0">
+          <div className="public-scrollbar flex w-full snap-x gap-4 overflow-x-auto pb-3 sm:grid sm:grid-cols-[repeat(auto-fill,minmax(230px,260px))] sm:justify-start sm:overflow-visible sm:pb-0">
             {listings.slice(0, 4).map((listing) => (
               <SoldListingCard key={listing.id} listing={listing} />
             ))}

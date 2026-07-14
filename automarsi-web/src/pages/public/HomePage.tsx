@@ -50,8 +50,8 @@ function HomePage({ onNavigate }: HomePageProps) {
 
       <FeaturedListingsSection onNavigate={onNavigate} />
 
-      <PublicSection>
-        <div className="grid min-h-44 gap-5 lg:grid-cols-[0.5fr_1fr] lg:items-end">
+      <PublicSection className="py-8 sm:py-10">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,0.5fr)_minmax(0,1fr)] lg:items-end">
           <div>
             <h2 className="max-w-sm text-3xl font-black leading-none sm:text-4xl">
               {messages.home.showroomCtaTitle}
