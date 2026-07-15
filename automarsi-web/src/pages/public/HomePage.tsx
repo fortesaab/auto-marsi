@@ -1,4 +1,5 @@
 import { MessageSquare } from 'lucide-react'
+import PublicFadingImage from '@/components/public/PublicFadingImage'
 import PublicSection from '@/components/public/PublicSection'
 import { Button } from '@/components/ui/button'
 import supraHeroImage from '@/assets/home-hero-supra.jpg'
@@ -20,11 +21,10 @@ function HomePage({ onNavigate }: HomePageProps) {
     <div>
       <section className="relative -mt-16 min-h-[calc(100svh-5rem)] overflow-hidden pt-16">
         <div className="absolute inset-0 public-image-fade">
-          <img
+          <PublicFadingImage
             src={heroMedia?.image_url ?? supraHeroImage}
             alt={heroMedia?.alt_text ?? 'AutoMarsi hero vehicle'}
             className="size-full object-cover"
-            decoding="async"
           />
         </div>
 

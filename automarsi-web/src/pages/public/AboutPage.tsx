@@ -1,3 +1,4 @@
+import PublicFadingImage from '@/components/public/PublicFadingImage'
 import PublicImageCarousel from '@/components/public/PublicImageCarousel'
 import PublicSection from '@/components/public/PublicSection'
 import supraHeroImage from '@/assets/home-hero-supra.jpg'
@@ -26,11 +27,10 @@ function AboutPage() {
     <div>
       <section className="relative -mt-16 min-h-[64svh] overflow-hidden pt-16">
         <div className="absolute inset-0 public-image-fade">
-          <img
+          <PublicFadingImage
             src={heroImage}
             alt={messages.about.showroomLabel}
             className="size-full object-cover"
-            decoding="async"
           />
         </div>
 
